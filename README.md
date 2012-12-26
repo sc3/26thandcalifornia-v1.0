@@ -1,4 +1,4 @@
 fullhouse
 =========
 
-ui for inmate tracker
+UI for inmate tracker
