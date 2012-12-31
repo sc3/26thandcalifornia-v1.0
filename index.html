@@ -2,7 +2,7 @@
 <html>
    
 <head>
-    <title>Fullhouse</title>
+    <title>Full House</title>
     <link rel="stylesheet" type="text/css" href="lib/bootstrap-2.2.2/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="lib/bootstrap-2.2.2/css/bootstrap-responsive.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -12,30 +12,72 @@
 
 <div class="navbar navbar-inverse navbar-fixed-top">
   <div class="navbar-inner">
-    <div class="container">
+    <div class="container-fluid">
       <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </a>
-      <a class="brand" href="#">Project name</a>
+      <a class="brand" href="#">Full House</a>
       <div class="nav-collapse collapse">
         <ul class="nav">
           <li class="active"><a href="#">Home</a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
         </ul>
     </div>
     </div>
   </div>
 </div>
 
-<div class="container">
-
-  <h1>Bootstrap starter template</h1>
-  <p>Use this document as a way to quick start any new project.<br> All you get is this message and a barebones HTML document.</p>
-
+<div class="container-fluid">
+    <section id="content">
+        <div id="inmates"></div>
+    </section>
 </div>
+
+<script type="text/template" id="inmates-template">
+<h1>Inmates</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Jail ID</th>
+            <th>Booking date</th>
+            <th>Stay (days)</th>
+            <th>Booking age</th>
+            <th>Bond amount</th>
+            <th>Bond status</th>
+            <th>Charges</th>
+            <th>Discharge date</th>
+            <th>Gender</th>
+            <th>Jail location</th>
+            <th>No. court dates</th>
+            <th>Next court date</th>
+            <th>Next court location</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% _.each(inmates, function(inmate, i) { %>
+        <tr>
+            <td><%= inmate.jail_id %></td>
+            <td><%= inmate.booking_date %></td>
+            <td><%= inmate.stay_length %></td>
+            <td><%= inmate.age_at_booking %></td>
+            <td><%= inmate.bail_amount %></td>
+            <td><%= inmate.bail_status %></td>
+            <td><%= inmate.charges_citation %></td>
+            <td><%= inmate.discharge_date_earliest %></td>
+            <td><%= inmate.gender %></td>
+            <td><%= inmate.housing_location %></td>
+            <td><%= inmate.court_dates.length %></td>
+            <% if (inmate.court_dates.length) { %>
+            <td><%= inmate.court_dates.reverse()[0].date %></td>
+            <td><%= inmate.court_dates.reverse()[0].location.location %></td>
+            <% } else { %><td></td><td></td><% } %>
+        </tr>
+        <% }); %>
+    </tbody>
+</table>
+</script>
 
 <script type="text/javascript" src="lib/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="lib/bootstrap-2.2.2/js/bootstrap.min.js"></script>
@@ -45,6 +87,13 @@
 <script type="text/javascript" src="lib/moment.js"></script>
 <script type="text/javascript" src="js/config.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    var inmates = new InmateTableView({collection: new InmateCollection()})
+    inmates.collection.fetch();
+});
+</script>
 
 </body>
 
