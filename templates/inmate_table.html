@@ -1,0 +1,43 @@
+<div id="inmate-table">
+    <h1>Inmates</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Jail ID</th>
+                <th>Booking date</th>
+                <th>Stay (days)</th>
+                <th>Booking age</th>
+                <th>Bond amount</th>
+                <th>Bond status</th>
+                <th>Charges</th>
+                <th>Discharge date</th>
+                <th>Gender</th>
+                <th>Jail location</th>
+                <th>No. court dates</th>
+                <th>Next court date</th>
+                <th>Next court location</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% _.each(inmates, function(inmate, i) { %>
+            <tr>
+                <td><%= inmate.jail_id %></td>
+                <td><%= inmate.booking_date %></td>
+                <td><%= inmate.stay_length %></td>
+                <td><%= inmate.age_at_booking %></td>
+                <td><%= inmate.bail_amount %></td>
+                <td><%= inmate.bail_status %></td>
+                <td><%= inmate.charges_citation %></td>
+                <td><%= inmate.discharge_date_earliest %></td>
+                <td><%= inmate.gender %></td>
+                <td><%= inmate.housing_location %></td>
+                <td><%= inmate.court_dates.length %></td>
+                <% if (inmate.court_dates.length) { %>
+                <td><%= inmate.court_dates.reverse()[0].date %></td>
+                <td><%= inmate.court_dates.reverse()[0].location.location %></td>
+                <% } else { %><td></td><td></td><% } %>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>

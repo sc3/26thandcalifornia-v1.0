@@ -1,40 +1,56 @@
-var InmateModel = Backbone.Model.extend();
+define([
+    // Libraries
+    'jquery', 
+    'underscore',
+    'backbone',
+    'moment',
 
-var InmateCollection = Backbone.Collection.extend({
-    url: INMATE_URL,
-    model: InmateModel,
-    sync: function(method, model, options) {
-        var params = _.extend({
-            type: 'GET',
-            dataType: 'jsonp',
-            url: this.url,
-        }, options);
-        return $.ajax(params);
-    },
-    parse: function(data) {
-        this.meta = data.meta;
-        _.each(data.objects, function(inmate, i) {
-            var start = new moment(inmate.booking_date);
-            var end = (inmate.discharge_date_earliest) ? new moment(inmate.discharge_date_earliest) : new moment();
-            inmate.stay_length = end.diff(start, 'days');
+    // Our app
+    'models',
+    'views',
+    'text!templates/inmate_table.html',
+    'text!templates/about.html'
+
+], function($, _, Backbone, Moment, Models, Views, inmate_tmpl, about_tmpl) {
+
+    var oldCollectionFetch = Backbone.Collection.prototype.fetch;
+
+    Backbone.Collection.prototype.fetch = function(options) {
+        this.trigger("fetch");
+        oldCollectionFetch.call(this, options);
+    }
+
+    var AppRouter = Backbone.Router.extend({
+        routes: {
+            '': 'InmateTableView',
+            'inmates': 'InmateTableView',
+            'about': 'AboutView'
+        }
+    });
+
+    var initialize = function(){
+        var router = new AppRouter();
+
+        var inmates = new Views.InmateTableView({collection: new Models.InmateCollection(), template: inmate_tmpl});
+        router.on('route:InmateTableView', function() {
+            inmates.collection.fetch();
         });
-        return data.objects;
-    }
+
+        var about = new Views.PageView({template: about_tmpl});
+        router.on('route:AboutView', function() {
+            about.render();
+        });
+
+        Backbone.history.start();
+        var menu = new Views.MenuView();
+    };
+
+    return { 
+        initialize: initialize
+    };
+
 });
 
-// Summary view
-var InmateTableView = Backbone.View.extend({
-    collection: InmateCollection,
-    el: '#inmates',
-    template: '#inmates-template',
-    initialize: function(options) {
-        this.template = (options.template) ? _.template(options.template) : _.template($(this.template).html());
-        this.collection.bind('reset', this.render, this);
-    },
-    render: function(options) {
-        var context = { inmates: this.collection.toJSON() };
-        this.$el.html(this.template(context));
-        return this;
-    }
-});
+
+
 
