@@ -1,9 +1,9 @@
-// Remote dev
+// Configure RequireJS
+
+// Inmate URL configuration variable
 var INMATE_URL = 'http://vast-retreat-3472.herokuapp.com/api/1.0/countyinmate/?format=jsonp';
 
-
-
-// Require aliases
+// RequireJS aliases
 require.config({
     paths: {
         jquery: '../lib/jquery-1.8.3.min',
@@ -16,7 +16,7 @@ require.config({
 
 });
 
-// Bootstrap app
+// Bootstrap our application.
 require([
     'app',
 ], function(App){
