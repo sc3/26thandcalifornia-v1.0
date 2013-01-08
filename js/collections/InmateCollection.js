@@ -1,8 +1,10 @@
 define([
     'jquery',
     'underscore',
-    'backbone'
-], function($, _, Backbone) {
+    'backbone',
+    'moment',
+    'models/InmateModel'
+], function($, _, Backbone, Moment, InmateModel) {
     var InmateCollection = Backbone.Collection.extend({
         url: INMATE_URL + "&related=1",
         model: InmateModel,
