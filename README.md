@@ -6,15 +6,32 @@ Chi-Town Coding Crew's [Cook County Jail API](http://cookcountyjail.recoveredfac
 
 # Getting started
 
-Clone the repository.
+Clone the repository:
 
-Open in your browser.
+``` 
+git clone git://github.com/sc3/26thandcalifornia.git 
+```
 
-Start editing index.html ... and we're off to the races.
+Open the `index.html` file in your browser. Firefox+Firebug or Chrome
+are highly recommended.
+
+Open `index.html` in your text editor. We're off to the races.
 
 # A tour of the app
 
+Let's take a whirlwind tour of the app. We'll mostly follow the execution 
+order of our application from the time `index.html` is opened in the browser.
+
+The application layout is heavily based on ["Organizing your application
+using Modules](http://backbonetutorials.com/organizing-backbone-using-modules/) 
+by Thomas Davis.
+
+
 ## index.html
+
+`index.html` is almost (see ticket XX) trivially short.
+
+<script src="http://gist-it.appspot.com/github/sc3/26thandcalifornia/raw/master/index.html"></script>
 
 ## main.js
 
@@ -26,3 +43,4 @@ Start editing index.html ... and we're off to the races.
 
 ## views
 
+## Overall structure
