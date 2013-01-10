@@ -22,7 +22,7 @@ Open `index.html` in your text editor. We're off to the races.
 Let's take a whirlwind tour of the app. We'll mostly follow the execution 
 order of our application from the time `index.html` is opened in the browser.
 
-The application layout is heavily based on ["Organizing your application
+The application layout is heavily based on [Organizing your application
 using Modules](http://backbonetutorials.com/organizing-backbone-using-modules/) 
 by Thomas Davis.
 
