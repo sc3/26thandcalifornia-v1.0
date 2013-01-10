@@ -407,7 +407,7 @@ define([
     var CourtLocationTableView = Backbone.View.extend({
         el: '#content',
         render: function(options) {
-            this.$el.html('<p>It's up to you to wire this up to a data source.</p>');
+            this.$el.html("<p>It's up to you to wire this up to a data source.</p>");
             return this;
         }
     });
