@@ -37,7 +37,7 @@ define([
         var router = new AppRouter();
 
         // Render inmate table view on 'inmates' navigation event
-        var inmates = new InmateTableView({collection: new InmateCollection()});
+        var inmates = new InmateTableView();
         router.on('route:inmates', function() {
             // InmateTableView.render() is triggered after fetching the data.
             inmates.collection.fetch();
