@@ -22,7 +22,7 @@ Open `index.html` in your text editor. We're off to the races.
 Let's take a whirlwind tour of the app. We'll mostly follow the execution 
 order of our application from the time `index.html` is opened in the browser.
 
-The application layout is heavily based on ["Organizing your application
+The application layout is heavily based on [Organizing your application
 using Modules](http://backbonetutorials.com/organizing-backbone-using-modules/) 
 by Thomas Davis.
 
@@ -58,7 +58,7 @@ the file called `js/main.js` to handle bootstrapping our application.
 
 At this point, RequireJS has loaded `js/main.js`:
 
-```javascript
+```js
 // Inmate URL configuration variable
 var INMATE_URL = 'http://cookcountyjail.recoveredfactory.net/api/1.0/countyinmate/?format=jsonp';
 
@@ -92,7 +92,7 @@ Let's take a look at it in a little more detail. If you know what's
 going on, or just want to know how Backbone works, skip ahead to
 [invoking Backbone](#invoking-backbone) in `js/app.js`.
 
-```javascript
+```js
 require([ // List of modules to load
     'app', // Load app.js (relative to main.js)
 ], function(App){ // Callback once modules are loaded
@@ -131,7 +131,7 @@ app.
 Up to this point, we've just been loading files. Now we're ready to look
 at the substance of the application, a Backbone JS app.
 
-```
+```javascript
 define([
     // Libraries
     'jquery', 
@@ -220,17 +220,18 @@ require([
 
 To use this app from `main.js`, we would use something like this:
 
-```
+```javascript
 require([
   'myapp'
 ], function(MyApp) {
   MyApp.rock_and_roll();
 }
+```
 
 Instead of exporting a `rock_and_roll()` method, our app exports a
 method called initialize. Remember good ol' `main.js`? It ends with
 
-```
+```javascript
  require([
     'app',
 ], function(App){
@@ -253,7 +254,7 @@ defined in `js/app.js`.
 
 Unless you know Backbone, just ignore this bit for now:
 
-```
+```javascript
 // Add a "fetch" event to signal start of collection AJAX call.
 var oldCollectionFetch = Backbone.Collection.prototype.fetch;
 Backbone.Collection.prototype.fetch = function(options) {
@@ -271,7 +272,7 @@ a code execution path. Backbone provides us with a way of executing a
 function or responding to an event triggered by navigating to a new URL 
 using a simple syntax:
 
-```
+```javascript
 // Application routes
 var AppRouter = Backbone.Router.extend({
     routes: {
@@ -348,7 +349,7 @@ First, create a file called `js/views/CourtLocationTableView.js`
 
 Then, add it to the app's required modules:
 
-```
+```js
 define([
     // Libraries
     'jquery', 
@@ -373,7 +374,7 @@ define([
 
 Add your route to AppRouter:
 
-```
+```js
     var AppRouter = Backbone.Router.extend({
         routes: {
             '': 'inmates',
@@ -386,7 +387,7 @@ Add your route to AppRouter:
 
 Invoke the router from your initialize function:
 
-```
+```js
         var courtlocations = new CourtLocationTableView();
         router.on('route:courtlocations', function() {
             courtlocations.render();
@@ -396,7 +397,7 @@ Invoke the router from your initialize function:
 In `js/views/CourtLocationTableView.js`, create a new RequireJS module
 that returns a Backbone view.
 
-```
+```js
 define([
     // Libraries
     'jquery',
