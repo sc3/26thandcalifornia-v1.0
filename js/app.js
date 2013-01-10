@@ -12,7 +12,7 @@ define([
     'views/PageView',
 
     // Templates
-    'text!templates/about.html',
+    'text!templates/about.html'
 
 ], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, about) {
 
