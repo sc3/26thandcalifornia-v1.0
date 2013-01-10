@@ -10,6 +10,8 @@ define([
     'views/InmateTableView',
     'views/MenuView',
     'views/PageView',
+
+    // Templates
     'text!templates/about.html',
 
 ], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, about) {
@@ -31,27 +33,29 @@ define([
     });
 
     // Initialize
-    var initialize = function(){
+    var initialize = function() {
         var router = new AppRouter();
 
-        // Inmate view is triggered on fetch
+        // Render inmate table view on 'inmates' navigation event
         var inmates = new InmateTableView({collection: new InmateCollection()});
         router.on('route:inmates', function() {
+            // InmateTableView.render() is triggered after fetching the data.
             inmates.collection.fetch();
         });
 
-        // Render about page template
+        // Render about page template on 'about' navigation event
         var about_page = new PageView({template: about});
         router.on('route:about', function() {
             about_page.render();
         });
 
+        // Menu requires history fragment to set default active tab, so it loads 
+        // after history starts.
         Backbone.history.start();
-
-        // Menu requires history fragment to set default active tab
         var menu = new MenuView();
     };
 
+    // Return our module interface
     return { 
         initialize: initialize
     };

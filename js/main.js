@@ -1,7 +1,7 @@
 // Configure RequireJS
 
 // Inmate URL configuration variable
-var INMATE_URL = 'http://vast-retreat-3472.herokuapp.com/api/1.0/countyinmate/?format=jsonp';
+var INMATE_URL = 'http://cookcountyjail.recoveredfactory.net/api/1.0/countyinmate/?format=jsonp';
 
 // RequireJS aliases
 require.config({
@@ -16,7 +16,8 @@ require.config({
 
 });
 
-// Bootstrap our application.
+// Load our application by requiring it, then calling it's
+// initialize method.
 require([
     'app',
 ], function(App){

@@ -1,12 +1,15 @@
+/* Account for fixed nav */
 body {
     padding-top: 70px;
 }
 
+/* Make room for spinner */
 #content { 
     min-height: 300px;
 }
 
 @media (max-width: 979px) {
+    /* Nav isn't fixed on smallish devices, so padding needs to go away. */
     body {
         padding-top: 0;
     }

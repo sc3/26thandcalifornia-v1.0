@@ -3,17 +3,29 @@
    
 <head>
     <title>Full House</title>
+
+    <!-- CSS libraries -->
     <link rel="stylesheet" type="text/css" href="lib/bootstrap-2.2.2/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="lib/bootstrap-2.2.2/css/bootstrap-responsive.min.css" />
+    
+    <!-- Our CSS -->
     <link rel="stylesheet" type="text/css" href="css/style.css" />
 
+    <!-- Javascript libraries that have trouble with RequireJS -->
     <script src="lib/spin.min.js"></script>
+
+    <!-- 
+    Load RequireJS. The `data-main` attribute specifies the file (e.g. js/main.js)
+    Require will use as an entry point. Basic configuration and application loading
+    happens there.
+    // -->
 	<script data-main="js/main" src="lib/require.js"></script>
     
 </head>
 
 <body>
 
+<!-- Main menu. -->
 <div id="menu" class="navbar navbar-inverse navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container-fluid">
@@ -34,7 +46,10 @@
 </div>
 
 <div class="container-fluid">
+    <!-- A container for "loading" spinners -->
     <div id="spinner"></div>
+
+    <!-- Main content -->
     <section id="content"></section>
 </div>
 
