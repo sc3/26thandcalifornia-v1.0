@@ -85,10 +85,12 @@ require([
 ```
 
 First, we set a constant. Then we update the RequireJS configuration by
-calling `require.config()`.
+calling `require.config()`. Finally, we encounter our first instance of
+RequireJS's loading syntax.
 
-Finally, we encounter our first instance of RequireJS's loading syntax.
-Let's take a look at it in a little more detail:
+Let's take a look at it in a little more detail. If you know what's
+going on, or just want to know how Backbone works, skip ahead to
+[invoking Backbone](#invoking-backbone) in `js/app.js`.
 
 ```javascript
 require([ // List of modules to load
@@ -127,7 +129,7 @@ app.
 ## js/app.js
 
 Up to this point, we've just been loading files. Now we're ready to look
-at the meat of the application.
+at the substance of the application, a Backbone JS app.
 
 ```
 define([
@@ -196,7 +198,10 @@ define([
 ```
 
 There's a lot going on in this file, so let's step back at look at the
-big picture and then drill down into the actual Backbone app. 
+big picture and then drill down into the actual Backbone app.
+
+To define a module that can be loaded by RequireJS, we need to return an
+object: 
 
 ```javascript
 // myapp.js
@@ -204,15 +209,129 @@ require([
   'jquery',
   'underscore'
 ], function($, _) {
-  var initialize = function() { 
-    console.log('init!');
+  var rock_and_roll = function() { 
+    $('#content').html('Initialized module.');
   }
-  
   return {
-    initialize: initialize
+    rock_and_roll: rock_and_roll
   }
 }
 ```
+
+To use this app from `main.js`, we would use something like this:
+
+```
+require([
+  'myapp'
+], function(MyApp) {
+  MyApp.rock_and_roll();
+}
+
+Instead of exporting a `rock_and_roll()` method, our app exports a
+method called initialize. Remember good ol' `main.js`? It ends with
+
+```
+ require([
+    'app',
+], function(App){
+    App.initialize();
+});
+```
+
+This imports our application and calls it's only method, initialize,
+which does the work of loading a Backbone model.
+
+Phew, that's a lot of mechanics. But they're pretty sane mechanics, and they 
+flow through a single, simple pattern that encourages good app
+architecture while making some common tasks easier.
+
+<div id="invoking-backbone"></div>
+
+Now for the fun part. Let's take a look at the app's callback function
+body. For those skipping ahead, you should now be looking at the callback 
+defined in `js/app.js`. 
+
+Unless you know Backbone, just ignore this bit for now:
+
+```
+// Add a "fetch" event to signal start of collection AJAX call.
+var oldCollectionFetch = Backbone.Collection.prototype.fetch;
+Backbone.Collection.prototype.fetch = function(options) {
+    this.trigger("fetch");
+    oldCollectionFetch.call(this, options);
+}
+```
+
+(If you do know Backbone, this adds a 'fetch' event to the start of
+collection AJAX requests, handy for adding a loading spinner.)
+
+The real fun starts in the next stanza, where we define our application routes. 
+All web applications must contain some version of this idea -- you gotta map URLs to
+a code execution path. Backbone provides us with a way of executing a
+function or responding to an event triggered by navigating to a new URL 
+using a simple syntax:
+
+```
+// Application routes
+var AppRouter = Backbone.Router.extend({
+    routes: {
+        '': 'inmates',
+        'inmates': 'inmates',
+        'about': 'about'
+    }
+});
+```
+
+These are "hash routes" -- instead of URLs like
+`http://mydomain.tld/inmates`, you use URLs like
+`http://mydomain.tld/#inmates`. Backbone catches the anchor link, trys
+to call a function that matches the 'value' side of the key-value pair,
+and fires and event called `route:<value>`.
+
+In our case, going to our web root (`''`) or `#inmates` should call a
+function called `inmates` if it exists in the router object and trigger
+the `route:inmates` event. Similarly, `#about` will call a function
+called `about` if it exists and trigger a `route:about` event.
+
+In the next code snippet, we're going to initialize our app by creating
+a new instance of the router, instantiating some Backbone views, and
+binding to route events:
+ 
+```js
+var initialize = function() {
+    var router = new AppRouter();
+
+    // Render inmate table view on 'inmates' navigation event
+    var inmates = new InmateTableView();
+    router.on('route:inmates', function() {
+        inmates.render();
+    });
+
+    // Render about page template on 'about' navigation event
+    var about_page = new PageView({template: about});
+    router.on('route:about', function() {
+        about_page.render();
+    });
+
+    // Menu requires history fragment to set default active tab, so it loads 
+    // after history starts.
+    Backbone.history.start();
+    var menu = new MenuView();
+}
+```
+
+As always, there's a pattern here:
+
+* Create a new router object
+* Create views
+* Bind route events to functions that cause views to render.
+
+
+## BREAK TIME
+
+If this is a class, take a short break for Q&A. If you're reading along
+at home, now would be a good time to refill your coffee or tea and take
+a little walk.
 
 ## models
 
@@ -220,4 +339,4 @@ require([
 
 ## views
 
-## Overall structure
+## How do I hack on it?
