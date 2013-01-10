@@ -304,7 +304,8 @@ var initialize = function() {
     // Render inmate table view on 'inmates' navigation event
     var inmates = new InmateTableView();
     router.on('route:inmates', function() {
-        inmates.render();
+        // InmateTableView.render() is triggered after fetching the data.
+        inmates.collection.fetch();
     });
 
     // Render about page template on 'about' navigation event
@@ -322,9 +323,9 @@ var initialize = function() {
 
 As always, there's a pattern here:
 
-* Create a new router object
-* Create views
-* Bind route events to functions that cause views to render.
+* Create a new Backbone router object based on our router definition
+* Create new Backbone views
+* Bind routing events to functions that cause views to render.
 
 
 ## BREAK TIME
@@ -340,3 +341,83 @@ a little walk.
 ## views
 
 ## How do I hack on it?
+
+Let's add a route to look at court locations:
+
+First, create a file called `js/views/CourtLocationTableView.js`
+
+Then, add it to the app's required modules:
+
+```
+define([
+    // Libraries
+    'jquery', 
+    'underscore',
+    'backbone',
+
+    // Application
+    'models/InmateModel',
+    'collections/InmateCollection',
+    'views/InmateTableView',
+    'views/CourtLocationTableView',
+    'views/MenuView',
+    'views/PageView',
+
+    // Templates
+    'text!templates/about.html'
+
+], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, CourtLocationTableView, MenuView, PageView, about) {
+// ...
+```
+ 
+
+Add your route to AppRouter:
+
+```
+    var AppRouter = Backbone.Router.extend({
+        routes: {
+            '': 'inmates',
+            'inmates': 'inmates',
+            'about': 'about'
+            'courtlocations': 'courtlocations'
+        }
+    });
+```
+
+Invoke the router from your initialize function:
+
+```
+        var courtlocations = new CourtLocationTableView();
+        router.on('route:courtlocations', function() {
+            courtlocations.render();
+        });
+```
+
+In `js/views/CourtLocationTableView.js`, create a new RequireJS module
+that returns a Backbone view.
+
+```
+define([
+    // Libraries
+    'jquery',
+    'underscore',
+    'backbone',
+], function($, _, Backbone) {
+
+    var CourtLocationTableView = Backbone.View.extend({
+        el: '#content',
+        render: function(options) {
+            this.$el.html('<p>It's up to you to wire this up to a data source.</p>');
+            return this;
+        }
+    });
+
+    return CourtLocationTableView;
+
+});
+```
+
+
+
+
+
