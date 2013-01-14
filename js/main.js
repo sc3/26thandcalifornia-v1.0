@@ -1,7 +1,7 @@
 // Configure RequireJS
 
 // Inmate URL configuration variable
-var INMATE_URL = 'http://cookcountyjail.recoveredfactory.net/api/1.0/countyinmate/?format=jsonp';
+var INMATE_URL = 'http://cookcountyjail.recoveredfactory.net/api/1.0/countyinmate/'; 
 
 // RequireJS aliases
 require.config({
