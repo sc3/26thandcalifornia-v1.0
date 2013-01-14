@@ -337,9 +337,111 @@ a little walk.
 
 ## models
 
+Models provide a light wrapper for individual data objects.
+
+Our main data model is available in `InmateModel.js`:
+
+```js
+define([
+    'moment',
+    'models/CookCountyJailModel'
+], function(Moment, CookCountyJailModel) {
+
+    var InmateModel = CookCountyJailModel.extend({
+        urlRoot: INMATE_URL,
+        idAttribute: 'jail_id',
+        parse: function(data) {
+            // Calculate length of stay
+            var start = new moment(data.booking_date);
+            var end = (data.discharge_date_earliest) ? new moment(data.discharge_date_earliest) : new moment();
+            data.stay_length = end.diff(start, 'days');
+            return data;
+        }
+    });
+
+    return InmateModel;
+
+});
+```
+
+This model definition configures where to find the model via the
+`urlRoot` option, which field to use as the id with the `idAtrribute`
+option, and defines a custom `parse()` function that uses the Moment
+javascript library to calculate length of stay in days.
+
+Note that we're extending a model called `CookCountyJailModel`. Most Backbone
+apps define models by extending the Backbone model (`var MyModel =
+Backbone.Model.extend({ ... })`). The common quirks of accessing our API
+and parsing API output are handled with our special model class.
+
 ## collections
 
+Collections represent collections of models. The inmate collection is
+even simpler than the model:
+
+```
+define([
+    'collections/CookCountyJailCollection',
+    'models/InmateModel'
+], function(CookCountyJailCollection, InmateModel) {
+
+    var InmateCollection = CookCountyJailCollection.extend({
+        url: INMATE_URL,
+        model: InmateModel,
+    });
+
+    return InmateCollection;
+
+});
+```
+
+As above, we extend `CookCountyJailCollection` to encapsulate the quirks
+of our AJAX requests to our API and parsing Tastypie's output.
+
 ## views
+
+Views are the fundamental building block of Backbone. It is said
+Backbone has thin models and collection and thick views. This makes
+sense: many classes of web apps are UI and interaction oriented, so
+structuring UI rendering and event handling a particularly useful trick.
+
+### Page view
+
+The page view is our most simple. It takes an underscore javascript
+template as an option. It renders that template if it's `render` method
+is called.
+
+```javascript
+define([
+    // Libraries
+    'jquery',
+    'underscore',
+    'backbone',
+], function($, _, Backbone) {
+
+    var PageView = Backbone.View.extend({
+        el: '#content',
+        initialize: function(options) {
+            // Compile template
+            this.template = _.template(options.template);
+        },
+        render: function(context) {
+            // Replace HTML with contents of template. Takes optional
+            // `context` parameter to pass to template.
+            this.$el.html(this.template(context));
+        }
+    });
+
+    return PageView;
+
+});
+```
+
+### Inmate table view
+
+### Menu view
+
+... under development ...
 
 ## How do I hack on it?
 

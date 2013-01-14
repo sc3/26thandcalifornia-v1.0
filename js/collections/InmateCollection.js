@@ -1,8 +1,7 @@
 define([
-    'jquery',
     'collections/CookCountyJailCollection',
     'models/InmateModel'
-], function($, CookCountyJailCollection, InmateModel) {
+], function(CookCountyJailCollection, InmateModel) {
 
     var InmateCollection = CookCountyJailCollection.extend({
         url: INMATE_URL,
