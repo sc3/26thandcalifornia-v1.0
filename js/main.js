@@ -11,9 +11,14 @@ require.config({
         backbone: '../lib/backbone-0.9.2.min',
         text: '../lib/text',
         moment: '../lib/moment',
-        templates: '../templates'
+        templates: '../templates',
+        spin: '../lib/spin.min'
+    },
+    shim: {
+        spin: {
+            exports: 'Spinner'
+        }
     }
-
 });
 
 // Load our application by requiring it, then calling it's

@@ -3,13 +3,14 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'spin',
 
     // Our apps
     'collections/InmateCollection',
 
     // Templates
     'text!templates/inmate_table.html'
-], function($, _, Backbone, InmateCollection, inmate_table) {
+], function($, _, Backbone, Spinner, InmateCollection, inmate_table) {
 
     var InmateTableView = Backbone.View.extend({
         collection: InmateCollection,
