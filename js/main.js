@@ -9,15 +9,19 @@ require.config({
         jquery: '../lib/jquery-1.8.3.min',
         underscore: '../lib/underscore-1.4.2.min',
         backbone: '../lib/backbone-0.9.2.min',
+        backbone_mutators: '../lib/backbone.mutators.min',
         text: '../lib/text',
         moment: '../lib/moment',
         templates: '../templates',
-        spin: '../lib/spin.min'
+        spin: '../lib/spin.min',
+        bootstrap: '../lib/bootstrap-2.2.2/js/bootstrap.min'
     },
     shim: {
         spin: {
             exports: 'Spinner'
-        }
+        },
+        backbone_mutators: 'backbone',
+        bootstrap: 'jquery'
     }
 });
 
