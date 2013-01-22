@@ -6,9 +6,20 @@ define(['collections/CookCountyJailCollection', 'models/InmateModel'], function(
 		sortAscending: true,
 		sortByAttributeKey: 'jail_id',
 
-		comparator: function(model) {
-			var val = model.get(this.sortByAttributeKey);
-			return this.sortAscending ? val : -val;
+		comparator: function(lhs, rhs) {
+			var compare = undefined,
+			val_lhs = lhs.get(this.sortByAttributeKey),
+			val_rhs = rhs.get(this.sortByAttributeKey);
+			switch(typeof(val_lhs)){
+				case "string":
+				compare = val_lhs.localeCompare(val_rhs);
+				break;
+
+				case "number":
+				compare =  val_lhs - val_rhs;
+				break;
+			}
+			return this.sortAscending ? compare : -compare;
 		},
 
 		sortByAttribute: function(attribute, ascending) {

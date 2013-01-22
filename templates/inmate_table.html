@@ -15,13 +15,13 @@
                     </div>
                 </th>
                 <th id="stay_length">Stay (days)<div class="btn-group hide" data-toggle="buttons-radio">
-                        <a class="btn btn-nano" href="#"><i class="icon-chevron-up"></i></a>
-                        <a class="btn btn-nano" href="#"><i class="icon-chevron-down"></i></a>
+                        <a class="btn btn-nano asce" href="#"><i class="icon-chevron-up"></i></a>
+                        <a class="btn btn-nano desc" href="#"><i class="icon-chevron-down"></i></a>
                     </div>
                 </th>
                 <th id="age_at_booking">Booking age<div class="btn-group hide" data-toggle="buttons-radio">
-                        <a class="btn btn-nano" href="#"><i class="icon-chevron-up"></i></a>
-                        <a class="btn btn-nano" href="#"><i class="icon-chevron-down"></i></a>
+                        <a class="btn btn-nano asce" href="#"><i class="icon-chevron-up"></i></a>
+                        <a class="btn btn-nano desc" href="#"><i class="icon-chevron-down"></i></a>
                     </div>
                 </th>
                 <th id="bail_amount">Bond amount<div class="btn-group hide" data-toggle="buttons-radio">
@@ -71,26 +71,6 @@
                 </th>
             </tr>
         </thead>
-        <tbody>
-            <% _.each(inmates, function(inmate, i) { %>
-            <tr>
-                <td><%= inmate.jail_id %></td>
-                <td><%= inmate.booking_date %></td>
-                <td><%= inmate.stay_length %></td>
-                <td><%= inmate.age_at_booking %></td>
-                <td><%= inmate.bail_amount %></td>
-                <td><%= inmate.bail_status %></td>
-                <td><%= inmate.charges_citation %></td>
-                <td><%= inmate.discharge_date_earliest %></td>
-                <td><%= inmate.gender %></td>
-                <td><%= inmate.housing_location %></td>
-                <td><%= inmate.num_court_dates %></td>
-                <% if (inmate.num_court_dates > 0) { %>
-                <td><%= inmate.next_court_date %></td>
-                <td><%= inmate.next_court_location %></td>
-                <% } else { %><td></td><td></td><% } %>
-            </tr>
-            <% }); %>
-        </tbody>
+        <tbody class="inmate-list"></tbody>
     </table>
 </div>
