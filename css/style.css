@@ -8,6 +8,33 @@ body {
     min-height: 300px;
 }
 
+/* Button Nano */
+.btn-nano [class^="icon-"],
+.btn-nano [class*=" icon-"] {
+  margin-top: 0px;
+}
+
+.btn-nano {
+  padding: 0 2px;
+  font-size: 11.5px;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+}
+
+/* Table Heading Select */
+#inmate-table .sortedby {
+	font-weight:bolder;
+	font-style: italic;
+}
+#inmate-table th.sortedby div  {
+	display: inline-block;
+}
+
+#inmate-table th:hover div  {
+	display: inline-block;
+}
+
 @media (max-width: 979px) {
     /* Nav isn't fixed on smallish devices, so padding needs to go away. */
     body {
