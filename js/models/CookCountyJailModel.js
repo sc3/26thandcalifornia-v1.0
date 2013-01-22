@@ -9,7 +9,7 @@ define([
             var params = _.extend({
                 type: 'GET',
                 dataType: 'jsonp',
-                data: {'format': 'jsonp', 'related': 1},
+                data: {'format': 'jsonp', 'related': 0},
                 url: this.urlRoot + model.get(this.idAttribute)
             }, options);
             return $.ajax(params);

@@ -8,13 +8,15 @@ define([
     'models/InmateModel',
     'collections/InmateCollection',
     'views/InmateTableView',
+    'collections/LocationCollection',
+    'views/LocationTableView',
     'views/MenuView',
     'views/PageView',
 
     // Templates
     'text!templates/about.html'
 
-], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, about) {
+], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, LocationCollection, LocationTableView, MenuView, PageView, about) {
 
     // Add a "fetch" event to signal start of collection AJAX call.
     var oldCollectionFetch = Backbone.Collection.prototype.fetch;
@@ -28,6 +30,7 @@ define([
         routes: {
             '': 'inmates',
             'inmates': 'inmates',
+            'locations': 'locations',
             'about': 'about'
         }
     });
@@ -47,6 +50,12 @@ define([
         var about_page = new PageView({template: about});
         router.on('route:about', function() {
             about_page.render();
+        });
+
+        var locations = new LocationTableView({ collection: new LocationCollection() });
+        router.on('route:locations', function() {
+            //locations.render();
+            locations.collection.fetch();
         });
 
         // Menu requires history fragment to set default active tab, so it loads 
