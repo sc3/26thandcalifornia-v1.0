@@ -35,6 +35,15 @@ body {
 	display: inline-block;
 }
 
+.chart rect {
+  stroke: white;
+  fill: steelblue;
+}
+
+.chart text.bar {
+  fill: white;
+}
+
 @media (max-width: 979px) {
     /* Nav isn't fixed on smallish devices, so padding needs to go away. */
     body {
