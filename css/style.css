@@ -44,6 +44,21 @@ body {
   fill: white;
 }
 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.x.axis path {
+  display: none;
+}
+
 @media (max-width: 979px) {
     /* Nav isn't fixed on smallish devices, so padding needs to go away. */
     body {

@@ -50,7 +50,11 @@ define([
         // Render histogram page template on 'histogram' navigation event
         var histogram_page = new HistogramView({collection: inmate_collection});
         router.on('route:histogram', function() {
-            histogram_page.render();
+            //simple example 1
+            //histogram_page.render();
+
+            //simple example 2
+            histogram_page.render_advanced();
         });
 
         // Render about page template on 'about' navigation event

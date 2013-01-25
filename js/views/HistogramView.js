@@ -84,6 +84,75 @@ define([
                 .attr("y1", 0)
                 .attr("y2", 380)
                 .style("stroke", "#000");
+        },
+
+        render_advanced: function(context) {
+            // draw an advanced chart with d3!
+            // based on http://bl.ocks.org/3885304
+
+            this.$el.html("<div id='histogram_advanced'></div>");
+
+            var margin = {top: 20, right: 20, bottom: 30, left: 40},
+                width = 960 - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
+
+            var formatPercent = d3.format(".0%");
+
+            var x = d3.scale.ordinal()
+                .rangeRoundBands([0, width], .1);
+
+            var y = d3.scale.linear()
+                .range([height, 0]);
+
+            var xAxis = d3.svg.axis()
+                .scale(x)
+                .orient("bottom");
+
+            var yAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left");
+
+            var svg = d3.select("#histogram_advanced").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            d3.json("/data/mock_inmate_stay.json", function(error, data) {
+
+              data = data.histogram;
+              data.forEach(function(d) {
+                d.inmate_count = +d.inmate_count;
+              });
+
+              x.domain(data.map(function(d) { return d.stay; }));
+              y.domain([0, d3.max(data, function(d) { return d.inmate_count; })]);
+
+              svg.append("g")
+                  .attr("class", "x axis")
+                  .attr("transform", "translate(0," + height + ")")
+                  .call(xAxis);
+
+              svg.append("g")
+                  .attr("class", "y axis")
+                  .call(yAxis)
+                .append("text")
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 6)
+                  .attr("dy", ".71em")
+                  .style("text-anchor", "end")
+                  .text("Inmate count");
+
+              svg.selectAll(".bar")
+                  .data(data)
+                .enter().append("rect")
+                  .attr("class", "bar")
+                  .attr("x", function(d) { return x(d.stay); })
+                  .attr("width", x.rangeBand())
+                  .attr("y", function(d) { return y(d.inmate_count); })
+                  .attr("height", function(d) { return height - y(d.inmate_count); });
+
+            });
         }
     });
 
