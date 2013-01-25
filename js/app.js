@@ -10,11 +10,12 @@ define([
     'views/InmateTableView',
     'views/MenuView',
     'views/PageView',
+    'views/HistogramView',
 
     // Templates
     'text!templates/about.html'
 
-], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, about) {
+], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView, about) {
 
     // Add a "fetch" event to signal start of collection AJAX call.
     var oldCollectionFetch = Backbone.Collection.prototype.fetch;
@@ -28,6 +29,7 @@ define([
         routes: {
             '': 'inmates',
             'inmates': 'inmates',
+            'histogram': 'histogram',
             'about': 'about'
         }
     });
@@ -36,11 +38,19 @@ define([
     var initialize = function() {
         var router = new AppRouter();
 
+        var inmate_collection = new InmateCollection();
+
         // Render inmate table view on 'inmates' navigation event
-        var inmates = new InmateTableView({collection: new InmateCollection()});
+        var inmates = new InmateTableView({collection: inmate_collection});
         router.on('route:inmates', function() {
             // InmateTableView.render() is triggered after fetching the data.
             inmates.collection.fetch();
+        });
+
+        // Render histogram page template on 'histogram' navigation event
+        var histogram_page = new HistogramView({collection: inmate_collection});
+        router.on('route:histogram', function() {
+            histogram_page.render();
         });
 
         // Render about page template on 'about' navigation event
