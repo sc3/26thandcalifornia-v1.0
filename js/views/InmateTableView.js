@@ -1,3 +1,4 @@
+"use strict";
 define([
     // Libraries
     'jquery',
@@ -14,6 +15,35 @@ define([
     var InmateTableView = Backbone.View.extend({
         collection: InmateCollection,
         el: '#content',
+        paginateMarker: 0,
+        amountToDisplay: 20,
+        events: {
+            'click #next': 'goForward',
+            'click #back': 'goBackward'
+        },
+        getRangeOfJSONData: function(data, first, last){
+          var dataSet;
+          if (typeof data !== Array) {
+              dataSet = _.toArray(data).slice(first,last);
+          } else {
+              dataSet = data.slice(first,last);
+          }
+          return dataSet;
+        },
+        goForward: function(){
+          var first;
+      
+          first = this.paginateMarker;
+          this.paginateMarker += this.amountToDisplay;
+          this.render({data: this.collection.toJSON(), firstMarker: first, lastMarker: this.paginateMarker});
+        },
+        
+        goBackward: function(){
+          console.log('hi backwards!!!');
+          //this.offset -= 20;
+          this.paginateMarker -= 20;
+          console.log(this.paginateMarker);
+        },
         initialize: function(options) {
             // Call 'spin' when collection AJAX request starts.
             this.collection.bind('fetch', this.spin, this);
@@ -28,11 +58,21 @@ define([
             return this;
         },
         render: function(options) {
-            // Render template and stop spinner.
-            var compiled_template = _.template(inmate_table, { inmates: this.collection.toJSON() });
-            this.$el.html(compiled_template);
-            this.spinner.stop();
-            return this;
+          // Render template and stop spinner.
+          //also should only get 20 rows at first.
+          var dataSet = this.collection.toJSON();
+
+          if (this.paginateMarker === 0) {
+            options.firstMarker = 0;
+            options.lastMarker = 20;
+          }
+          
+          dataSet = this.getRangeOfJSONData( this.collection.toJSON(),options.firstMarker, options.lastMarker );
+          
+          var compiled_template = _.template(inmate_table, { inmates: dataSet });
+          this.$el.html(compiled_template);
+          this.spinner.stop();
+          return this;
         }
     });
 
