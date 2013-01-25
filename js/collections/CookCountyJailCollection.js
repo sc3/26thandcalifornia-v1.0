@@ -20,6 +20,11 @@ define([
             // Parse out 'meta' and return 'objects'
             this.meta = data.meta;
             return data.objects;
+        },
+
+        histogram: function() {
+            var mock_data = [80,20,15,10,1];
+            return mock_data;
         }
     });
 

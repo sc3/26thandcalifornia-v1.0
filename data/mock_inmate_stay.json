@@ -1,0 +1,8 @@
+{"histogram": [
+    {"stay": "0-6 days", "inmate_count": "90"},
+    {"stay": "7-13 days", "inmate_count": "100"},
+    {"stay": "14-20 days", "inmate_count": "50"},
+    {"stay": "21-27 days", "inmate_count": "20"},
+    {"stay": "28+ days", "inmate_count": "30"}
+  ]
+}
