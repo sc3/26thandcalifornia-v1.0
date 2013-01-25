@@ -14,14 +14,18 @@ require.config({
         moment: '../lib/moment',
         templates: '../templates',
         spin: '../lib/spin.min',
-        bootstrap: '../lib/bootstrap-2.2.2/js/bootstrap.min'
+        bootstrap: '../lib/bootstrap-2.2.2/js/bootstrap.min',
+        d3: '../lib/d3.v3.min'
     },
     shim: {
         spin: {
             exports: 'Spinner'
         },
         backbone_mutators: 'backbone',
-        bootstrap: 'jquery'
+        bootstrap: 'jquery',
+        d3: {
+            exports: 'd3'
+        }
     }
 });
 

@@ -3,18 +3,19 @@ define([
     'jquery',
     'underscore',
     'backbone',
-], function($, _, Backbone) {
+    'd3',
+], function($, _, Backbone, mything) {
 
     var HistogramView = Backbone.View.extend({
         el: '#content',
-        initialize: function(options) {
-            // Compile template
-            //this.template = _.template(options.template);
-        },
+        initialize: function(options) {},
+
         render: function(context) {
             // Replace HTML with contents of template. Takes optional
             // `context` parameter to pass to template.
-            this.$el.html("Howdy!");
+            this.$el.html("<p>Howdy!</p>");
+            //console.log(this.collection.histogram());
+            d3.selectAll("p").style("color", "red");
         }
     });
 
