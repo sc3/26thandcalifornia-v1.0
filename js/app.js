@@ -38,23 +38,25 @@ define([
     var initialize = function() {
         var router = new AppRouter();
 
+        // Initialize collection
         var inmate_collection = new InmateCollection();
 
         // Render inmate table view on 'inmates' navigation event
         var inmates = new InmateTableView({collection: inmate_collection});
         router.on('route:inmates', function() {
-            // InmateTableView.render() is triggered after fetching the data.
-            inmates.collection.fetch();
+          inmate_collection.fetch({
+            success: _.bind(inmates.render, inmates)
+          });
         });
 
         // Render histogram page template on 'histogram' navigation event
-        var histogram_page = new HistogramView({collection: inmate_collection});
+        var histogram = new HistogramView({collection: inmate_collection});
         router.on('route:histogram', function() {
-            //simple example 1
-            //histogram_page.render();
-
-            //simple example 2
-            histogram_page.render_advanced();
+          inmate_collection.fetch({
+            data: { 'discharge_date_earliest__isnull': 'False', 'booking_date__gte': '2012-01-01', 'limit': 0 },
+            //data: { 'bail_amount__isnull': 'False', 'booking_date__gte': '2013-01-01', 'limit': 0 },
+            success: _.bind(histogram.render_advanced, histogram)
+          });
         });
 
         // Render about page template on 'about' navigation event

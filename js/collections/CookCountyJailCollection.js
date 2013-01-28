@@ -11,7 +11,7 @@ define([
             var params = _.extend({
                 type: 'GET',
                 dataType: 'jsonp',
-                data: {'format': 'jsonp', 'related': 1},
+                data: {'format': 'jsonp'},
                 url: this.url,
             }, options);
             return $.ajax(params);

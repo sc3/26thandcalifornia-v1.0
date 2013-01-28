@@ -8,7 +8,10 @@ define([
 
     var HistogramView = Backbone.View.extend({
         el: '#content',
-        initialize: function(options) {},
+        initialize: function(options) {
+            // Call 'render' when collection AJAX request is done.
+            //this.collection.bind('reset', this.render_advanced, this);
+        },
 
         render: function(context) {
             // draw a chart with d3!
@@ -92,14 +95,17 @@ define([
 
             this.$el.html("<div id='histogram_advanced'></div>");
 
-            var margin = {top: 20, right: 20, bottom: 30, left: 40},
-                width = 960 - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
+            var data = this.collection.histogram('stay_length', _.range(0, 365, 14));
+            //var data = this.collection.histogram('bail_amount', _.range(0, 100000, 2500));
+
+            var margin = {top: 40, right: 40, bottom: 40, left: 40},
+                width = ($(window).width() * 0.9) - margin.left - margin.right,
+                height = ($(window).height() * .8) - margin.top - margin.bottom;
 
             var formatPercent = d3.format(".0%");
 
             var x = d3.scale.ordinal()
-                .rangeRoundBands([0, width], .1);
+                .rangeRoundBands([0, width], .2);
 
             var y = d3.scale.linear()
                 .range([height, 0]);
@@ -118,41 +124,42 @@ define([
               .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            d3.json("/data/mock_inmate_stay.json", function(error, data) {
-
-              data = data.histogram;
-              data.forEach(function(d) {
-                d.inmate_count = +d.inmate_count;
-              });
-
-              x.domain(data.map(function(d) { return d.stay; }));
-              y.domain([0, d3.max(data, function(d) { return d.inmate_count; })]);
-
-              svg.append("g")
-                  .attr("class", "x axis")
-                  .attr("transform", "translate(0," + height + ")")
-                  .call(xAxis);
-
-              svg.append("g")
-                  .attr("class", "y axis")
-                  .call(yAxis)
-                .append("text")
-                  .attr("transform", "rotate(-90)")
-                  .attr("y", 6)
-                  .attr("dy", ".71em")
-                  .style("text-anchor", "end")
-                  .text("Inmate count");
-
-              svg.selectAll(".bar")
-                  .data(data)
-                .enter().append("rect")
-                  .attr("class", "bar")
-                  .attr("x", function(d) { return x(d.stay); })
-                  .attr("width", x.rangeBand())
-                  .attr("y", function(d) { return y(d.inmate_count); })
-                  .attr("height", function(d) { return height - y(d.inmate_count); });
-
+            data.forEach(function(d) {
+              d.inmate_count = +d.inmate_count;
             });
+
+            x.domain(data.map(function(d) { return d.stay; }));
+            y.domain([0, d3.max(data, function(d) { return d.inmate_count; })]);
+
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+
+            var xTicks = d3.select('.axis.x').selectAll('g');
+            xTicks
+              .selectAll('text')
+              .attr('transform', function(d,i,j) { return 'translate (-17, 30) rotate(-90 0,0)' }) ;
+
+
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+              .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text("Inmates");
+
+            svg.selectAll(".bar")
+                .data(data)
+              .enter().append("rect")
+                .attr("class", "bar")
+                .attr("x", function(d) { return x(d.stay); })
+                .attr("width", x.rangeBand())
+                .attr("y", function(d) { return y(d.inmate_count); })
+                .attr("height", function(d) { return height - y(d.inmate_count); });
         }
     });
 

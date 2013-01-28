@@ -16,10 +16,10 @@ define([
         },
         initialize: function(options) {
             // Call 'spin' when collection AJAX request starts.
-            this.collection.bind('fetch', this.spin, this);
+            //this.collection.bind('fetch', this.spin, this);
 
             // Call 'render' when collection AJAX request is done.
-            this.collection.bind('reset', this.render, this);
+            // this.collection.bind('reset', this.render, this);
 
             // Call 'renderlist' when collection sort is performed.
             this.collection.bind('sort', this.renderlist, this);
@@ -35,10 +35,10 @@ define([
             var collection = {
                 inmates: this.collection.toJSON()
             },
-                compiled_template = _.template(inmate_table, collection);
+            compiled_template = _.template(inmate_table, collection);
             this.$el.html(compiled_template);
             this.renderlist({collection : collection});
-            this.spinner.stop();
+            //this.spinner.stop();
             return this;
         },
         renderlist: function(options) {
