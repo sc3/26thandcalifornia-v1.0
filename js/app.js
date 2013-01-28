@@ -1,6 +1,7 @@
+"use strict";
 define([
     // Libraries
-    'jquery', 
+    'jquery',
     'underscore',
     'backbone',
 
@@ -21,7 +22,7 @@ define([
     Backbone.Collection.prototype.fetch = function(options) {
         this.trigger("fetch");
         oldCollectionFetch.call(this, options);
-    }
+    };
 
     // Application routes
     var AppRouter = Backbone.Router.extend({
@@ -38,6 +39,7 @@ define([
 
         // Render inmate table view on 'inmates' navigation event
         var inmates = new InmateTableView({collection: new InmateCollection()});
+
         router.on('route:inmates', function() {
             // InmateTableView.render() is triggered after fetching the data.
             inmates.collection.fetch();
@@ -49,14 +51,14 @@ define([
             about_page.render();
         });
 
-        // Menu requires history fragment to set default active tab, so it loads 
+        // Menu requires history fragment to set default active tab, so it loads
         // after history starts.
         Backbone.history.start();
         var menu = new MenuView();
     };
 
     // Return our module interface
-    return { 
+    return {
         initialize: initialize
     };
 

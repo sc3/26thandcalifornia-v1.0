@@ -24,25 +24,35 @@ define([
         getRangeOfJSONData: function(data, first, last){
           var dataSet;
           if (typeof data !== Array) {
-              dataSet = _.toArray(data).slice(first,last);
+            dataSet = _.toArray(data).slice(first,last);
           } else {
-              dataSet = data.slice(first,last);
+            dataSet = data.slice(first,last);
           }
           return dataSet;
         },
+
         goForward: function(){
           var first;
-      
-          first = this.paginateMarker;
-          this.paginateMarker += this.amountToDisplay;
-          this.render({data: this.collection.toJSON(), firstMarker: first, lastMarker: this.paginateMarker});
+          //you need bound check for last record here...
+          if(true){
+              first = this.paginateMarker;
+              this.paginateMarker += this.amountToDisplay;
+              this.render({
+                data: this.collection.toJSON(),
+                firstMarker: first, lastMarker: this.paginateMarker
+              });
+          }
         },
-        
+
         goBackward: function(){
-          console.log('hi backwards!!!');
-          //this.offset -= 20;
-          this.paginateMarker -= 20;
-          console.log(this.paginateMarker);
+          var first, last;
+          if( (this.paginateMarker >= this.amountToDisplay)){
+              this.paginateMarker -= this.amountToDisplay;
+              last = this.paginateMarker;
+              first = this.paginateMarker - this.amountToDisplay;
+              this.render({data: this.collection.toJSON(), firstMarker: first,lastMarker: last });
+          }
+
         },
         initialize: function(options) {
             // Call 'spin' when collection AJAX request starts.
@@ -59,19 +69,23 @@ define([
         },
         render: function(options) {
           // Render template and stop spinner.
-          //also should only get 20 rows at first.
+          console.log('render and options', options);
           var dataSet = this.collection.toJSON();
 
           if (this.paginateMarker === 0) {
             options.firstMarker = 0;
             options.lastMarker = 20;
+            this.paginateMarker = 20;
           }
           
           dataSet = this.getRangeOfJSONData( this.collection.toJSON(),options.firstMarker, options.lastMarker );
           
           var compiled_template = _.template(inmate_table, { inmates: dataSet });
           this.$el.html(compiled_template);
+          
+          this.delegateEvents();
           this.spinner.stop();
+
           return this;
         }
     });
