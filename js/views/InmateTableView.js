@@ -60,7 +60,7 @@ define([
             // this.collection.bind('reset', this.render, this);
 
             // Call 'renderlist' when collection sort is performed.
-            this.collection.bind('sort', this.renderlist, this);
+            this.collection.bind('sort', this.renderSorted, this);
         },
         spin: function() {
             // Clear element and start spinner on collection start
@@ -68,54 +68,52 @@ define([
             this.spinner = new Spinner().spin(this.el);
             return this;
         },
-        incrementPaginateMaker: function(){
-          this.paginateMarker += this.amountToDisplay;
+        resetPaginateMaker: function(){
+          this.paginateMarker = this.amountToDisplay;
         },
-        initRender: function(options){
-          //i need sorted data here first, and i think i can just increment form here and don't need to slice here since renderlist will
+
+        renderInit: function(argument) {
           var dataSet = this.collection.toJSON();
-          this.renderlist({collection: dataSet, callback: this.incrementPaginateMaker});
-                
+          var compiled_table_template = _.template(inmate_table, { inmates: dataSet });
+          this.$el.html(compiled_table_template);
+
+          this.renderSorted({collection : {inmates: dataSet}});
+          this.resetPaginateMaker();
         },
+
         render: function(options) {
-            // Render template and stop spinner.
-            //my render expects a dataset and markers returned from array slicing. 
+         
+          //and then any twenty the user wants to see.
 
-            //my renderlist expected to be called from the user asking for either default first set of data or specific set of data.
+          var dataSet = this.collection.toJSON();
+           
+            if (options && options.firstMarker && options.lastMarker){
+              dataSet = this.getRangeOfJSONData( this.collection.toJSON(),options.firstMarker, options.lastMarker );
+            }
 
-            //his renderlist expects nothing of the sort ha!
-            // it expects to just render everything. i may want to rename
-            //his function sortlist and have it call my render (using his DOM modifications) with first set to 0 and set this.paginate to 20 because that will call get range and then display that set of the sorted entire collection. 
-
-            //so whatever sorts - calls renderlist, which means i'd need it to look at the markers and pass those to
-            var collection = {
-                inmates: this.collection.toJSON()
-            },
-            compiled_template = _.template(inmate_table, collection);
-            this.$el.html(compiled_template);
-            this.renderlist({collection : collection});
+          var compiled_template = _.template(inmate_table_body, {inmates:dataSet});
+          this.$el.find('.inmate-list').html(compiled_template); 
             //this.spinner.stop();
             return this;
         },
-        renderlist: function(options) {
-            var collection = options && options.collection ? options.collection : {
-                inmates: this.collection.toJSON()
-            };
-            //and since sort always calls renderList,this is the way to go.
+        renderSorted: function(options) {
+        //okay. this needs to just get first 20 records and send them to
+        //template.  
+
+          var collection = options && options.collection ? options.collection : {
+              inmates: this.collection.toJSON()
+          };
 
 
-            //instead of passing whole collection, could pass ranged. however what were are really doing is needing to keep track of where we are, so for instance if we just do this we haven't incremented. we are really emulating the init form of paginate here, which perhaps should be  method, and what it does is collect a range and then set the paginateMarker.
+         var range = collection.inmates ? collection.inmates : collection;
 
-            var rangeOfCollection = this.getRangeOfJSONData({data: collection, first: first, last: this.amountToDisplay });
+          var rangeOfCollection = this.getRangeOfJSONData(range, 0, this.amountToDisplay);
+          var compiled_template = _.template(inmate_table_body, {inmates:rangeOfCollection});
+          this.$el.find('.inmate-list').html(compiled_template);
+          this.resetPaginateMaker();
 
-            var compiled_template = _.template(inmate_table_body, rangeOfCollection);
-            this.$el.find('.inmate-list').html(compiled_template);
 
-            if (options && options.callback) {
-              callback();
-            }
-
-            return this;
+          return this;
         },
         sort: function(evt) {
             var btn = $(evt.currentTarget),

@@ -47,7 +47,7 @@ define([
           inmate_collection.fetch({
             //i could make a render init and bind it here.
             //that one could sort, paginate and increment.
-            success: _.bind(inmates.initRender, inmates)
+            success: _.bind(inmates.renderInit, inmates)
           });
         });
 
