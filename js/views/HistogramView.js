@@ -99,6 +99,12 @@ define([
             var data = this.collection.histogram('stay_length', _.range(0, 365, 14));
             //var data = this.collection.histogram('bail_amount', _.range(0, 100000, 2500));
 
+            //sum up our inmate count from raw data
+            //API should return a summary for better performance
+            data.forEach(function(d) {
+              d.inmate_count = +d.inmate_count;
+            });
+
             //set our histogram margins
             var margin = {top: 40, right: 40, bottom: 60, left: 80},
                 width = ($(window).width() * 0.9) - margin.left - margin.right,
@@ -128,11 +134,6 @@ define([
                 .attr("height", height + margin.top + margin.bottom)
               .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            //sum up our inmate count
-            data.forEach(function(d) {
-              d.inmate_count = +d.inmate_count;
-            });
 
             //define our domain ranges
             x.domain(data.map(function(d) { return d.stay; }));
