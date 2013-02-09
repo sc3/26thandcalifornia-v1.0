@@ -45,8 +45,7 @@ define([
         var inmates = new InmateTableView({collection: inmate_collection});
         router.on('route:inmates', function() {
           inmate_collection.fetch({
-            //i could make a render init and bind it here.
-            //that one could sort, paginate and increment.
+
             success: _.bind(inmates.renderInit, inmates)
           });
         });

@@ -69,43 +69,46 @@ define([
             return this;
         },
         resetPaginateMaker: function(){
+          //a way of saying set this back to first set (it's last record of first set)
           this.paginateMarker = this.amountToDisplay;
         },
 
         renderInit: function(argument) {
           var dataSet = this.collection.toJSON();
           var compiled_table_template = _.template(inmate_table, { inmates: dataSet });
+
+          //what are key differences between these three similar methods?
+
           this.$el.html(compiled_table_template);
 
+          //calls renderSorted then calls resetPaginate
           this.renderSorted({collection : {inmates: dataSet}});
           this.resetPaginateMaker();
         },
 
         render: function(options) {
-         
-          //and then any twenty the user wants to see.
-
           var dataSet = this.collection.toJSON();
            
-            if (options && options.firstMarker && options.lastMarker){
-              dataSet = this.getRangeOfJSONData( this.collection.toJSON(),options.firstMarker, options.lastMarker );
-            }
+          //checks options for range markers
+          if (options && options.firstMarker && options.lastMarker){
+            dataSet = this.getRangeOfJSONData( this.collection.toJSON(),options.firstMarker, options.lastMarker );
+          }
+
+          //only redoes table body
 
           var compiled_template = _.template(inmate_table_body, {inmates:dataSet});
-          this.$el.find('.inmate-list').html(compiled_template); 
+          this.$el.find('.inmate-list').html(compiled_template);
             //this.spinner.stop();
             return this;
         },
         renderSorted: function(options) {
-        //okay. this needs to just get first 20 records and send them to
-        //template.  
 
           var collection = options && options.collection ? options.collection : {
               inmates: this.collection.toJSON()
           };
 
 
-         var range = collection.inmates ? collection.inmates : collection;
+          var range = collection.inmates ? collection.inmates : collection;
 
           var rangeOfCollection = this.getRangeOfJSONData(range, 0, this.amountToDisplay);
           var compiled_template = _.template(inmate_table_body, {inmates:rangeOfCollection});
@@ -120,7 +123,7 @@ define([
                 isAscending = btn.hasClass('asce'),
                 sortByColumn = btn.parents('th:first'),
                 attribute = sortByColumn.attr('id');
-            console.log('sort ' + (isAscending ? 'ascending' : 'decending') + ' by ' + attribute);
+            //console.log('sort ' + (isAscending ? 'ascending' : 'decending') + ' by ' + attribute);
 
             // Add sortedby to selected Column
             sortByColumn.addClass('sortedby');
