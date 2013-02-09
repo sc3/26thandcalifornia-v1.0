@@ -96,7 +96,7 @@ define([
             this.$el.html("<div id='histogram_advanced'></div>");
 
             //fetch our data from the collection
-            var data = this.collection.histogram('stay_length', _.range(0, 365, 14));
+            var data = this.collection.histogram('stay_length', _.range(0, 365, 7));
             //var data = this.collection.histogram('bail_amount', _.range(0, 100000, 2500));
 
             //sum up our inmate count from raw data
