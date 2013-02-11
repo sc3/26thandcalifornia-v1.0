@@ -11,8 +11,46 @@ define([
     var InmateTableView = Backbone.View.extend({
         collection: InmateCollection,
         el: '#content',
+        paginateMarker: 0,
+        amountToDisplay: 20,
         events: {
             'click th .btn': 'sort',
+            'click #next': 'goForward',
+            'click #back': 'goBackward'
+        },
+        getRangeOfJSONData: function(data, first, last){
+          var dataSet;
+          if (typeof data !== Array) {
+            dataSet = _.toArray(data).slice(first,last);
+          } else {
+            dataSet = data.slice(first,last);
+          }
+          return dataSet;
+        },
+
+        goForward: function(){
+          var first;
+          //you need bound check for last record here...
+          //((this.paginateMarker += this.amountToDisplay) <= this.collection.last)
+          if(true){
+              first = this.paginateMarker;
+              this.paginateMarker += this.amountToDisplay;
+              this.render({
+                data: this.collection.toJSON(),
+                firstMarker: first, lastMarker: this.paginateMarker
+              });
+          }
+        },
+
+        goBackward: function(){
+          var first, last;
+          if( (this.paginateMarker >= this.amountToDisplay)){
+              this.paginateMarker -= this.amountToDisplay;
+              last = this.paginateMarker;
+              first = this.paginateMarker - this.amountToDisplay;
+              this.render({data: this.collection.toJSON(), firstMarker: first,lastMarker: last });
+          }
+
         },
         initialize: function(options) {
             // Call 'spin' when collection AJAX request starts.
@@ -22,7 +60,7 @@ define([
             // this.collection.bind('reset', this.render, this);
 
             // Call 'renderlist' when collection sort is performed.
-            this.collection.bind('sort', this.renderlist, this);
+            this.collection.bind('sort', this.renderSorted, this);
         },
         spin: function() {
             // Clear element and start spinner on collection start
@@ -30,32 +68,62 @@ define([
             this.spinner = new Spinner().spin(this.el);
             return this;
         },
+        resetPaginateMaker: function(){
+          //a way of saying set this back to first set (it's last record of first set)
+          this.paginateMarker = this.amountToDisplay;
+        },
+
+        renderInit: function(argument) {
+          var dataSet = this.collection.toJSON();
+          var compiled_table_template = _.template(inmate_table, { inmates: dataSet });
+
+          //what are key differences between these three similar methods?
+
+          this.$el.html(compiled_table_template);
+
+          //calls renderSorted then calls resetPaginate
+          this.renderSorted({collection : {inmates: dataSet}});
+          this.resetPaginateMaker();
+        },
+
         render: function(options) {
-            // Render template and stop spinner.
-            var collection = {
-                inmates: this.collection.toJSON()
-            },
-            compiled_template = _.template(inmate_table, collection);
-            this.$el.html(compiled_template);
-            this.renderlist({collection : collection});
+          var dataSet = this.collection.toJSON();
+           
+          //checks options for range markers
+          if (options && options.firstMarker && options.lastMarker){
+            dataSet = this.getRangeOfJSONData( this.collection.toJSON(),options.firstMarker, options.lastMarker );
+          }
+
+          //only redoes table body
+
+          var compiled_template = _.template(inmate_table_body, {inmates:dataSet});
+          this.$el.find('.inmate-list').html(compiled_template);
             //this.spinner.stop();
             return this;
         },
-        renderlist: function(options) {
-            var collection = options && options.collection ? options.collection : {
-                inmates: this.collection.toJSON()
-            };
+        renderSorted: function(options) {
 
-            var compiled_template = _.template(inmate_table_body, collection);
-            this.$el.find('.inmate-list').html(compiled_template);
-            return this;
+          var collection = options && options.collection ? options.collection : {
+              inmates: this.collection.toJSON()
+          };
+
+
+          var range = collection.inmates ? collection.inmates : collection;
+
+          var rangeOfCollection = this.getRangeOfJSONData(range, 0, this.amountToDisplay);
+          var compiled_template = _.template(inmate_table_body, {inmates:rangeOfCollection});
+          this.$el.find('.inmate-list').html(compiled_template);
+          this.resetPaginateMaker();
+
+
+          return this;
         },
         sort: function(evt) {
             var btn = $(evt.currentTarget),
                 isAscending = btn.hasClass('asce'),
                 sortByColumn = btn.parents('th:first'),
                 attribute = sortByColumn.attr('id');
-            console.log('sort ' + (isAscending ? 'ascending' : 'decending') + ' by ' + attribute);
+            //console.log('sort ' + (isAscending ? 'ascending' : 'decending') + ' by ' + attribute);
 
             // Add sortedby to selected Column
             sortByColumn.addClass('sortedby');
