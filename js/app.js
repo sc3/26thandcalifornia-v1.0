@@ -66,7 +66,7 @@ define([
         var gen_stats = new GenStatsView({collection: inmate_collection});
         router.on('route:gen_stats', function() {
           inmate_collection.fetch({
-            data: { 'booking_date__gte': '2011-01-01', 'limit': 0 },
+            data: { 'booking_date__gte': '2011-01-01', 'limit': 250 },
             success: _.bind(gen_stats.renderInit, gen_stats)
           });
         });
