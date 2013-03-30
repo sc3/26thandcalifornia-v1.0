@@ -35,16 +35,16 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, gen_stats_templat
 
         // number of prisioers / number of days
         averageNumberPrisonersPerDay: function () {
-          var count_number_of_days = 1,
-              current_booking_day = this.collection.models[0].get('booking_date'),
-              num_prisoners = this.numberOf();
-          for (var i = 1; i < num_prisoners; ++i) {
-            if (current_booking_day != this.collection.models[i].get('booking_date')) {
-              count_number_of_days += 1;
-              current_booking_day = this.collection.models[i].get('booking_date');
+          var booking_count_info;
+          booking_count_info = this.collection.reduce(function(booking_count_info, prisoner) {
+            var cur_booking_date = prisoner.get('booking_date');
+            if (booking_count_info.current_booking_day != cur_booking_date) {
+              booking_count_info.current_booking_day = cur_booking_date;
+              booking_count_info.num_days += 1;
             }
-          }
-          return this.numberOf() / count_number_of_days;
+            return booking_count_info;
+          }, { num_days: 0, current_booking_day: 0});
+          return this.numberOf() / booking_count_info.num_days;
         },
 
         gender_ratio: function(gender) {
