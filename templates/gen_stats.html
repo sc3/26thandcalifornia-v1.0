@@ -1,0 +1,47 @@
+<div id="gen-stats">
+    <h1>General Statistics</h1>
+
+		<p><strong>Discalimer:</strong> the data on prisoners is known to be not accurate, both at the source, the Cook County
+			Jail and in the way and the timeframe the data is captured. Therefore do not take the data as definitive, rather it
+			can be viewed as suggestive.</p>
+
+    <div class="">
+    		<h2>Information on the Data Set</h2>
+        <p>Number of Prisoner Records: <%= gen_stats.numberOf() %>.</p>
+        <p>Number of Males: <%= gen_stats.numberOfMales() %> (<%= gen_stats.gender_ratio('male').toFixed(1)  %>%).</p>
+        <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
+        <p>Longest stay: <%= gen_stats.longestServeringPrisoner().get('stay_length') %> days
+        	- <%= (gen_stats.longestServeringPrisoner().get('gender') == "M") ? "Male" : "Female" %>.</p>
+        <p>Average number prisoners booked per day: <%= gen_stats.averageNumberPrisonersPerDay().toFixed(0) %>.</p>
+        <p>Minimum number prisoners booked per day: <%= gen_stats.minimumNumberPrisonersPerDay().toFixed(0) %>.</p>
+        <p>Maximum number prisoners booked per day: <%= gen_stats.maximumNumberPrisonersPerDay().toFixed(0) %>.</p>
+        <div class="" style="margin-bottom: 16px;">
+        	<h3>Race</h3>
+            <table cellpadding="8px" border="1" style="text-align: right;">
+                <tr><td></td><td colspan="6" align="center">Male</td><td colspan="6" align="center">Female</td></tr>
+                <tr><td align="center">Race</td>
+                    <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
+                    <td align="center">Average</td><td align="center">Min Bail</td><td align="center">Max Bail</td>
+                    <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
+                    <td align="center">Average</td><td align="center">Min Bail</td><td align="center">Max Bail</td>
+            		<% _.each(gen_stats.racialStats(), function(race_info, race) { %>
+                        <tr>
+                            <td><%= race %></td>
+                            <td><%= race_info.male.count %></td>
+                            <td><%= race_info.male.count - race_info.male.bail %></td>
+                            <td><%= race_info.male.bail %></td>
+                            <td>$<%= (race_info.male.bail != 0) ? (race_info.male.total_bail / race_info.male.bail).toFixed(0) : 0 %></td>
+                            <td>$<%= (race_info.male.bail != 0) ? race_info.male.min_bail_amt : 0 %></td>
+                            <td>$<%= (race_info.male.bail != 0) ? race_info.male.max_bail_amt : 0 %></td>
+                            <td><%= race_info.female.count %></td>
+                            <td><%= race_info.female.count - race_info.female.bail %></td>
+                            <td><%= race_info.female.bail %></td>
+                            <td>$<%= (race_info.female.bail != 0) ? (race_info.female.total_bail / race_info.female.bail).toFixed(0) : 0 %></td>
+                            <td>$<%= (race_info.female.bail != 0) ? race_info.female.min_bail_amt : 0 %></td>
+                            <td>$<%= (race_info.female.bail != 0) ? race_info.female.max_bail_amt : 0 %></td>
+                        </tr>
+            		<% }); %>
+            </table>
+       </div>
+    </div>
+</div>
