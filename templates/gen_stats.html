@@ -1,7 +1,28 @@
 <div id="gen-stats">
     <h1>General Statistics</h1>
 
+		<p><strong>Discalimer:</strong> the data on prisoners is known to be not accurate, both at the source, the Cook County
+			Jail and in the way and the timeframe the data is captured. Therefore do not take the data as definitive, rather it
+			can be viewed as suggestive.</p>
+
     <div class="">
-        <p>Number of Prisoners: <%= gen_stats.numberOf() %>.</p>
+    		<h2>Information on the Data Set</h2>
+        <p>Number of Prisoner Records: <%= gen_stats.numberOf() %>.</p>
+        <p>Number of Males: <%= gen_stats.numberOfMales() %> (<%= gen_stats.gender_ratio('male').toFixed(1)  %>%).</p>
+        <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
+        <p>Longest stay: <%= gen_stats.longestServeringPrisoner().get('stay_length') %> days
+        	- <%= (gen_stats.longestServeringPrisoner().get('gender') == "M") ? "Male" : "Female" %>.</p>
+        <p>Average number prisoners booked per day: <%= gen_stats.averageNumberPrisonersPerDay().toFixed(0) %>.</p>
+        <p>Minimum number prisoners booked per day: <%= gen_stats.minimumNumberPrisonersPerDay().toFixed(0) %>.</p>
+        <p>Maximum number prisoners booked per day: <%= gen_stats.maximumNumberPrisonersPerDay().toFixed(0) %>.</p>
+        <div class="">
+        	<h3>Race</h3>
+					<% _.each(gen_stats.racialStats(), function(races, gender) { %>
+						<h4><%= gender %></h4>
+						<% _.each(races, function(count, race) { %>
+							<p><%= race %> : <%= count %>.<p>
+						<% }); %>
+					<% }); %>
+       </div>
     </div>
 </div>
