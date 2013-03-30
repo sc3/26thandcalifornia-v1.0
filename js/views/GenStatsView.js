@@ -124,17 +124,37 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, gen_stats_templat
         },
 
         racialStats: function() {
-          var racial_info = { 'male' : {}, 'female' : {}},
+          var racial_info = {
+            'male' : {
+              AS : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              B : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              BK : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              IN : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              LB : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              LW : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              LT : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              W : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              WH : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+            },
+            'female' : {
+              AS : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              B : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              BK : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              IN : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              LB : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              LW : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              LT : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              W : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              WH : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+             }},
               gender,
               num_prisoners = this.numberOf();
           for (var i = 0; i < num_prisoners; ++i) {
-            gender = (this.collection.models[i].get('gender') == "M") ? 'male' : 'female';
-            race = this.collection.models[i].get('race');
-            if (!racial_info[gender][race]) {
-              racial_info[gender][race] = 1;
-            } else {
-              racial_info[gender][race] += 1;
-            }
+            var prisoner = this.collection.models[i];
+            gender = (prisoner.get('gender') == "M") ? 'male' : 'female';
+            race = prisoner.get('race');
+            racial_info[gender][race].count += 1;
+            this.update_bail_info(racial_info[gender][race], prisoner);
           }
           return racial_info;
         },
@@ -144,6 +164,20 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, gen_stats_templat
 
           this.$el.html(compiled_gen_stats_template);
         },
+
+        update_bail_info: function(collected_info, prisoner) {
+          var bail_amount = prisoner.get('bail_amount');
+          if (bail_amount) {
+            collected_info.bail += 1;
+            collected_info.total_bail += bail_amount;
+            if (collected_info.min_bail_amt > bail_amount) {
+              collected_info.min_bail_amt = bail_amount;
+            }
+            if (collected_info.max_bail_amt < bail_amount) {
+              collected_info.max_bail_amt = bail_amount;
+            }
+          }
+        }
     });
 
     return GenStatsView;
