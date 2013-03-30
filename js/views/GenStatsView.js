@@ -38,13 +38,16 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, gen_stats_templat
           var booking_count_info;
           booking_count_info = this.collection.reduce(function(booking_count_info, prisoner) {
             var cur_booking_date = prisoner.get('booking_date');
-            if (booking_count_info.current_booking_day != cur_booking_date) {
-              booking_count_info.current_booking_day = cur_booking_date;
-              booking_count_info.num_days += 1;
+            if (cur_booking_date >= "2013-01-01T00:00:00") {
+              if (booking_count_info.current_booking_day != cur_booking_date) {
+                booking_count_info.current_booking_day = cur_booking_date;
+                booking_count_info.num_days += 1;
+              }
+              booking_count_info.prisoner_count += 1;
             }
             return booking_count_info;
-          }, { num_days: 0, current_booking_day: 0});
-          return this.numberOf() / booking_count_info.num_days;
+          }, { num_days: 0, current_booking_day: 0, prisoner_count: 0});
+          return booking_count_info.prisoner_count / booking_count_info.num_days;
         },
 
         gender_ratio: function(gender) {
@@ -71,10 +74,10 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, gen_stats_templat
               current_booking_day = this.collection.models[0].get('booking_date'),
               num_prisoners = this.numberOf();
           for (var i = 1; i < num_prisoners; ++i) {
-            if (current_booking_day == this.collection.models[i].get('booking_date')) {
+            if ((current_booking_day >= "2013-01-01T00:00:00") && (current_booking_day == this.collection.models[i].get('booking_date'))) {
               current_booking_count += 1;
             } else {
-              if (current_booking_count > max_num_booked_per_day) {
+              if ((current_booking_day >= "2013-01-01T00:00:00") && (current_booking_count > max_num_booked_per_day)) {
                 max_num_booked_per_day = current_booking_count;
               }
               current_booking_day = this.collection.models[i].get('booking_date');
@@ -90,10 +93,10 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, gen_stats_templat
               current_booking_day = this.collection.models[0].get('booking_date'),
               num_prisoners = this.numberOf();
           for (var i = 1; i < num_prisoners; ++i) {
-            if (current_booking_day == this.collection.models[i].get('booking_date')) {
+            if ((current_booking_day >= "2013-01-01T00:00:00") && (current_booking_day == this.collection.models[i].get('booking_date'))) {
               current_booking_count += 1;
             } else {
-              if (current_booking_count < min_num_booked_per_day) {
+              if ((current_booking_day >= "2013-01-01T00:00:00") && (current_booking_count < min_num_booked_per_day)) {
                 min_num_booked_per_day = current_booking_count;
               }
               current_booking_day = this.collection.models[i].get('booking_date');
@@ -125,36 +128,32 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, gen_stats_templat
 
         racialStats: function() {
           var racial_info = {
-            'male' : {
-              AS : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              B : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              BK : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              IN : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              LB : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              LW : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              LT : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              W : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              WH : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+              AS : {male: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+                    female: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE}},
+              B : {male: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+                    female: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE}},
+              BK : {male: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+                    female: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE}},
+              IN : {male: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+                    female: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE}},
+              LB : {male: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+                    female: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE}},
+              LW : {male: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+                    female: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE}},
+              LT : {male: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+                    female: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE}},
+              W : {male: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+                    female: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE}},
+              WH : {male: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
+                    female: {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE}},
             },
-            'female' : {
-              AS : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              B : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              BK : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              IN : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              LB : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              LW : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              LT : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              W : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-              WH : {count: 0, bail: 0, total_bail: 0, min_bail_amt: Number.MAX_VALUE, max_bail_amt: Number.MIN_VALUE},
-             }},
-              gender,
-              num_prisoners = this.numberOf();
-          for (var i = 0; i < num_prisoners; ++i) {
+            num_prisoners = this.numberOf();
+        for (var i = 0; i < num_prisoners; ++i) {
             var prisoner = this.collection.models[i];
-            gender = (prisoner.get('gender') == "M") ? 'male' : 'female';
-            race = prisoner.get('race');
-            racial_info[gender][race].count += 1;
-            this.update_bail_info(racial_info[gender][race], prisoner);
+            var gender = (prisoner.get('gender') == "M") ? 'male' : 'female';
+            var race = prisoner.get('race');
+            racial_info[race][gender].count += 1;
+            this.update_bail_info(racial_info[race][gender], prisoner);
           }
           return racial_info;
         },

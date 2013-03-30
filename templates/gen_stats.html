@@ -15,14 +15,33 @@
         <p>Average number prisoners booked per day: <%= gen_stats.averageNumberPrisonersPerDay().toFixed(0) %>.</p>
         <p>Minimum number prisoners booked per day: <%= gen_stats.minimumNumberPrisonersPerDay().toFixed(0) %>.</p>
         <p>Maximum number prisoners booked per day: <%= gen_stats.maximumNumberPrisonersPerDay().toFixed(0) %>.</p>
-        <div class="">
+        <div class="" style="margin-bottom: 16px;">
         	<h3>Race</h3>
-					<% _.each(gen_stats.racialStats(), function(races, gender) { %>
-						<h4><%= gender %></h4>
-						<% _.each(races, function(race_info, race) { %>
-							<p><%= race %> : <%= race_info.count %>, no-bail: <%= race_info.count - race_info.bail %>, bail: <%= race_info.bail %>, average: $<%= (race_info.bail != 0) ? (race_info.total_bail / race_info.bail).toFixed(0) : 0 %>, min: $<%= (race_info.bail != 0) ? race_info.min_bail_amt : 0 %>, max: $<%= (race_info.bail != 0) ? race_info.max_bail_amt : 0 %>.<p>
-						<% }); %>
-					<% }); %>
+            <table cellpadding="8px" border="1" style="text-align: right;">
+                <tr><td></td><td colspan="6" align="center">Male</td><td colspan="6" align="center">Female</td></tr>
+                <tr><td align="center">Race</td>
+                    <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
+                    <td align="center">Average</td><td align="center">Min Bail</td><td align="center">Max Bail</td>
+                    <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
+                    <td align="center">Average</td><td align="center">Min Bail</td><td align="center">Max Bail</td>
+            		<% _.each(gen_stats.racialStats(), function(race_info, race) { %>
+                        <tr>
+                            <td><%= race %></td>
+                            <td><%= race_info.male.count %></td>
+                            <td><%= race_info.male.count - race_info.male.bail %></td>
+                            <td><%= race_info.male.bail %></td>
+                            <td>$<%= (race_info.male.bail != 0) ? (race_info.male.total_bail / race_info.male.bail).toFixed(0) : 0 %></td>
+                            <td>$<%= (race_info.male.bail != 0) ? race_info.male.min_bail_amt : 0 %></td>
+                            <td>$<%= (race_info.male.bail != 0) ? race_info.male.max_bail_amt : 0 %></td>
+                            <td><%= race_info.female.count %></td>
+                            <td><%= race_info.female.count - race_info.female.bail %></td>
+                            <td><%= race_info.female.bail %></td>
+                            <td>$<%= (race_info.female.bail != 0) ? (race_info.female.total_bail / race_info.female.bail).toFixed(0) : 0 %></td>
+                            <td>$<%= (race_info.female.bail != 0) ? race_info.female.min_bail_amt : 0 %></td>
+                            <td>$<%= (race_info.female.bail != 0) ? race_info.female.max_bail_amt : 0 %></td>
+                        </tr>
+            		<% }); %>
+            </table>
        </div>
     </div>
 </div>
