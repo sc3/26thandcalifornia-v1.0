@@ -18,13 +18,6 @@ define([
 
 ], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView, GenStatsView, about) {
 
-    // Add a "fetch" event to signal start of collection AJAX call.
-    var oldCollectionFetch = Backbone.Collection.prototype.fetch;
-    Backbone.Collection.prototype.fetch = function(options) {
-        this.trigger("fetch");
-        oldCollectionFetch.call(this, options);
-    };
-
     // Application routes
     var AppRouter = Backbone.Router.extend({
         routes: {
