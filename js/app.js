@@ -11,11 +11,12 @@ define([
     'views/MenuView',
     'views/PageView',
     'views/HistogramView',
+    'views/GenStatsView',
 
     // Templates
     'text!templates/about.html'
 
-], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView, about) {
+], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView, GenStatsView, about) {
 
     // Add a "fetch" event to signal start of collection AJAX call.
     var oldCollectionFetch = Backbone.Collection.prototype.fetch;
@@ -30,6 +31,7 @@ define([
             '': 'inmates',
             'inmates': 'inmates',
             'histogram': 'histogram',
+            'gen_stats': 'gen_stats',
             'about': 'about'
         }
     });
@@ -57,6 +59,18 @@ define([
             data: { 'discharge_date_earliest__isnull': 'False', 'booking_date__gte': '2012-01-01', 'limit': 0 },
             //data: { 'bail_amount__isnull': 'False', 'booking_date__gte': '2013-01-01', 'limit': 0 },
             success: _.bind(histogram.render_advanced, histogram)
+          });
+        });
+
+        // Render gen stats page template on 'gen_stats' navigation event
+        var gen_stats = new GenStatsView({collection: inmate_collection});
+        router.on('route:gen_stats', function() {
+          inmate_collection.fetch({
+            data: { 'limit': 0 },
+            // data: { 'booking_date__gte': '2012-12-31', 'limit': 0 },
+            // data: { 'booking_date__gte': '2013-03-04', 'booking_date__lte': '2013-03-10', 'limit': 12000 },
+            // data: { 'discharge_date_earliest__isnull': 1, 'booking_date__gte': '1990-01-01', 'limit': 0 },
+            success: _.bind(gen_stats.renderInit, gen_stats)
           });
         });
 
