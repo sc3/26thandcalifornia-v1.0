@@ -1,17 +1,21 @@
-// Generic collection for interacting with Cook County Jail API
+// JSONP stub callback
+function processJSONP(data) { return data; }
 
+// Generic collection for interacting with Cook County Jail API
 define([
     'jquery',
-    'underscore',
     'backbone',
-], function($, _, Backbone) {
+], function($, Backbone) {
 
     var CookCountyJailCollection = Backbone.Collection.extend({
         sync: function(method, model, options) {
-            var params = _.extend({
+            var params = $.extend(true, {
                 type: 'GET',
                 dataType: 'jsonp',
-                data: {'format': 'jsonp'},
+                jsonp: false,
+                jsonpCallback: 'processJSONP',
+                cache: true,
+                data: {'format': 'jsonp', 'callback': 'processJSONP'},
                 url: this.url,
             }, options);
             return $.ajax(params);
