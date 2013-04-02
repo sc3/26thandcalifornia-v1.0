@@ -8,9 +8,6 @@ define(['jquery', 'underscore', 'backbone', 'backbone_mutators'], function($, _,
             next_court_date: function() {
                 return this.court_dates && this.court_dates.length > 0 ? (this.court_dates[this.court_dates.length - 1]).date : undefined;
             },
-            next_court_location: function() {
-                return this.court_dates && this.court_dates.length > 0 ? (this.court_dates[this.court_dates.length - 1]).location.location : undefined;
-            }
         },
         sync: function(method, model, options) {
             var params = _.extend({
