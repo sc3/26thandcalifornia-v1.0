@@ -49,8 +49,7 @@ define([
         var histogram = new HistogramView({collection: inmate_collection});
         router.on('route:histogram', function() {
           inmate_collection.fetch({
-            data: { 'discharge_date_earliest__isnull': 'False', 'booking_date__gte': '2012-01-01', 'limit': 0 },
-            //data: { 'bail_amount__isnull': 'False', 'booking_date__gte': '2013-01-01', 'limit': 0 },
+            data: { 'discharge_date_earliest__isnull': 'False', 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-14', 'limit': 0 },
             success: _.bind(histogram.render_advanced, histogram)
           });
         });
