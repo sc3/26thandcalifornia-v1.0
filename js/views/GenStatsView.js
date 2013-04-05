@@ -30,24 +30,33 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, gen_stats_templat
         el: '#content',
         number_of_males: null,
         longest_serving_prisoner: null,
+        average_number_of_prisoners_booked_per_day: null,
         events: {
         },
 
         // number of prisioers / number of days
         averageNumberPrisonersPerDay: function () {
-          var booking_count_info;
-          booking_count_info = this.collection.reduce(function(booking_count_info, prisoner) {
-            var cur_booking_date = prisoner.get('booking_date');
-            if (cur_booking_date >= "2013-01-01T00:00:00") {
-              if (booking_count_info.current_booking_day != cur_booking_date) {
-                booking_count_info.current_booking_day = cur_booking_date;
-                booking_count_info.num_days += 1;
+          if (!this.average_number_of_prisoners_booked_per_day) {
+            this.average_number_of_prisoners_booked_per_day = this.collection.reduce(function(booking_count_info, prisoner) {
+              var cur_booking_date = prisoner.get('booking_date');
+              if (cur_booking_date >= "2013-01-01T00:00:00") {
+                if (booking_count_info.current_booking_day != cur_booking_date) {
+                  booking_count_info.current_booking_day = cur_booking_date;
+                  booking_count_info.num_days += 1;
+                }
+                booking_count_info[(prisoner.get('gender') == 'M') ? 'males' : 'females'] += 1;
               }
-              booking_count_info.prisoner_count += 1;
+              return booking_count_info;
+            }, { num_days: 0, current_booking_day: 0, males: 0, females: 0, total: 0});
+            if (this.average_number_of_prisoners_booked_per_day.num_days > 0) {
+              this.average_number_of_prisoners_booked_per_day.total =
+                (this.average_number_of_prisoners_booked_per_day.males + this.average_number_of_prisoners_booked_per_day.females) /
+                  this.average_number_of_prisoners_booked_per_day.num_days;
+              this.average_number_of_prisoners_booked_per_day.males /= this.average_number_of_prisoners_booked_per_day.num_days;
+              this.average_number_of_prisoners_booked_per_day.females /= this.average_number_of_prisoners_booked_per_day.num_days;
             }
-            return booking_count_info;
-          }, { num_days: 0, current_booking_day: 0, prisoner_count: 0});
-          return booking_count_info.prisoner_count / booking_count_info.num_days;
+          }
+          return this.average_number_of_prisoners_booked_per_day;
         },
 
         gender_ratio: function(gender) {

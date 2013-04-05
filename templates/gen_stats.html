@@ -12,7 +12,9 @@
         <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
         <p>Longest stay: <%= gen_stats.longestServeringPrisoner().get('stay_length') %> days
         	- <%= (gen_stats.longestServeringPrisoner().get('gender') == "M") ? "Male" : "Female" %>.</p>
-        <p>Average number prisoners booked per day: <%= gen_stats.averageNumberPrisonersPerDay().toFixed(0) %>.</p>
+        <p>Average number prisoners booked per day: <%= gen_stats.averageNumberPrisonersPerDay().total.toFixed(0) %>,
+            Males: <%= gen_stats.averageNumberPrisonersPerDay().males.toFixed(0) %>
+            Females: <%= gen_stats.averageNumberPrisonersPerDay().females.toFixed(0) %>.</p>
         <p>Minimum number prisoners booked per day: <%= gen_stats.minimumNumberPrisonersPerDay().toFixed(0) %>.</p>
         <p>Maximum number prisoners booked per day: <%= gen_stats.maximumNumberPrisonersPerDay().toFixed(0) %>.</p>
         <div class="" style="margin-bottom: 16px;">
