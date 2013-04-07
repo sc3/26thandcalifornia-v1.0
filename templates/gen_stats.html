@@ -12,18 +12,19 @@
         <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
         <p>Longest stay: <%= gen_stats.longestServeringPrisoner().get('stay_length') %> days
         	- <%= (gen_stats.longestServeringPrisoner().get('gender') == "M") ? "Male" : "Female" %>.</p>
-        <h3>Averages from <%= gen_stats.prisonerPerDayInfo().first_booking_day %> to <%= gen_stats.prisonerPerDayInfo().last_booking_day %></h3>
-        <p>Average number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().min_max_average.get('average').toFixed(0) %>,
-            Females: <%= gen_stats.prisonerPerDayInfo().min_max_average_females.get('average').toFixed(0) %>,
-            Males: <%= gen_stats.prisonerPerDayInfo().min_max_average_males.get('average').toFixed(0) %>.</p>
-        <p>Minimum number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().min_max_average.get('min') %> -
-            Date: <%= gen_stats.prisonerPerDayInfo().min_date %>,
-            Females: <%= gen_stats.prisonerPerDayInfo().min_females %>,
-            Males: <%= gen_stats.prisonerPerDayInfo().min_males %>.</p>
-        <p>Maximum number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().min_max_average.get('max') %> -
-            Date: <%= gen_stats.prisonerPerDayInfo().max_date %>,
-            Females: <%= gen_stats.prisonerPerDayInfo().max_females %>,
-            Males: <%= gen_stats.prisonerPerDayInfo().max_males %>.</p>
+        <h3>Averages from <%= gen_stats.prisonerPerDayInfo().get('first_booking_day') %> to
+            <%= gen_stats.prisonerPerDayInfo().get('last_booking_day') %></h3>
+        <p>Average number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().get('min_max_average').get('average').toFixed(0) %>,
+            Females: <%= gen_stats.prisonerPerDayInfo().get('min_max_average_females').get('average').toFixed(0) %>,
+            Males: <%= gen_stats.prisonerPerDayInfo().get('min_max_average_males').get('average').toFixed(0) %>.</p>
+        <p>Minimum number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().get('min_max_average').get('min') %> -
+            Date: <%= gen_stats.prisonerPerDayInfo().get('min_date') %>,
+            Females: <%= gen_stats.prisonerPerDayInfo().get('min_females') %>,
+            Males: <%= gen_stats.prisonerPerDayInfo().get('min_males') %>.</p>
+        <p>Maximum number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().get('min_max_average').get('max') %> -
+            Date: <%= gen_stats.prisonerPerDayInfo().get('max_date') %>,
+            Females: <%= gen_stats.prisonerPerDayInfo().get('max_females') %>,
+            Males: <%= gen_stats.prisonerPerDayInfo().get('max_males') %>.</p>
         <div class="" style="margin-bottom: 16px;">
         	<h3>Bail Information</h3>
             <table cellpadding="8px" border="1" style="text-align: right;">
