@@ -37,56 +37,7 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
         events: {
         },
 
-        gender_ratio: function(gender) {
-          return ((gender === 'female') ? this.numberOfFemales() : this.numberOfMales()) / this.numberOf() * 100;
-         },
-
-        longestServeringPrisoner: function() {
-          if (!this.longest_serving_prisoner) {
-            var stay_field = 'stay_length',
-                num_prisoners = this.numberOf();
-            this.longest_serving_prisoner = this.collection.models[0];
-            for (var i = 1; i < num_prisoners; ++i) {
-              if (this.longest_serving_prisoner.get(stay_field) < this.collection.models[i].get(stay_field)) {
-                this.longest_serving_prisoner = this.collection.models[i];
-              }
-            }
-          }
-          return this.longest_serving_prisoner;
-        },
-
-        numberOf: function() {
-          return this.collection.length;
-        },
-
-        numberOfFemales: function() {
-          return this.numberOf() - this.numberOfMales();
-        },
-
-        numberOfMales: function() {
-          if (!this.number_of_males) {
-            this.number_of_males = this.collection.reduce(function(number_of_males, prisoner) {
-              if (prisoner.get('gender') === 'M') {
-                number_of_males += 1;
-              }
-              return number_of_males;
-            }, 0);
-          }
-          return this.number_of_males;
-        },
-
-        prisonerPerDayInfo: function() {
-          if (!this.prisoner_per_day_info) {
-            var prisoners = this.collection.filter(function(prisoner) { return prisoner.get('booking_date') >= "2013-01-01T00:00:00";}),
-                prisoner_per_day_info = new PrisonersBookedPerDayModel({current_booking_day: prisoners[0].get('booking_date')});
-            this.prisoner_per_day_info = _.reduce(prisoners, function(prisoner_per_day_info, prisoner) {
-             return prisoner_per_day_info.add(prisoner);
-            }, prisoner_per_day_info);
-          }
-          return this.prisoner_per_day_info;
-        },
-
-        racialStats: function() {
+        bailInfo: function() {
           var prisoners_stats_by_race = {
               AS : {male: {count: 0, bail_info: new MinMaxAverageModel()},
                     female: {count: 0, bail_info: new MinMaxAverageModel()}},
@@ -118,6 +69,57 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
               }
           });
           return prisoners_stats_by_race;
+        },
+
+        gender_ratio: function(gender) {
+          return ((gender === 'female') ? this.numberOfFemales() : this.numberOfMales()) / this.numberOf() * 100;
+         },
+
+        longestServeringPrisoner: function() {
+          if (!this.longest_serving_prisoner) {
+            var stay_length_field = 'stay_length';
+            this.longest_serving_prisoner = this.collection.reduce(function(longest_serving_prisoner, cur_prisoner) {
+              if (longest_serving_prisoner.get(stay_length_field) < cur_prisoner.get(stay_length_field)) {
+                longest_serving_prisoner = cur_prisoner;
+              }
+              return longest_serving_prisoner;
+            }, this.collection.at(0));
+          }
+          return this.longest_serving_prisoner;
+        },
+
+        numberOf: function() {
+          return this.collection.length;
+        },
+
+        numberOfFemales: function() {
+          return this.numberOf() - this.numberOfMales();
+        },
+
+        numberOfMales: function() {
+          if (!this.number_of_males) {
+            this.number_of_males = this.collection.reduce(function(number_of_males, prisoner) {
+              if (prisoner.get('gender') === 'M') {
+                number_of_males += 1;
+              }
+              return number_of_males;
+            }, 0);
+          }
+          return this.number_of_males;
+        },
+
+        prisonerPerDayInfo: function() {
+          if (!this.prisoner_per_day_info) {
+            var prisoners = this.collection.filter(function(prisoner) {
+                  return prisoner.get('booking_date') >= "2013-01-01T00:00:00";
+                }),
+                prisoner_per_day_info = new PrisonersBookedPerDayModel({current_booking_day: prisoners[0].get('booking_date')});
+            this.prisoner_per_day_info = _.reduce(prisoners, function(prisoner_per_day_info, prisoner) {
+             return prisoner_per_day_info.add(prisoner);
+            }, prisoner_per_day_info);
+            this.prisoner_per_day_info.add_lastest_day();
+          }
+          return this.prisoner_per_day_info;
         },
 
         renderInit: function(argument) {

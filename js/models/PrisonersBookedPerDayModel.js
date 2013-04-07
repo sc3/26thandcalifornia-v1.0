@@ -45,18 +45,26 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
       var current_booking_day = prisoner.get('booking_date'),
           count_field = 'count_' + ((prisoner.get('gender') === 'M') ? '' : 'fe') + 'males';
       if (current_booking_day !== this.get('current_booking_day')) {
-        var count_females = this.get('count_females'),
-            count_males = this.get('count_males');
-        this.get('min_max_average').add(count_females + count_males);
-        this.get('min_max_average_females').add(count_females);
-        this.get('min_max_average_males').add(count_males);
-        this.set('current_booking_day', current_booking_day);
-        this.set('last_booking_day', current_booking_day.substring(0, 10));
-        this.set('count_females', 0);
-        this.set('count_males', 0);
+        this.add_lastest_day();
+        this.initialize_for_current_counts(current_booking_day);
       }
       this.set(count_field, this.get(count_field) + 1);
       return this;
+    },
+
+    add_lastest_day: function() {
+      var count_females = this.get('count_females'),
+          count_males = this.get('count_males');
+      this.get('min_max_average').add(count_females + count_males);
+      this.get('min_max_average_females').add(count_females);
+      this.get('min_max_average_males').add(count_males);
+    },
+
+    initialize_for_current_counts: function(current_booking_day) {
+      this.set('current_booking_day', current_booking_day);
+      this.set('last_booking_day', current_booking_day.substring(0, 10));
+      this.set('count_females', 0);
+      this.set('count_males', 0);
     }
   });
   return PrisonersBookedPerDayModel;

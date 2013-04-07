@@ -8,8 +8,8 @@
     <div class="">
     	<h2>Information on the Data Set</h2>
         <p>Number of Prisoner Records: <%= gen_stats.numberOf() %>.</p>
-        <p>Number of Males: <%= gen_stats.numberOfMales() %> (<%= gen_stats.gender_ratio('male').toFixed(1)  %>%).</p>
         <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
+        <p>Number of Males: <%= gen_stats.numberOfMales() %> (<%= gen_stats.gender_ratio('male').toFixed(1)  %>%).</p>
         <p>Longest stay: <%= gen_stats.longestServeringPrisoner().get('stay_length') %> days
         	- <%= (gen_stats.longestServeringPrisoner().get('gender') == "M") ? "Male" : "Female" %>.</p>
         <h3>Averages from <%= gen_stats.prisonerPerDayInfo().get('first_booking_day') %> to
@@ -34,7 +34,7 @@
                     <td align="center">Average</td><td align="center">Min Bail</td><td align="center">Max Bail</td>
                     <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
                     <td align="center">Average</td><td align="center">Min Bail</td><td align="center">Max Bail</td>
-            		<% _.each(gen_stats.racialStats(), function(race_info, race) { %>
+            		<% _.each(gen_stats.bailInfo(), function(race_info, race) { %>
                         <tr>
                             <td><%= race %></td>
                             <td><%= race_info.male.count %></td>
