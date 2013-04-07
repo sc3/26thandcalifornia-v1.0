@@ -77,13 +77,19 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
 
         longestServeringPrisoner: function() {
           if (!this.longest_serving_prisoner) {
-            var stay_length_field = 'stay_length';
-            this.longest_serving_prisoner = this.collection.reduce(function(longest_serving_prisoner, cur_prisoner) {
-              if (longest_serving_prisoner.get(stay_length_field) < cur_prisoner.get(stay_length_field)) {
-                longest_serving_prisoner = cur_prisoner;
-              }
-              return longest_serving_prisoner;
-            }, this.collection.at(0));
+            var stay_length_field = 'stay_length',
+                longest_serving_prisoner = this.collection.reduce(function(longest_serving_prisoner, cur_prisoner) {
+                    if (longest_serving_prisoner.get(stay_length_field) < cur_prisoner.get(stay_length_field)) {
+                      // As of 2013-04-07 some records do not have a booking date but do have a duration of stay
+                      // these records are bad and this guard prevents them from affecting the longest staying
+                      // prisoner. This defect should be corrected and then this guard should be removed
+                      if (cur_prisoner.get('booking_date')) {
+                        longest_serving_prisoner = cur_prisoner;
+                      }
+                    }
+                    return longest_serving_prisoner;
+                  }, this.collection.at(0));
+            this.longest_serving_prisoner = longest_serving_prisoner;
           }
           return this.longest_serving_prisoner;
         },

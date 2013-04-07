@@ -1,9 +1,9 @@
 <div id="gen-stats">
     <h1>General Statistics</h1>
 
-		<p><strong>Discalimer:</strong> the data on prisoners is known to be not accurate, both at the source, the Cook County
-			Jail and in the way and the timeframe the data is captured. Therefore do not take the data as definitive, rather it
-			can be viewed as suggestive.</p>
+	<p><strong>Discalimer:</strong> the data on prisoners is known to be not accurate, both at the source, the Cook County
+		Jail and the way the data is captured is not guaranteed to be fault free. Therefore do not take the data as definitive,
+        rather viewed it as suggestive.</p>
 
     <div class="">
     	<h2>Information on the Data Set</h2>
@@ -11,7 +11,11 @@
         <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
         <p>Number of Males: <%= gen_stats.numberOfMales() %> (<%= gen_stats.gender_ratio('male').toFixed(1)  %>%).</p>
         <p>Longest stay: <%= gen_stats.longestServeringPrisoner().get('stay_length') %> days
-        	- <%= (gen_stats.longestServeringPrisoner().get('gender') == "M") ? "Male" : "Female" %>.</p>
+        	- <%= (gen_stats.longestServeringPrisoner().get('gender') == "M") ? "Male" : "Female" %>,
+            Booking date: <%= gen_stats.longestServeringPrisoner().get('booking_date').substring(0, 10) %>,
+            Discharge date: <%= ((gen_stats.longestServeringPrisoner().get('discharge_date_earliest') != null) ? gen_stats.longestServeringPrisoner().get('discharge_date_earliest').substring(0, 10) : 'Still in jail') %>.
+        </p>
+
         <h3>Averages from <%= gen_stats.prisonerPerDayInfo().get('first_booking_day') %> to
             <%= gen_stats.prisonerPerDayInfo().get('last_booking_day') %></h3>
         <p>Average number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().get('min_max_average').get('average').toFixed(0) %>,
@@ -25,6 +29,7 @@
             Date: <%= gen_stats.prisonerPerDayInfo().get('max_date') %>,
             Females: <%= gen_stats.prisonerPerDayInfo().get('max_females') %>,
             Males: <%= gen_stats.prisonerPerDayInfo().get('max_males') %>.</p>
+
         <div class="" style="margin-bottom: 16px;">
         	<h3>Bail Information</h3>
             <table cellpadding="8px" border="1" style="text-align: right;">

@@ -62,7 +62,7 @@ define([
             // data: { 'booking_date__gte': '2012-12-31', 'limit': 0 },
             // data: { 'booking_date__gte': '2013-03-04', 'booking_date__lte': '2013-03-10', 'limit': 12000 },
             // data: { 'booking_date__gte': '2012-12-31', 'booking_date__lte': '2013-01-07', 'limit': 12000 },
-            // data: { 'booking_date': '2013-04-01', 'limit': 12000 },
+            // data: { 'booking_date': '2013-04-05', 'limit': 12000 },
             // data: { 'discharge_date_earliest__isnull': 1, 'booking_date__gte': '1990-01-01', 'limit': 0 },
             success: _.bind(gen_stats.renderInit, gen_stats)
           });
