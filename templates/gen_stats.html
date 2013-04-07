@@ -12,13 +12,20 @@
         <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
         <p>Longest stay: <%= gen_stats.longestServeringPrisoner().get('stay_length') %> days
         	- <%= (gen_stats.longestServeringPrisoner().get('gender') == "M") ? "Male" : "Female" %>.</p>
-        <p>Average number prisoners booked per day: <%= gen_stats.averageNumberPrisonersPerDay().total.toFixed(0) %>,
-            Males: <%= gen_stats.averageNumberPrisonersPerDay().males.toFixed(0) %>
-            Females: <%= gen_stats.averageNumberPrisonersPerDay().females.toFixed(0) %>.</p>
-        <p>Minimum number prisoners booked per day: <%= gen_stats.minimumNumberPrisonersPerDay().toFixed(0) %>.</p>
-        <p>Maximum number prisoners booked per day: <%= gen_stats.maximumNumberPrisonersPerDay().toFixed(0) %>.</p>
+        <h3>Averages from <%= gen_stats.prisonerPerDayInfo().first_booking_day %> to <%= gen_stats.prisonerPerDayInfo().last_booking_day %></h3>
+        <p>Average number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().min_max_average.get('average').toFixed(0) %>,
+            Females: <%= gen_stats.prisonerPerDayInfo().min_max_average_females.get('average').toFixed(0) %>,
+            Males: <%= gen_stats.prisonerPerDayInfo().min_max_average_males.get('average').toFixed(0) %>.</p>
+        <p>Minimum number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().min_max_average.get('min') %> -
+            Date: <%= gen_stats.prisonerPerDayInfo().min_date %>,
+            Females: <%= gen_stats.prisonerPerDayInfo().min_females %>,
+            Males: <%= gen_stats.prisonerPerDayInfo().min_males %>.</p>
+        <p>Maximum number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().min_max_average.get('max') %> -
+            Date: <%= gen_stats.prisonerPerDayInfo().max_date %>,
+            Females: <%= gen_stats.prisonerPerDayInfo().max_females %>,
+            Males: <%= gen_stats.prisonerPerDayInfo().max_males %>.</p>
         <div class="" style="margin-bottom: 16px;">
-        	<h3>Race</h3>
+        	<h3>Bail Information</h3>
             <table cellpadding="8px" border="1" style="text-align: right;">
                 <tr><td></td><td colspan="6" align="center">Male</td><td colspan="6" align="center">Female</td></tr>
                 <tr><td align="center">Race</td>
@@ -30,17 +37,17 @@
                         <tr>
                             <td><%= race %></td>
                             <td><%= race_info.male.count %></td>
-                            <td><%= race_info.male.count - race_info.male.bail %></td>
-                            <td><%= race_info.male.bail %></td>
-                            <td>$<%= (race_info.male.bail != 0) ? (race_info.male.total_bail / race_info.male.bail).toFixed(0) : 0 %></td>
-                            <td>$<%= (race_info.male.bail != 0) ? race_info.male.min_bail_amt : 0 %></td>
-                            <td>$<%= (race_info.male.bail != 0) ? race_info.male.max_bail_amt : 0 %></td>
+                            <td><%= race_info.male.count - race_info.male.bail_info.get('count') %></td>
+                            <td><%= race_info.male.bail_info.get('count') %></td>
+                            <td>$<%= (race_info.male.bail_info.get('count') != 0) ? race_info.male.bail_info.get('average').toFixed(0) : 0 %></td>
+                            <td>$<%= (race_info.male.bail_info.get('count') != 0) ? race_info.male.bail_info.get('min') : 0 %></td>
+                            <td>$<%= (race_info.male.bail_info.get('count') != 0) ? race_info.male.bail_info.get('max') : 0 %></td>
                             <td><%= race_info.female.count %></td>
-                            <td><%= race_info.female.count - race_info.female.bail %></td>
-                            <td><%= race_info.female.bail %></td>
-                            <td>$<%= (race_info.female.bail != 0) ? (race_info.female.total_bail / race_info.female.bail).toFixed(0) : 0 %></td>
-                            <td>$<%= (race_info.female.bail != 0) ? race_info.female.min_bail_amt : 0 %></td>
-                            <td>$<%= (race_info.female.bail != 0) ? race_info.female.max_bail_amt : 0 %></td>
+                            <td><%= race_info.female.count - race_info.female.bail_info.get('count') %></td>
+                            <td><%= race_info.female.bail_info.get('count') %></td>
+                            <td>$<%= (race_info.female.bail_info.get('count') != 0) ? race_info.female.bail_info.get('average').toFixed(0) : 0 %></td>
+                            <td>$<%= (race_info.female.bail_info.get('count') != 0) ? race_info.female.bail_info.get('min') : 0 %></td>
+                            <td>$<%= (race_info.female.bail_info.get('count') != 0) ? race_info.female.bail_info.get('max') : 0 %></td>
                         </tr>
             		<% }); %>
             </table>
