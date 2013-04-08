@@ -6,10 +6,12 @@ define([
 'collections/InmateCollection',
 'models/MinMaxAverageModel',
 'models/PrisonersBookedPerDayModel',
+'models/BailStatsModel',
 
 // Templates
 'text!templates/gen_stats.html'],
-function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageModel, PrisonersBookedPerDayModel, gen_stats_template) {
+function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageModel, PrisonersBookedPerDayModel,
+          BailStatsModel, gen_stats_template) {
 
     // Prisoner model:
     //     age_at_booking
@@ -30,68 +32,46 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
     var GenStatsView = Backbone.View.extend({
         collection: InmateCollection,
         el: '#content',
-        number_of_males: null,
-        longest_serving_prisoner: null,
-        average_number_of_prisoners_booked_per_day: null,
-        prisoner_per_day_info: null,
         events: {
         },
 
-        bailInfo: function() {
-          var prisoners_stats_by_race = {
-              AS : {male: {count: 0, bail_info: new MinMaxAverageModel()},
-                    female: {count: 0, bail_info: new MinMaxAverageModel()}},
-              B : {male: {count: 0, bail_info: new MinMaxAverageModel()},
-                    female: {count: 0, bail_info: new MinMaxAverageModel()}},
-              BK : {male: {count: 0, bail_info: new MinMaxAverageModel()},
-                    female: {count: 0, bail_info: new MinMaxAverageModel()}},
-              IN : {male: {count: 0, bail_info: new MinMaxAverageModel()},
-                    female: {count: 0, bail_info: new MinMaxAverageModel()}},
-              LB : {male: {count: 0, bail_info: new MinMaxAverageModel()},
-                    female: {count: 0, bail_info: new MinMaxAverageModel()}},
-              LW : {male: {count: 0, bail_info: new MinMaxAverageModel()},
-                    female: {count: 0, bail_info: new MinMaxAverageModel()}},
-              LT : {male: {count: 0, bail_info: new MinMaxAverageModel()},
-                    female: {count: 0, bail_info: new MinMaxAverageModel()}},
-              W : {male: {count: 0, bail_info: new MinMaxAverageModel()},
-                    female: {count: 0, bail_info: new MinMaxAverageModel()}},
-              WH : {male: {count: 0, bail_info: new MinMaxAverageModel()},
-                    female: {count: 0, bail_info: new MinMaxAverageModel()}},
-            },
-            num_prisoners = this.numberOf();
-          this.collection.each(function(prisoner) {
-              var gender = (prisoner.get('gender') === "M") ? 'male' : 'female',
-                  race = prisoner.get('race')
-                  bail_amount = prisoner.get('bail_amount');
-              prisoners_stats_by_race[race][gender].count += 1;
-              if (bail_amount) {
-                prisoners_stats_by_race[race][gender].bail_info.add(bail_amount);
-              }
-          });
-          return prisoners_stats_by_race;
+        average_number_of_prisoners_booked_per_day: null,
+        longest_incarcerated_female: null,
+        longest_incarcerated_male: null,
+        number_of_males: null,
+        prisoner_per_day_info: null,
+
+        bailStats: function() {
+          var bail_stats = this.collection.reduce(function(bail_stats, cur_prisoner) {
+                                                    return bail_stats.add(cur_prisoner);
+                                                  },
+                                                  new BailStatsModel());
+          var attrs = bail_stats.stats();
+          return attrs;
         },
 
         gender_ratio: function(gender) {
           return ((gender === 'female') ? this.numberOfFemales() : this.numberOfMales()) / this.numberOf() * 100;
-         },
+        },
 
-        longestServeringPrisoner: function() {
-          if (!this.longest_serving_prisoner) {
-            var stay_length_field = 'stay_length',
-                longest_serving_prisoner = this.collection.reduce(function(longest_serving_prisoner, cur_prisoner) {
-                    if (longest_serving_prisoner.get(stay_length_field) < cur_prisoner.get(stay_length_field)) {
-                      // As of 2013-04-07 some records do not have a booking date but do have a duration of stay
-                      // these records are bad and this guard prevents them from affecting the longest staying
-                      // prisoner. This defect should be corrected and then this guard should be removed
-                      if (cur_prisoner.get('booking_date')) {
-                        longest_serving_prisoner = cur_prisoner;
-                      }
-                    }
-                    return longest_serving_prisoner;
-                  }, this.collection.at(0));
-            this.longest_serving_prisoner = longest_serving_prisoner;
+        longestIncarceratedFemale: function() {
+          if (!this.longest_incarcerated_female) {
+            var female_prisoners = this.collection.filter(function(prisoner) {
+                  return prisoner.get('gender') === 'F';
+                });
+            this.longest_incarcerated_female = this.find_longest_incarcerated_prisoner(female_prisoners);
           }
-          return this.longest_serving_prisoner;
+          return this.longest_incarcerated_female;
+        },
+
+        longestIncarceratedMale: function() {
+          if (!this.longest_incarcerated_male) {
+            var male_prisoners = this.collection.filter(function(prisoner) {
+                  return prisoner.get('gender') === 'M';
+                });
+            this.longest_incarcerated_male = this.find_longest_incarcerated_prisoner(male_prisoners);
+          }
+          return this.longest_incarcerated_male;
         },
 
         numberOf: function() {
@@ -133,6 +113,23 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
 
           this.$el.html(compiled_gen_stats_template);
         },
+
+        // helper funcitons in this section they are consideredto be private to this object
+        find_longest_incarcerated_prisoner: function(prisoners) {
+          var stay_length_field = 'stay_length';
+          return _.reduce(prisoners, function(longest_serving_prisoner, cur_prisoner) {
+                      if (longest_serving_prisoner.get(stay_length_field) < cur_prisoner.get(stay_length_field)) {
+                        // As of 2013-04-07 some records do not have a booking date but do have a duration of stay
+                        // these records are bad and this guard prevents them from affecting the longest staying
+                        // prisoner. This defect should be corrected and then this guard should be removed
+                        if (cur_prisoner.get('booking_date')) {
+                          longest_serving_prisoner = cur_prisoner;
+                        }
+                      }
+                      return longest_serving_prisoner;
+                    }, prisoners[0]);
+        },
+
     });
 
     return GenStatsView;
