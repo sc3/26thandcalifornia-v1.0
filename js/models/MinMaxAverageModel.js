@@ -21,6 +21,15 @@ define(['underscore', 'backbone'], function(_, Backbone) {
             this.set('count', count);
             this.set('average', sum / count);
             return this;
+        },
+        average: function() {
+            return this.get('average');
+        },
+        max: function() {
+            return this.get('max');
+        },
+        min: function() {
+            return this.get('min');
         }
     });
 

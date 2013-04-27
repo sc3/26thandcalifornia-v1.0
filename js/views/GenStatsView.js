@@ -7,11 +7,12 @@ define([
 'models/MinMaxAverageModel',
 'models/PrisonersBookedPerDayModel',
 'models/BailStatsModel',
+'models/WeekdayStatsModel',
 
 // Templates
 'text!templates/gen_stats.html'],
 function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageModel, PrisonersBookedPerDayModel,
-          BailStatsModel, gen_stats_template) {
+          BailStatsModel, WeekdayStatsModel, gen_stats_template) {
 
     // Prisoner model:
     //     age_at_booking
@@ -30,7 +31,7 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
     // list of prisoners is from oldest to newest
 
     var GenStatsView = Backbone.View.extend({
-        collection: InmateCollection,
+        collection: null,
         el: '#content',
         events: {
         },
@@ -65,7 +66,7 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
         },
 
         longestIncarceratedMale: function() {
-          if (!this.longest_incarcerated_male) {
+         if (!this.longest_incarcerated_male) {
             var male_prisoners = this.collection.filter(function(prisoner) {
                   return prisoner.get('gender') === 'M';
                 });
@@ -96,13 +97,13 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
 
         prisonerPerDayInfo: function() {
           if (!this.prisoner_per_day_info) {
-            var prisoners = this.collection.filter(function(prisoner) {
-                  return prisoner.get('booking_date') >= "2013-01-01T00:00:00";
-                }),
+            var prisoners = this.collection.filter(this.collection.prisoners_booked_since_collection_start_filter()),
                 prisoner_per_day_info = new PrisonersBookedPerDayModel({current_booking_day: prisoners[0].get('booking_date')});
-            this.prisoner_per_day_info = _.reduce(prisoners, function(prisoner_per_day_info, prisoner) {
-             return prisoner_per_day_info.add(prisoner);
-            }, prisoner_per_day_info);
+            this.prisoner_per_day_info = _.reduce(prisoners,
+                                                  function(prisoner_per_day_info, prisoner) {
+                                                    return prisoner_per_day_info.add(prisoner);
+                                                  },
+                                                  prisoner_per_day_info);
             this.prisoner_per_day_info.add_lastest_day();
           }
           return this.prisoner_per_day_info;
@@ -114,22 +115,34 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
           this.$el.html(compiled_gen_stats_template);
         },
 
-        // helper funcitons in this section they are consideredto be private to this object
-        find_longest_incarcerated_prisoner: function(prisoners) {
-          var stay_length_field = 'stay_length';
-          return _.reduce(prisoners, function(longest_serving_prisoner, cur_prisoner) {
-                      if (longest_serving_prisoner.get(stay_length_field) < cur_prisoner.get(stay_length_field)) {
-                        // As of 2013-04-07 some records do not have a booking date but do have a duration of stay
-                        // these records are bad and this guard prevents them from affecting the longest staying
-                        // prisoner. This defect should be corrected and then this guard should be removed
-                        if (cur_prisoner.get('booking_date')) {
-                          longest_serving_prisoner = cur_prisoner;
-                        }
-                      }
-                      return longest_serving_prisoner;
-                    }, prisoners[0]);
+        weekdayStats: function() {
+          if (!this.weekday_stats) {
+            var prisoners = this.collection.filter(this.collection.prisoners_booked_since_collection_start_filter());
+            this.weekday_stats = new WeekdayStatsModel({prisoners: prisoners});
+          }
+          return this.weekday_stats;
         },
 
+        //
+        // Helper Functions in this section they are consideredto be private to this object
+        //
+
+        find_longest_incarcerated_prisoner: function(prisoners) {
+          var stay_length_field = 'stay_length';
+          return _.reduce(prisoners,
+                          function(longest_serving_prisoner, cur_prisoner) {
+                            if (longest_serving_prisoner.get(stay_length_field) < cur_prisoner.get(stay_length_field)) {
+                              // As of 2013-04-07 some records do not have a booking date but do have a duration of stay
+                              // these records are bad and this guard prevents them from affecting the longest staying
+                              // prisoner. This defect should be corrected and then this guard should be removed
+                              if (cur_prisoner.get('booking_date')) {
+                                longest_serving_prisoner = cur_prisoner;
+                              }
+                            }
+                            return longest_serving_prisoner;
+                          },
+                          prisoners[0]);
+        },
     });
 
     return GenStatsView;

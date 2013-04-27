@@ -1,66 +1,85 @@
 <div id="gen-stats">
-    <h1>General Statistics</h1>
+  <h1>General Statistics</h1>
 
 	<p><strong>Discalimer:</strong> the data on prisoners is known to be not accurate, both at the source, the Cook County
 		Jail and the way the data is captured is not guaranteed to be fault free. Therefore do not take the data as definitive,
         rather viewed it as suggestive.</p>
 
-    <div class="">
-    	<h2>Information on the Data Set</h2>
-        <p>Number of Prisoner Records: <%= gen_stats.numberOf() %>.</p>
-        <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
-        <p>Number of Males: <%= gen_stats.numberOfMales() %> (<%= gen_stats.gender_ratio('male').toFixed(1)  %>%).</p>
+  <div class="">
+  	<h2>Information on the Data Set</h2>
 
-        <h3>Longest Incarceration</h3>
-        <p>Female: <%= gen_stats.longestIncarceratedFemale().get('stay_length') %> days, Booking: <%= gen_stats.longestIncarceratedFemale().get('booking_date').substring(0, 10) %>,
-            Discharge: <%= ((gen_stats.longestIncarceratedFemale().get('discharge_date_earliest') != null) ? gen_stats.longestIncarceratedFemale().get('discharge_date_earliest').substring(0, 10) : 'Still in jail') %>.
-        </p>
-        <p>Male: <%= gen_stats.longestIncarceratedMale().get('stay_length') %> days, Booking: <%= gen_stats.longestIncarceratedMale().get('booking_date').substring(0, 10) %>,
-            Discharge: <%= ((gen_stats.longestIncarceratedMale().get('discharge_date_earliest') != null) ? gen_stats.longestIncarceratedMale().get('discharge_date_earliest').substring(0, 10) : 'Still in jail') %>.
-        </p>
+    <p>Number of Prisoner Records: <%= gen_stats.numberOf() %>.</p>
+    <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
+    <p>Number of Males: <%= gen_stats.numberOfMales() %> (<%= gen_stats.gender_ratio('male').toFixed(1)  %>%).</p>
 
-        <h3>Averages from <%= gen_stats.prisonerPerDayInfo().get('first_booking_day') %> to
-            <%= gen_stats.prisonerPerDayInfo().get('last_booking_day') %></h3>
-        <p>Average number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().get('min_max_average').get('average').toFixed(0) %>,
-            Females: <%= gen_stats.prisonerPerDayInfo().get('min_max_average_females').get('average').toFixed(0) %>,
-            Males: <%= gen_stats.prisonerPerDayInfo().get('min_max_average_males').get('average').toFixed(0) %>.</p>
-        <p>Minimum number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().get('min_max_average').get('min') %> -
-            Date: <%= gen_stats.prisonerPerDayInfo().get('min_date') %>,
-            Females: <%= gen_stats.prisonerPerDayInfo().get('min_females') %>,
-            Males: <%= gen_stats.prisonerPerDayInfo().get('min_males') %>.</p>
-        <p>Maximum number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().get('min_max_average').get('max') %> -
-            Date: <%= gen_stats.prisonerPerDayInfo().get('max_date') %>,
-            Females: <%= gen_stats.prisonerPerDayInfo().get('max_females') %>,
-            Males: <%= gen_stats.prisonerPerDayInfo().get('max_males') %>.</p>
+    <h3>Longest Incarceration</h3>
+    <p>Female: <%= gen_stats.longestIncarceratedFemale().get('stay_length') %> days, Booking: <%= gen_stats.longestIncarceratedFemale().get('booking_date').substring(0, 10) %>,
+        Discharge: <%= ((gen_stats.longestIncarceratedFemale().get('discharge_date_earliest') != null) ? gen_stats.longestIncarceratedFemale().get('discharge_date_earliest').substring(0, 10) : 'Still in jail') %>.
+    </p>
+    <p>Male: <%= gen_stats.longestIncarceratedMale().get('stay_length') %> days, Booking: <%= gen_stats.longestIncarceratedMale().get('booking_date').substring(0, 10) %>,
+        Discharge: <%= ((gen_stats.longestIncarceratedMale().get('discharge_date_earliest') != null) ? gen_stats.longestIncarceratedMale().get('discharge_date_earliest').substring(0, 10) : 'Still in jail') %>.
+    </p>
 
-        <div class="" style="margin-bottom: 16px;">
-        	<h3>Bail Information</h3>
-            <table cellpadding="8px" border="1" style="text-align: right;">
-                <tr><td></td><td colspan="6" align="center">Female</td><td colspan="6" align="center">Male</td></tr>
-                <tr><td align="center">Race</td>
-                    <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
-                    <td align="center">Average</td><td align="center">Min Bail</td><td align="center">Max Bail</td>
-                    <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
-                    <td align="center">Average</td><td align="center">Min Bail</td><td align="center">Max Bail</td>
-            		<% _.each(gen_stats.bailStats(), function(bail_stats, race) { %>
-                        <tr>
-                            <td><%= race %></td>
-                            <td><%= bail_stats.total_females() %></td>
-                            <td><%= bail_stats.female_nobail_count() %> <%= bail_stats.format_female_nobail_pecentage() %></td>
-                            <td><%= bail_stats.female_bail_count() %> <%= bail_stats.format_female_bail_pecentage() %></td>
-                            <td>$<%= (bail_stats.female_bail_count() != 0) ? bail_stats.female_min_max_average().get('average').toFixed(0) : 0 %></td>
-                            <td>$<%= (bail_stats.female_bail_count() != 0) ? bail_stats.female_min_max_average().get('min') : 0 %></td>
-                            <td>$<%= (bail_stats.female_bail_count() != 0) ? bail_stats.female_min_max_average().get('max') : 0 %></td>
+    <h3>Averages from <%= gen_stats.prisonerPerDayInfo().get('first_booking_day') %> to
+        <%= gen_stats.prisonerPerDayInfo().get('last_booking_day') %></h3>
+    <p>Average number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().get('min_max_average').get('average').toFixed(0) %>,
+        Females: <%= gen_stats.prisonerPerDayInfo().get('min_max_average_females').get('average').toFixed(0) %>,
+        Males: <%= gen_stats.prisonerPerDayInfo().get('min_max_average_males').get('average').toFixed(0) %>.</p>
+    <p>Minimum number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().get('min_max_average').get('min') %> -
+        Date: <%= gen_stats.prisonerPerDayInfo().get('min_date') %>,
+        Females: <%= gen_stats.prisonerPerDayInfo().get('min_females') %>,
+        Males: <%= gen_stats.prisonerPerDayInfo().get('min_males') %>.</p>
+    <p>Maximum number prisoners booked per day: <%= gen_stats.prisonerPerDayInfo().get('min_max_average').get('max') %> -
+        Date: <%= gen_stats.prisonerPerDayInfo().get('max_date') %>,
+        Females: <%= gen_stats.prisonerPerDayInfo().get('max_females') %>,
+        Males: <%= gen_stats.prisonerPerDayInfo().get('max_males') %>.</p>
 
-                            <td><%= bail_stats.total_males() %></td>
-                            <td><%= bail_stats.male_nobail_count() %> <%= bail_stats.format_male_nobail_pecentage() %></td>
-                            <td><%= bail_stats.male_bail_count() %> <%= bail_stats.format_male_bail_pecentage() %></td>
-                            <td>$<%= (bail_stats.male_bail_count() != 0) ? bail_stats.male_min_max_average().get('average').toFixed(0) : 0 %></td>
-                            <td>$<%= (bail_stats.male_bail_count() != 0) ? bail_stats.male_min_max_average().get('min') : 0 %></td>
-                            <td>$<%= (bail_stats.male_bail_count() != 0) ? bail_stats.male_min_max_average().get('max') : 0 %></td>
-                       </tr>
-            		<% }); %>
-            </table>
-       </div>
+    <div class="" style="margin-bottom: 16px;">
+    	<h3>Bail Information</h3>
+        <table cellpadding="8px" border="1" style="text-align: right;">
+          <tr><td></td><td colspan="6" align="center">Female</td><td colspan="6" align="center">Male</td></tr>
+          <tr>
+            <td align="center">Race</td>
+            <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
+            <td align="center">Average</td><td align="center">Min Bail</td><td align="center">Max Bail</td>
+            <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
+            <td align="center">Average</td><td align="center">Min Bail</td><td align="center">Max Bail</td>
+          </tr>
+      		<% _.each(gen_stats.bailStats(), function(bail_stats, race) { %>
+            <tr>
+              <td><%= race %></td>
+              <td><%= bail_stats.total_females() %></td>
+              <td><%= bail_stats.female_nobail_count() %> <%= bail_stats.format_female_nobail_pecentage() %></td>
+              <td><%= bail_stats.female_bail_count() %> <%= bail_stats.format_female_bail_pecentage() %></td>
+              <td>$<%= (bail_stats.female_bail_count() != 0) ? bail_stats.female_min_max_average().get('average').toFixed(0) : 0 %></td>
+              <td>$<%= (bail_stats.female_bail_count() != 0) ? bail_stats.female_min_max_average().get('min') : 0 %></td>
+              <td>$<%= (bail_stats.female_bail_count() != 0) ? bail_stats.female_min_max_average().get('max') : 0 %></td>
+
+              <td><%= bail_stats.total_males() %></td>
+              <td><%= bail_stats.male_nobail_count() %> <%= bail_stats.format_male_nobail_pecentage() %></td>
+              <td><%= bail_stats.male_bail_count() %> <%= bail_stats.format_male_bail_pecentage() %></td>
+              <td>$<%= (bail_stats.male_bail_count() != 0) ? bail_stats.male_min_max_average().get('average').toFixed(0) : 0 %></td>
+              <td>$<%= (bail_stats.male_bail_count() != 0) ? bail_stats.male_min_max_average().get('min') : 0 %></td>
+              <td>$<%= (bail_stats.male_bail_count() != 0) ? bail_stats.male_min_max_average().get('max') : 0 %></td>
+           </tr>
+      		<% }); %>
+        </table>
+   </div>
+
+    <div class="" style="margin-bottom: 16px;">
+      <h3>Booking per Day Stats</h3>
+      <table cellpadding="8px" border="1" style="text-align: right;">
+        <tr>
+          <th>Weekday</th>
+          <th>Count</th>
+        </tr>
+        <% _.each(gen_stats.weekdayStats().stats(), function(day_stats, name) { %>
+          <tr>
+            <td><%= name %></td>
+            <td><%= day_stats %></td>
+          </tr>
+        <% }); %>
+      </table>
     </div>
+  </div>
 </div>
