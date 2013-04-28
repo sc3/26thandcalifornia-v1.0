@@ -32,7 +32,8 @@ define([
           var first;
           //you need bound check for last record here...
           //((this.paginateMarker += this.amountToDisplay) <= this.collection.last)
-          if(true){
+          // If condition need to be tested with numbers that this.collection isn't divisible by
+          if((this.paginateMarker + this.amountToDisplay) <= this.collection.length){
               first = this.paginateMarker;
               this.paginateMarker += this.amountToDisplay;
               this.render({
