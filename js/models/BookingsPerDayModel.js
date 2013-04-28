@@ -3,11 +3,11 @@
 //
 define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Backbone, MinMaxAverageModel) {
 
-  var PrisonersBookedPerDayModel = Backbone.Model.extend({
+  var BookingsPerDayModel = Backbone.Model.extend({
     defaults: {
       current_booking_day: null,
       first_booking_day: null,
-      last_booking_day: null,
+      latest_booking_day: null,
       booking_counts_per_day: null,
       count_females: 0,
       count_males: 0,
@@ -57,12 +57,18 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
     initialize_for_current_counts: function(current_booking_day) {
       var date_minus_time = current_booking_day.substring(0, 10);
       this.set('current_booking_day', current_booking_day);
-      this.set('last_booking_day', date_minus_time);
+      this.set('latest_booking_day', date_minus_time);
       this.set('count_females', 0);
       this.set('count_males', 0);
       this.get('booking_counts_per_day')[date_minus_time] = {F: null, M: null, T: null};
     },
 
+    // To sort the fields by their names in a Javscript Object, which is what a Hash is, is a two step process
+    // First extract all the keys and sort them in an array, which is stored in the var days
+    // Then create a new Object and iterate over the array, days, adding new field to the created object
+    // Javascript remembers insertion order and so when you iterate over the fields of the new object
+    // You get the fields out in sorted order.
+    // The newly created object, with its sorted fields, is set to the field 'booking_counts_per-day'
     sort_booking_counts_per_day: function() {
       var bookings_per_day = this.get('booking_counts_per_day'),
           days = _.map(bookings_per_day, function(value, key) { return key; }).sort();
@@ -72,7 +78,7 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
                             booking_counts_per_day[cur_day] = this[cur_day];
                             return booking_counts_per_day;
                           },
-                          {},
+                          {}, // this is the new object that is populated with fields in sorted order
                           bookings_per_day));
     },
 
@@ -80,7 +86,7 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
       var count_females = this.get('count_females'),
           count_males = this.get('count_males'),
           total = count_females + count_males,
-          booking_counts_for_cur_day = this.get('booking_counts_per_day')[this.get('last_booking_day')];
+          booking_counts_for_cur_day = this.get('booking_counts_per_day')[this.get('latest_booking_day')];
       this.get('min_max_average').add(total);
       this.get('min_max_average_females').add(count_females);
       this.get('min_max_average_males').add(count_males);
@@ -89,5 +95,5 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
       booking_counts_for_cur_day.T = total;
     },
   });
-  return PrisonersBookedPerDayModel;
+  return BookingsPerDayModel;
 });

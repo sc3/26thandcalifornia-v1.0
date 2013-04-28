@@ -5,13 +5,13 @@ define([
 // Our apps
 'collections/InmateCollection',
 'models/MinMaxAverageModel',
-'models/PrisonersBookedPerDayModel',
+'models/BookingsPerDayModel',
 'models/BailStatsModel',
 'models/WeekdayStatsModel',
 
 // Templates
 'text!templates/gen_stats.html'],
-function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageModel, PrisonersBookedPerDayModel,
+function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageModel, BookingsPerDayModel,
           BailStatsModel, WeekdayStatsModel, gen_stats_template) {
 
     // Prisoner model:
@@ -36,7 +36,6 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
         events: {
         },
 
-        average_number_of_prisoners_booked_per_day: null,
         longest_incarcerated_female: null,
         longest_incarcerated_male: null,
         number_of_males: null,
@@ -86,19 +85,20 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
         numberOfMales: function() {
           if (!this.number_of_males) {
             this.number_of_males = this.collection.reduce(function(number_of_males, prisoner) {
-              if (prisoner.get('gender') === 'M') {
-                number_of_males += 1;
-              }
-              return number_of_males;
-            }, 0);
+                                                            if (prisoner.get('gender') === 'M') {
+                                                              number_of_males += 1;
+                                                            }
+                                                            return number_of_males;
+                                                          },
+                                                          0);
           }
           return this.number_of_males;
         },
 
-        prisonerPerDayInfo: function() {
+        bookingsPerDay: function() {
           if (!this.prisoner_per_day_info) {
             var prisoners = this.collection.filter(this.collection.prisoners_booked_since_collection_start_filter());
-            this.prisoner_per_day_info = new PrisonersBookedPerDayModel({prisoners: prisoners});
+            this.prisoner_per_day_info = new BookingsPerDayModel({prisoners: prisoners});
           }
           return this.prisoner_per_day_info;
         },
@@ -111,10 +111,11 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
 
         weekdayStats: function() {
           if (!this.weekday_stats) {
-            this.weekday_stats = new WeekdayStatsModel({booking_counts_per_day: this.prisonerPerDayInfo().get('booking_counts_per_day')});
+            this.weekday_stats = new WeekdayStatsModel({booking_counts_per_day: this.bookingsPerDay().get('booking_counts_per_day')});
           }
           return this.weekday_stats;
         },
+
 
         //
         // Helper Functions in this section they are consideredto be private to this object

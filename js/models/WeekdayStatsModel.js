@@ -4,7 +4,7 @@
 define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Backbone, MinMaxAverageModel) {
 
   var WeekdayStatsModel = Backbone.Model.extend({
-   days_of_the_week: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+    days_of_the_week: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
     summed_booking_counts_per_day: null,
 
     defaults: {
@@ -19,8 +19,9 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
       return this.summed_booking_counts_per_day;
     },
 
+
     //
-    // Helper FunctionS: private area
+    // Helper Functions: private area
     //
 
     sum_booking_counts_per_weekday: function() {
