@@ -97,14 +97,8 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
 
         prisonerPerDayInfo: function() {
           if (!this.prisoner_per_day_info) {
-            var prisoners = this.collection.filter(this.collection.prisoners_booked_since_collection_start_filter()),
-                prisoner_per_day_info = new PrisonersBookedPerDayModel({current_booking_day: prisoners[0].get('booking_date')});
-            this.prisoner_per_day_info = _.reduce(prisoners,
-                                                  function(prisoner_per_day_info, prisoner) {
-                                                    return prisoner_per_day_info.add(prisoner);
-                                                  },
-                                                  prisoner_per_day_info);
-            this.prisoner_per_day_info.add_lastest_day();
+            var prisoners = this.collection.filter(this.collection.prisoners_booked_since_collection_start_filter());
+            this.prisoner_per_day_info = new PrisonersBookedPerDayModel({prisoners: prisoners});
           }
           return this.prisoner_per_day_info;
         },
@@ -117,8 +111,7 @@ function($, _, Backbone, Spinner, Bootstrap, InmateCollection, MinMaxAverageMode
 
         weekdayStats: function() {
           if (!this.weekday_stats) {
-            var prisoners = this.collection.filter(this.collection.prisoners_booked_since_collection_start_filter());
-            this.weekday_stats = new WeekdayStatsModel({prisoners: prisoners});
+            this.weekday_stats = new WeekdayStatsModel({booking_counts_per_day: this.prisonerPerDayInfo().get('booking_counts_per_day')});
           }
           return this.weekday_stats;
         },
