@@ -56,7 +56,7 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
         if (this.summed_booking_counts_per_day.cur_week) {
           _.each(this.summed_booking_counts_per_day.cur_week,
                 function(weekday_val, index) {
-                  this.summed_booking_counts_per_day[this.days_of_the_week[index]].push(weekday_val);
+                  this.summed_booking_counts_per_day.summed[this.days_of_the_week[index]].push(weekday_val);
                 },
                 this);
         }

@@ -20,6 +20,7 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
       min_max_average: new MinMaxAverageModel(),
       min_max_average_females: new MinMaxAverageModel(),
       min_max_average_males: new MinMaxAverageModel(),
+      prisoners: null,
       update_max_info: function() {
         _.bind(this.get('update_min_max_info'), this)('max');
       },

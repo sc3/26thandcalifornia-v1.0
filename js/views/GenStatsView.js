@@ -8,12 +8,13 @@ define([
 'models/BookingsPerDayModel',
 'models/BailStatsModel',
 'models/WeekdayStatsModel',
+'models/JailSystemPopulationModel',
 
 // Templates
 'text!templates/gen_stats.html'
 ],
 function($, _, Backbone, Spinner, Bootstrap, D3,
-          InmateCollection, MinMaxAverageModel, BookingsPerDayModel, BailStatsModel, WeekdayStatsModel,
+          InmateCollection, MinMaxAverageModel, BookingsPerDayModel, BailStatsModel, WeekdayStatsModel, JailSystemPopulationModel,
           gen_stats_template) {
 
     // Prisoner model:
@@ -41,7 +42,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
         longest_incarcerated_female: null,
         longest_incarcerated_male: null,
         number_of_males: null,
-        prisoner_per_day_info: null,
+        bookings_per_day: null,
 
         bailStats: function() {
           var bail_stats = this.collection.reduce(function(bail_stats, cur_prisoner) {
@@ -53,11 +54,11 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
         },
 
         bookingsPerDay: function() {
-          if (!this.prisoner_per_day_info) {
+          if (!this.bookings_per_day) {
             var prisoners = this.collection.filter(this.collection.prisoners_booked_since_collection_start_filter());
-            this.prisoner_per_day_info = new BookingsPerDayModel({prisoners: prisoners});
+            this.bookings_per_day = new BookingsPerDayModel({prisoners: prisoners});
           }
-          return this.prisoner_per_day_info;
+          return this.bookings_per_day;
         },
 
         gender_ratio: function(gender) {
@@ -141,16 +142,30 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             [new Date(2013, 0, 1), 5.4],
           ];
 
+          var jail_population_per_day = new JailSystemPopulationModel({inmates: this.collection}),
+              daily_population = jail_population_per_day.daily_population();
+
           var margin = {top: 20, right: 30, bottom: 30, left: 40},
               width = 960 - margin.left - margin.right,
               height = 500 - margin.top - margin.bottom;
 
           var x = d3.time.scale()
-              .domain([new Date(2001, 0, 1), new Date(2014, 0, 1)])
+              // .domain([new Date(2001, 0, 1), new Date(2014, 0, 1)])
+              .domain([daily_population[0][0], daily_population[daily_population.length - 1][0]])
               .range([0, width]);
 
-          var y = d3.scale.linear()
-              .domain([0, 6])
+          var y_range = [_.min(daily_population, function(entry) { return entry[1]; })[1],
+                         _.max(daily_population, function(entry) { return entry[1]; })[1]],
+              y;
+              if ((y_range[0] - 49) < 0) {
+                y_range[0] = 0;
+              } else {
+                y_range[0] = Math.floor((y_range[0] - 1) / 50) * 50;
+              }
+              y_range[1] = Math.floor((y_range[1] + 51) / 50) * 50;
+              y = d3.scale.linear()
+              // .domain([0, 6])
+              .domain(y_range)
               .range([height, 0]);
 
           var xAxis = d3.svg.axis()
@@ -166,6 +181,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
               .x(function(d) { return x(d[0]); })
               .y(function(d) { return y(d[1]); });
 
+          data = daily_population;
           var svg = d3.select("#JailSystemPopulation")
               .append("svg")
               .datum(data)
