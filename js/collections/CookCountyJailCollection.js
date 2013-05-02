@@ -25,6 +25,7 @@ define([
             this.meta = data.meta;
             return data.objects;
         },
+        stats_start_date: '2013-01-01T00:00:00', // This is the "official" start date that data was being collectd
     });
 
     return CookCountyJailCollection;
