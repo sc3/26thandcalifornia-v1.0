@@ -22,12 +22,6 @@ define(['collections/CookCountyJailCollection', 'models/InmateModel'], function(
 			return this.sortAscending ? compare : -compare;
 		},
 
-		sortByAttribute: function(attribute, ascending) {
-			this.sortByAttributeKey = attribute;
-			this.sortAscending = ascending;
-			this.sort();
-		},
-
     histogram: function(field, buckets) {
       var histogram = [];
       var buckets_length = buckets.length;
@@ -61,7 +55,19 @@ define(['collections/CookCountyJailCollection', 'models/InmateModel'], function(
         });
       });
       return histogram;
-    }
+    },
+
+    prisoners_booked_since_collection_start_filter: function() {
+      var stats_start_date = this.stats_start_date;
+      return function(prisoner) { return prisoner.get('booking_date') >= stats_start_date; };
+    },
+
+    sortByAttribute: function(attribute, ascending) {
+      this.sortByAttributeKey = attribute;
+      this.sortAscending = ascending;
+      this.sort();
+    },
+
 	});
 
 	return InmateCollection;
