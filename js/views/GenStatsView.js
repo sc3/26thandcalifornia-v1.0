@@ -110,6 +110,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
           var compiled_gen_stats_template = _.template(gen_stats_template, { gen_stats: this });
 
           this.$el.html(compiled_gen_stats_template);
+          this.displayWeekdayBookings();
           this.displayJailSystemPopulation();
         },
 
@@ -125,22 +126,18 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
         // Helper Functions in this section they are consideredto be private to this object
         //
 
-        displayJailSystemPopulation: function() {
+        convert_weekday_stats_for_d3_usage: function() {
+          var weekday_stats = this.weekdayStats().stats();
+          return _.map(weekday_stats,
+                        function(weekday_values, weekday) {
+                          return {
+                            name: weekday,
+                            values: weekday_values
+                          };
+                        });
+        },
 
-          var data = [
-            [new Date(2001, 0, 1), 1],
-            [new Date(2002, 0, 1), 2],
-            [new Date(2003, 0, 1), 2],
-            [new Date(2004, 0, 1), 3],
-            [new Date(2005, 0, 1), 4],
-            [new Date(2006, 0, 1), 5],
-            [new Date(2008, 0, 1), 4.6],
-            [new Date(2009, 0, 1), 2.75],
-            [new Date(2010, 0, 1), 3.68],
-            [new Date(2011, 0, 1), 3.72],
-            [new Date(2012, 0, 1), 4.3],
-            [new Date(2013, 0, 1), 5.4],
-          ];
+        displayJailSystemPopulation: function() {
 
           var jail_population_per_day = new JailSystemPopulationModel({inmates: this.collection}),
               daily_population = jail_population_per_day.daily_population();
@@ -150,7 +147,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
               height = 500 - margin.top - margin.bottom;
 
           var x = d3.time.scale()
-              // .domain([new Date(2001, 0, 1), new Date(2014, 0, 1)])
               .domain([daily_population[0][0], daily_population[daily_population.length - 1][0]])
               .range([0, width]);
 
@@ -164,7 +160,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
               }
               y_range[1] = Math.floor((y_range[1] + 51) / 50) * 50;
               y = d3.scale.linear()
-              // .domain([0, 6])
               .domain(y_range)
               .range([height, 0]);
 
@@ -177,14 +172,12 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
               .orient("left");
 
           var line = d3.svg.line()
-              .interpolate("monotone")
               .x(function(d) { return x(d[0]); })
               .y(function(d) { return y(d[1]); });
 
-          data = daily_population;
           var svg = d3.select("#JailSystemPopulation")
               .append("svg")
-              .datum(data)
+              .datum(daily_population)
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
               .append("g")
@@ -204,12 +197,109 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
               .attr("d", line);
 
           svg.selectAll(".dot")
-              .data(data)
+              .data(daily_population)
               .enter().append("circle")
               .attr("class", "dot")
               .attr("cx", line.x())
               .attr("cy", line.y())
-              .attr("r", 3.5);
+              .attr("r", 1.2);
+        },
+
+        displayWeekdayBookings: function() {
+
+          var bookings_per_weekdays = this.convert_weekday_stats_for_d3_usage();
+
+          var max_weekday_value = Math.floor((_.max(_.reduce(bookings_per_weekdays,
+                                                              function(max_values, bookings_per_weekday) {
+                                                                max_values.push(_.max(bookings_per_weekday.values));
+                                                                return max_values;
+                                                              },
+                                                              [])) + 10) / 10) * 10,
+              min_weekday_value = Math.floor((_.min(_.reduce(bookings_per_weekdays,
+                                                              function(min_values, bookings_per_weekday) {
+                                                                min_values.push(_.min(bookings_per_weekday.values));
+                                                                return min_values;
+                                                              },
+                                                              [])) - 10) / 10) * 10;
+ 
+          var margin = {top: 20, right: 30, bottom: 30, left: 40},
+              width = 960 - margin.left - margin.right,
+              height = 500 - margin.top - margin.bottom;
+
+          var x = d3.scale.linear()
+              .domain([1, bookings_per_weekdays[0].values.length])
+              .range([0, width]);
+
+          var y = d3.scale.linear()
+              .domain([min_weekday_value, max_weekday_value])
+              .range([height, 0]);
+
+          var xAxis = d3.svg.axis()
+              .scale(x)
+              .orient("bottom");
+
+          var yAxis = d3.svg.axis()
+              .scale(y)
+              .orient("left");
+
+          var color = d3.scale.category10().domain(_.map(bookings_per_weekdays,
+                                                          function(bookings_per_weekday) { return bookings_per_weekday.name; }));
+
+          var line = d3.svg.line()
+              .x(function(d, index) {
+                return x(index + 1); })
+              .y(function(d) {
+                return y(d); });
+
+          var svg = d3.select("#BookingsPerWeekday")
+              .append("svg")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+              .append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          svg.append("g")
+              .attr("class", "x axis")
+              .attr("transform", "translate(0," + height + ")")
+              .call(xAxis);
+
+          svg.append("g")
+              .attr("class", "y axis")
+              .call(yAxis);
+
+          var b_p_w = svg.selectAll(".b_p_w")
+              .data(bookings_per_weekdays)
+              .enter()
+              .append("g")
+              .attr("class", "b_p_w");
+
+           b_p_w.append("path")
+              .attr("class", "line")
+              .attr("d", function(d) {
+                return line(d.values); })
+              .style("stroke", function(d) { return color(d.name); });
+
+          b_p_w.append("text")
+              .datum(function(d) { return {name: d.name, value: [d.values.length, d.values[d.values.length - 1]]}; })
+              .attr("transform", function(d) { return "translate(" + x(d.value[0]) + "," + y(d.value[1]) + ")"; })
+              .attr("x", 3)
+              .attr("dy", ".35em")
+              .text(function(d) { return d.name; })
+              .style("stroke", function(d) { return color(d.name); });
+
+          _.each(bookings_per_weekdays,
+                  function(bookings_per_weekday) {
+                    svg.selectAll(".b_p_w_dot_" + bookings_per_weekday.name)
+                        .data(bookings_per_weekday.values)
+                        .enter()
+                        .append("circle")
+                        .attr("class", "dot")
+                        .attr("cx", line.x())
+                        .attr("cy", line.y())
+                        .attr("r", 2.1)
+                        .style("stroke", function(d) { return color(bookings_per_weekday.name); });
+                  });
+
         },
 
         find_longest_incarcerated_prisoner: function(prisoners) {
