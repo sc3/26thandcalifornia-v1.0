@@ -1,17 +1,24 @@
+
+// TODO: Refactor D3 graphics code it is not DRY.
+
+//
+// This computes and displays general statistics about the Cook County Jail System.
+//
+
 define([
-// Libraries
-'jquery', 'underscore', 'backbone', 'spin', 'bootstrap', 'd3',
+  // Libraries
+  'jquery', 'underscore', 'backbone', 'spin', 'bootstrap', 'd3',
 
-// Our apps
-'collections/InmateCollection',
-'models/MinMaxAverageModel',
-'models/BookingsPerDayModel',
-'models/BailStatsModel',
-'models/WeekdayStatsModel',
-'models/JailSystemPopulationModel',
+  // Our apps
+  'collections/InmateCollection',
+  'models/MinMaxAverageModel',
+  'models/BookingsPerDayModel',
+  'models/BailStatsModel',
+  'models/WeekdayStatsModel',
+  'models/JailSystemPopulationModel',
 
-// Templates
-'text!templates/gen_stats.html'
+  // Templates
+  'text!templates/gen_stats.html'
 ],
 function($, _, Backbone, Spinner, Bootstrap, D3,
           InmateCollection, MinMaxAverageModel, BookingsPerDayModel, BailStatsModel, WeekdayStatsModel, JailSystemPopulationModel,
