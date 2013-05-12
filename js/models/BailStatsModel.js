@@ -10,10 +10,10 @@ define(['underscore', 'backbone', 'models/BailStatsItemModel'], function(_, Back
       BK: null,
       IN: null,
       LB: null,
-      LW: null,
       LT: null,
+      LW: null,
       W: null,
-      WH: null,
+      WH: null
     },
 
     initialize: function() {
@@ -29,14 +29,16 @@ define(['underscore', 'backbone', 'models/BailStatsItemModel'], function(_, Back
     },
 
     add: function(prisoner) {
-    	var race = prisoner.get('race'),
-    			b_s_i_m = this.get(race);
+      var race = prisoner.get('race'),
+          b_s_i_m = this.get(race);
       b_s_i_m.add(prisoner);
       return this;
     },
 
     stats: function() {
-    	return this.attributes;
+      var attrs = this.attributes;
+      return attrs;
+      // return this.attributes;
     }
 
   });

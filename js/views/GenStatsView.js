@@ -203,8 +203,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
         var male_age_counts = full_male_age_counts.slice(age_start_index, age_end_index + 1);
         var margin = {top: 40, right: 40, bottom: 60, left: 80},
             w = _.max([820, ($(window).width() * 0.9)]) - margin.left - margin.right,
-            h = _.max([360, ($(window).height() * 0.8)]) - margin.top - margin.bottom;
-            labelpad = 165,
+            h = _.max([360, ($(window).height() * 0.8)]) - margin.top - margin.bottom,
             x = d3.scale.ordinal().rangeRoundBands([0, w], 0.2),
             y = d3.scale.linear().range([h, 0]);
 
@@ -368,8 +367,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
         var male_age_counts = full_male_age_counts.slice(age_start_index, age_end_index + 1);
         var margin = {top: 40, right: 40, bottom: 60, left: 80},
             w = _.max([820, ($(window).width() * 0.9)]) - margin.left - margin.right,
-            h = _.max([360, ($(window).height() * 0.8)]) - margin.top - margin.bottom;
-            labelpad = 165,
+            h = _.max([360, ($(window).height() * 0.8)]) - margin.top - margin.bottom,
             x = d3.scale.ordinal().rangeRoundBands([0, w], 0.2),
             y = d3.scale.linear().range([h, 0]);
 

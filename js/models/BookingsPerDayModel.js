@@ -31,7 +31,7 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
         this.set(selector + '_date', this.get('current_booking_day').substring(0, 10));
         this.set(selector + '_females', this.get('count_females'));
         this.set(selector + '_males', this.get('count_males'));
-      },
+      }
     },
     initialize: function() {
       this.get('min_max_average').on('change:min', this.get('update_min_info'), this);
@@ -94,7 +94,7 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
       booking_counts_for_cur_day.F = count_females;
       booking_counts_for_cur_day.M = count_males;
       booking_counts_for_cur_day.T = total;
-    },
+    }
   });
   return BookingsPerDayModel;
 });

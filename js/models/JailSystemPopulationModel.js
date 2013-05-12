@@ -12,7 +12,7 @@ define(['underscore', 'backbone'], function(_, Backbone) {
 
     defaults: {
       inmates: null,
-      daily_population: null,
+      daily_population: null
     },
 
     daily_population: function() {
@@ -96,8 +96,8 @@ define(['underscore', 'backbone'], function(_, Backbone) {
     },
 
     trim: function(entries) {
-      return _.filter(entries, function(entry) { return entry[1] != 0; });
-    },
+      return _.filter(entries, function(entry) { return entry[1] !== 0; });
+    }
   });
   return JailSystemPopulationModel;
 });
