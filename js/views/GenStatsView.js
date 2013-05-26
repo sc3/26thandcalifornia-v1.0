@@ -54,6 +54,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
       longest_incarcerated_male: null,
       male_inmates: null,
       number_of_males: null,
+      races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'W', 'WH'],
 
       bailStats: function() {
         var bail_stats = this.collection.reduce(function(bail_stats, cur_prisoner) {
@@ -141,8 +142,8 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
         this.$el.html(compiled_gen_stats_template);
         this.displayWeekdayBookings();
         this.displayJailSystemPopulation();
-        this.displayFemaleInmatesAgeAtBooking();
-        this.displayMaleInmatesAgeAtBooking();
+        this.displayInmatesAgeAtBookingByRace(this.females(), 'Female');
+        this.displayInmatesAgeAtBookingByRace(this.males(), 'Male');
       },
 
       weekdayStats: function() {
@@ -168,31 +169,36 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
                       });
       },
 
-      displayFemaleInmatesAgeAtBooking: function() {
 
-        var i,
+      displayInmatesAgeAtBookingByRace: function(population, gender) {
+        var element_id = "#" + gender + "InmatesAgeAtBookingByRace",
+            i,
             upper_age_limit = 120,
-            full_male_age_counts = new Array(upper_age_limit + 1);
+            full_age_counts = new Array(upper_age_limit + 1);
         for (i = 0; i <= upper_age_limit; ++i) {
-          full_male_age_counts[i] = 0;
+          full_age_counts[i] = {AS: 0, B: 0, BK: 0, IN: 0, LB: 0, LT: 0, LW: 0, W: 0, WH: 0};
         }
-        full_male_age_counts = _.reduce(this.females(),
-                                        function(age_counts, inmate) {
-                                          var age = inmate.get('age_at_booking');
-                                          if (age === 0) { age = 25; }
-                                          age_counts[age] += 1;
-                                          return age_counts;
-                                        },
-                                        full_male_age_counts);
-        var age_start_index = -1, age_end_index = -1;
+        full_age_counts = _.reduce(population,
+                                  function(age_counts, inmate) {
+                                    var age = inmate.get('age_at_booking');
+                                    if (age === 0) { age = 25; }
+                                    age_counts[age][inmate.get('race')] += 1;
+                                    return age_counts;
+                                  },
+                                  full_age_counts);
+        var age_start_index = -1,
+            age_end_index = -1,
+            sum;
         for (i = 0; i <= upper_age_limit; ++i) {
-          if (full_male_age_counts[i] !== 0) {
+          sum = this.sum_age_counts(full_age_counts[i]);
+          if (sum !== 0) {
             age_start_index = i;
             break;
           }
         }
         for (i = upper_age_limit; i >= 0; --i) {
-          if (full_male_age_counts[i] !== 0) {
+          sum = this.sum_age_counts(full_age_counts[i]);
+          if (sum !== 0) {
             age_end_index = i;
             break;
           }
@@ -200,16 +206,17 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
         if (age_start_index === -1 || age_end_index === -1) {
           return;
         }
-        var male_age_counts = full_male_age_counts.slice(age_start_index, age_end_index + 1);
+        var age_counts = full_age_counts.slice(age_start_index, age_end_index + 1);
+
         var margin = {top: 40, right: 40, bottom: 60, left: 80},
             w = _.max([820, ($(window).width() * 0.9)]) - margin.left - margin.right,
-            h = _.max([360, ($(window).height() * 0.8)]) - margin.top - margin.bottom,
+            h = _.max([480, ($(window).height() * 0.8)]) - margin.top - margin.bottom,
             x = d3.scale.ordinal().rangeRoundBands([0, w], 0.2),
             y = d3.scale.linear().range([h, 0]);
 
           //define our domain ranges
-          var x_range = _.map(male_age_counts, function(d, i) { return i + age_start_index; }),
-              y_max_value = d3.max(male_age_counts);
+          var x_range = _.map(age_counts, function(d, i) { return i + age_start_index; }),
+              y_max_value = _.max(_.map(age_counts, this.sum_age_counts, this));
           x.domain(x_range);
           y.domain([0, y_max_value]);
 
@@ -223,7 +230,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             .scale(y)
             .orient("left");
 
-        var chart = d3.select("#FemaleInmatesAgeAtBooking").append("svg")
+        var chart = d3.select(element_id).append("svg")
             .attr("class", "chart")
             .attr("width", w + margin.left + margin.right)
             .attr("height", h + margin.top + margin.bottom)
@@ -246,22 +253,59 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             .attr("class", "y axis")
             .call(yAxis);
 
+        var colors = d3.scale.category10().domain(this.races);
+
+        _.each(age_counts,
+                function(d) {
+                  var y0 = 0;
+                  d.rect_info = _.map(this.races, function(race) {
+                    return {race: race, y0: y0, y1: y0 += +d[race]}; });
+                },
+                this);
+
         //finally, populate our SVG with data
         var x_width = x.rangeBand();
-        chart.selectAll(".bar")
-            .data(male_age_counts)
-            .enter().append("rect")
-            .attr("class", "bar")
-            .attr("x", function(d, i) {
-              var x_offset = x(i + age_start_index);
-              return x_offset; })
+
+        var ages = chart.selectAll('.ages')
+            .data(age_counts)
+            .enter()
+            .append("g")
+            .attr("class", "g")
+            .attr("transform", function(d, i) { return "translate(" + x(i + age_start_index) + ",0)"; });
+
+        ages.selectAll("rect")
+            .data(function(d) { return d.rect_info; })
+            .enter()
+            .append("rect")
             .attr("width", x_width)
             .attr("y", function(d) {
-              var y_offset = y(d);
-              return y_offset; })
+              return y(d.y1); })
             .attr("height", function(d) {
-              var height = h - y(d);
-              return height; });
+              var y0 = y(d.y0), y1 = y(d.y1);
+              var height = y0 - y1;
+              return height; })
+            .style("fill", function(d) {
+              return colors(d.race); });
+
+        var legend = chart.selectAll(".legend")
+            .data(colors.domain().slice().reverse())
+            .enter()
+            .append("g")
+            .attr("class", "legend")
+            .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+        legend.append("rect")
+            .attr("x", w - 18)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", colors);
+
+        legend.append("text")
+            .attr("x", w - 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text(function(d) { return d; });
       },
 
       displayJailSystemPopulation: function() {
@@ -330,102 +374,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             .attr("cx", line.x())
             .attr("cy", line.y())
             .attr("r", 1.2);
-      },
-
-      displayMaleInmatesAgeAtBooking: function() {
-
-        var i,
-            upper_age_limit = 120,
-            full_male_age_counts = new Array(upper_age_limit + 1);
-        for (i = 0; i <= upper_age_limit; ++i) {
-          full_male_age_counts[i] = 0;
-        }
-        full_male_age_counts = _.reduce(this.males(),
-                                        function(age_counts, inmate) {
-                                          var age = inmate.get('age_at_booking');
-                                          if (age === 0) { age = 25; }
-                                          age_counts[age] += 1;
-                                          return age_counts;
-                                        },
-                                        full_male_age_counts);
-        var age_start_index = -1, age_end_index = -1;
-        for (i = 0; i <= upper_age_limit; ++i) {
-          if (full_male_age_counts[i] !== 0) {
-            age_start_index = i;
-            break;
-          }
-        }
-        for (i = upper_age_limit; i >= 0; --i) {
-          if (full_male_age_counts[i] !== 0) {
-            age_end_index = i;
-            break;
-          }
-        }
-        if (age_start_index === -1 || age_end_index === -1) {
-          return;
-        }
-        var male_age_counts = full_male_age_counts.slice(age_start_index, age_end_index + 1);
-        var margin = {top: 40, right: 40, bottom: 60, left: 80},
-            w = _.max([820, ($(window).width() * 0.9)]) - margin.left - margin.right,
-            h = _.max([360, ($(window).height() * 0.8)]) - margin.top - margin.bottom,
-            x = d3.scale.ordinal().rangeRoundBands([0, w], 0.2),
-            y = d3.scale.linear().range([h, 0]);
-
-          //define our domain ranges
-          var x_range = _.map(male_age_counts, function(d, i) { return i + age_start_index; }),
-              y_max_value = d3.max(male_age_counts);
-          x.domain(x_range);
-          y.domain([0, y_max_value]);
-
-        //define our x axis
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom");
-
-        //define our y axis
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
-
-        var chart = d3.select("#MaleInmatesAgeAtBooking").append("svg")
-            .attr("class", "chart")
-            .attr("width", w + margin.left + margin.right)
-            .attr("height", h + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        //draw our x axis
-        var x_axis = chart.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + h + ")")
-            .call(xAxis);
-
-        //draw our tic marks on the x axis
-        x_axis.selectAll('g')
-          .selectAll('text')
-          .attr('transform', function(d,i,j) { return 'translate (-17, 30) rotate(-90 0,0)'; }) ;
-
-        // draw our y axis
-        chart.append("g")
-            .attr("class", "y axis")
-            .call(yAxis);
-
-        //finally, populate our SVG with data
-        var x_width = x.rangeBand();
-        chart.selectAll(".bar")
-            .data(male_age_counts)
-            .enter().append("rect")
-            .attr("class", "bar")
-            .attr("x", function(d, i) {
-              var x_offset = x(i + age_start_index);
-              return x_offset; })
-            .attr("width", x_width)
-            .attr("y", function(d) {
-              var y_offset = y(d);
-              return y_offset; })
-            .attr("height", function(d) {
-              var height = h - y(d);
-              return height; });
       },
 
       displayWeekdayBookings: function() {
@@ -540,6 +488,14 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
                           return longest_serving_prisoner;
                         },
                         prisoners[0]);
+      },
+
+      sum_age_counts: function(age_counts) {
+        return _.reduce(this.races,
+                        function(sum, race) {
+                          return sum + age_counts[race];
+                        },
+                        0);
       }
   });
 
