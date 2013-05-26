@@ -12,11 +12,14 @@ define([
     'views/PageView',
     'views/HistogramView',
     'views/GenStatsView',
+    'views/IncarcerationStatsView',
 
     // Templates
     'text!templates/about.html'
 
-], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView, GenStatsView, about) {
+], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView,
+            GenStatsView, IncarcerationStatsView,
+            about) {
 
     // Application routes
     var AppRouter = Backbone.Router.extend({
@@ -25,6 +28,7 @@ define([
             'inmates': 'inmates',
             'histogram': 'histogram',
             'gen_stats': 'gen_stats',
+            'incarceration_stats': 'incarceration_stats',
             'about': 'about'
         }
     });
@@ -54,22 +58,35 @@ define([
           });
         });
 
+        // stats_data_options - options used to fetch data for the following stats views 
+        var stats_data_options;
+        // stats_data_options = { 'limit': 0 };
+        // stats_data_options = { 'booking_date__gte': '2012-12-31', 'limit': 0 };
+        // stats_data_options = { 'booking_date__gte': '2013-01-01', 'limit': 0 };
+        // stats_data_options = { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-07', 'limit': 0 };
+        // stats_data_options = { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-15', 'limit': 0 };
+        stats_data_options = { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-22', 'limit': 0 };
+        // stats_data_options = { 'booking_date__gte': '2013-03-04', 'booking_date__lte': '2013-03-10', 'limit': 0 };
+        // stats_data_options = { 'discharge_date_earliest__gt': '2013-03-01', 'limit': 0 };
+        // stats_data_options = { 'booking_date__gte': '2012-12-31', 'booking_date__lte': '2013-01-07', 'limit': 0 };
+        // stats_data_options = { 'booking_date': '2013-02-15', 'limit': 0 };
+        // stats_data_options = { 'discharge_date_earliest__isnull': 1, 'booking_date__gte': '1990-01-01', 'limit': 0 };
+
         // Render gen stats page template on 'gen_stats' navigation event
         var gen_stats = new GenStatsView({collection: inmate_collection});
         router.on('route:gen_stats', function() {
           inmate_collection.fetch({
-            data: { 'limit': 0 },
-            // data: { 'booking_date__gte': '2012-12-31', 'limit': 0 },
-            // data: { 'booking_date__gte': '2013-01-01', 'limit': 0 },
-            // data: { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-07', 'limit': 0 },
-            // data: { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-15', 'limit': 0 },
-            // data: { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-22', 'limit': 0 },
-            // data: { 'booking_date__gte': '2013-03-04', 'booking_date__lte': '2013-03-10', 'limit': 0 },
-            // data: { 'discharge_date_earliest__gt': '2013-03-01', 'limit': 0 },
-            // data: { 'booking_date__gte': '2012-12-31', 'booking_date__lte': '2013-01-07', 'limit': 0 },
-            // data: { 'booking_date': '2013-02-15', 'limit': 0 },
-            // data: { 'discharge_date_earliest__isnull': 1, 'booking_date__gte': '1990-01-01', 'limit': 0 },
+            data: stats_data_options,
             success: _.bind(gen_stats.renderInit, gen_stats)
+          });
+        });
+
+        // Render incarceration stats page template on 'incarceration' navigation event
+        var incarceration_stats = new IncarcerationStatsView({collection: inmate_collection});
+        router.on('route:incarceration_stats', function() {
+          inmate_collection.fetch({
+            data: stats_data_options,
+            success: _.bind(incarceration_stats.renderInit, incarceration_stats)
           });
         });
 

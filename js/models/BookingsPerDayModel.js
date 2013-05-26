@@ -34,10 +34,12 @@ define(['underscore', 'backbone', 'models/MinMaxAverageModel'], function(_, Back
       }
     },
     initialize: function() {
+      var prisoners = this.get('prisoners');
+      this.set('first_booking_day', prisoners[0].get('booking_date').substring(0, 10));
       this.get('min_max_average').on('change:min', this.get('update_min_info'), this);
       this.get('min_max_average').on('change:max', this.get('update_max_info'), this);
       this.set('booking_counts_per_day', {});
-      _.each(this.get('prisoners'), function(prisoner) { this.add(prisoner); }, this);
+      _.each(prisoners, function(prisoner) { this.add(prisoner); }, this);
       this.summarize_latest_day();
       this.sort_booking_counts_per_day();
     },

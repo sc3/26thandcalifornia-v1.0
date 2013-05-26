@@ -77,20 +77,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
         return ((gender === 'female') ? this.numberOfFemales() : this.numberOfMales()) / this.numberOf() * 100;
       },
 
-      longestIncarceratedFemale: function() {
-        if (!this.longest_incarcerated_female) {
-          this.longest_incarcerated_female = this.find_longest_incarcerated_prisoner(this.females());
-        }
-        return this.longest_incarcerated_female;
-      },
-
-      longestIncarceratedMale: function() {
-       if (!this.longest_incarcerated_male) {
-          this.longest_incarcerated_male = this.find_longest_incarcerated_prisoner(this.males());
-        }
-        return this.longest_incarcerated_male;
-      },
-
       males: function() {
         return this.collection.males();
       },
@@ -453,24 +439,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
                       .style("stroke", function(d) { return color(bookings_per_weekday.name); });
                 });
 
-      },
-
-
-      find_longest_incarcerated_prisoner: function(prisoners) {
-        var stay_length_field = 'stay_length';
-        return _.reduce(prisoners,
-                        function(longest_serving_prisoner, cur_prisoner) {
-                          if (longest_serving_prisoner.get(stay_length_field) < cur_prisoner.get(stay_length_field)) {
-                            // As of 2013-04-07 some records do not have a booking date but do have a duration of stay
-                            // these records are bad and this guard prevents them from affecting the longest staying
-                            // prisoner. This defect should be corrected and then this guard should be removed
-                            if (cur_prisoner.get('booking_date')) {
-                              longest_serving_prisoner = cur_prisoner;
-                            }
-                          }
-                          return longest_serving_prisoner;
-                        },
-                        prisoners[0]);
       }
   });
 
