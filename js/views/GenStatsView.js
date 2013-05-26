@@ -129,6 +129,49 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
       // Helper Functions in this section they are consideredto be private to this object
       //
 
+      // count_of_ages_at_booking: returns an array of objects with the following numeric fields:
+      //      age - inamtes age
+      //      AS, B, BK, IN, LB, LT, LW, W, WH - count of inmates of that race booked at that age
+      //      total - sum of inmates booked at that age
+      // the array's first object is the youngest age of an inmate at the time of booking
+      // the array's last object is the oldest age of an inmate at the time of booking
+      count_of_ages_at_booking: function(population) {
+        var i,
+            upper_age_limit = 120,
+            full_age_counts = new Array(upper_age_limit + 1);
+        for (i = 0; i <= upper_age_limit; ++i) {
+          full_age_counts[i] = {AS: 0, B: 0, BK: 0, IN: 0, LB: 0, LT: 0, LW: 0, W: 0, WH: 0, age: i, total: 0};
+        }
+        full_age_counts = _.reduce(population,
+                                  function(age_counts, inmate) {
+                                    var age = inmate.get('age_at_booking');
+                                    if (age === 0) { age = 20; } // this is the majority age
+                                    age_counts[age][inmate.get('race')] += 1;
+                                    age_counts[age]['total'] += 1;
+                                    return age_counts;
+                                  },
+                                  full_age_counts);
+        var age_start_index = -1,
+            age_end_index = -1;
+        for (i = 0; i <= upper_age_limit; ++i) {
+          if (full_age_counts[i].total !== 0) {
+            age_start_index = i;
+            break;
+          }
+        }
+        for (i = upper_age_limit; i >= 0; --i) {
+          if (full_age_counts[i].total !== 0) {
+            age_end_index = i;
+            break;
+          }
+        }
+        if (age_start_index === -1 || age_end_index === -1) {
+          return;
+        }
+        return full_age_counts.slice(age_start_index, age_end_index + 1);
+      },
+
+
       convert_weekday_stats_for_d3_usage: function() {
         var weekday_stats = this.weekdayStats().stats();
         return _.map(weekday_stats,
@@ -143,41 +186,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
 
       displayInmatesAgeAtBookingByRace: function(population, gender) {
         var element_id = "#" + gender + "InmatesAgeAtBookingByRace",
-            i,
-            upper_age_limit = 120,
-            full_age_counts = new Array(upper_age_limit + 1);
-        for (i = 0; i <= upper_age_limit; ++i) {
-          full_age_counts[i] = {AS: 0, B: 0, BK: 0, IN: 0, LB: 0, LT: 0, LW: 0, W: 0, WH: 0};
-        }
-        full_age_counts = _.reduce(population,
-                                  function(age_counts, inmate) {
-                                    var age = inmate.get('age_at_booking');
-                                    if (age === 0) { age = 25; }
-                                    age_counts[age][inmate.get('race')] += 1;
-                                    return age_counts;
-                                  },
-                                  full_age_counts);
-        var age_start_index = -1,
-            age_end_index = -1,
-            sum;
-        for (i = 0; i <= upper_age_limit; ++i) {
-          sum = this.sum_age_counts(full_age_counts[i]);
-          if (sum !== 0) {
-            age_start_index = i;
-            break;
-          }
-        }
-        for (i = upper_age_limit; i >= 0; --i) {
-          sum = this.sum_age_counts(full_age_counts[i]);
-          if (sum !== 0) {
-            age_end_index = i;
-            break;
-          }
-        }
-        if (age_start_index === -1 || age_end_index === -1) {
-          return;
-        }
-        var age_counts = full_age_counts.slice(age_start_index, age_end_index + 1);
+            age_counts = this.count_of_ages_at_booking(population);
 
         var margin = {top: 40, right: 40, bottom: 60, left: 80},
             w = _.max([820, ($(window).width() * 0.9)]) - margin.left - margin.right,
@@ -186,8 +195,8 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             y = d3.scale.linear().range([h, 0]);
 
           //define our domain ranges
-          var x_range = _.map(age_counts, function(d, i) { return i + age_start_index; }),
-              y_max_value = _.max(_.map(age_counts, this.sum_age_counts, this));
+          var x_range = _.map(age_counts, function(d) { return d.age; }),
+              y_max_value = d3.max(age_counts, function(d) { return d.total; });
           x.domain(x_range);
           y.domain([0, y_max_value]);
 
@@ -242,7 +251,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             .enter()
             .append("g")
             .attr("class", "g")
-            .attr("transform", function(d, i) { return "translate(" + x(i + age_start_index) + ",0)"; });
+            .attr("transform", function(d) { return "translate(" + x(d.age) + ",0)"; });
 
         ages.selectAll("rect")
             .data(function(d) { return d.rect_info; })
@@ -278,6 +287,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             .style("text-anchor", "end")
             .text(function(d) { return d; });
       },
+
 
       displayJailSystemPopulation: function() {
 
@@ -346,6 +356,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             .attr("cy", line.y())
             .attr("r", 1.2);
       },
+
 
       displayWeekdayBookings: function() {
 
@@ -444,6 +455,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
 
       },
 
+
       find_longest_incarcerated_prisoner: function(prisoners) {
         var stay_length_field = 'stay_length';
         return _.reduce(prisoners,
@@ -459,14 +471,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
                           return longest_serving_prisoner;
                         },
                         prisoners[0]);
-      },
-
-      sum_age_counts: function(age_counts) {
-        return _.reduce(this.races,
-                        function(sum, race) {
-                          return sum + age_counts[race];
-                        },
-                        0);
       }
   });
 
