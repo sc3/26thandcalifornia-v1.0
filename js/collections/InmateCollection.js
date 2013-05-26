@@ -23,12 +23,69 @@ define(['collections/CookCountyJailCollection', 'models/InmateModel'], function(
 			return this.sortAscending ? compare : -compare;
 		},
 
+    // returns true if the cached data options match the data options in the passed in options object
+    // return false otherwise.
+    data_options_same_as_cached: function(new_options) {
+      var cached_data_options = this.cached_data_options,
+          new_data_options = new_options.data;
+      if (cached_data_options === new_data_options ) { return true; }
+
+      if (!(cached_data_options instanceof Object) || !(new_data_options instanceof Object)) { return false; }
+        // if they are not strictly equal, they both need to be Objects
+
+      if (cached_data_options.constructor !== new_data_options.constructor) { return false; }
+        // they must have the exact same prototype chain, the closest we can do is
+        // test there constructor.
+
+      for (var p in cached_data_options) {
+        if (!cached_data_options.hasOwnProperty(p)) { continue; }
+          // other properties were tested using x.constructor === y.constructor
+
+        if (!new_data_options.hasOwnProperty(p)) { return false; }
+          // allows to compare x[ p ] and y[ p ] when set to undefined
+
+        if (cached_data_options[p] === new_data_options[p]) { continue; }
+          // if they have the same strict value or identity then they are equal
+
+        if (typeof(cached_data_options[p]) !== "object") { return false; }
+          // Numbers, Strings, Functions, Booleans must be strictly equal
+
+        if (!Object.equals(cached_data_options[p], new_data_options[p])) { return false; }
+          // Objects and Arrays must be tested recursively
+      }
+
+      for (p in new_data_options) {
+        if (new_data_options.hasOwnProperty(p) && !cached_data_options.hasOwnProperty(p)) { return false; }
+          // allows x[ p ] to be set to undefined
+      }
+      return true;
+    },
+
     females: function() {
       return this.memoize('female_inmates');
     },
 
     female_inmates_fn: function() {
       return this.filter(function(prisoner) { return prisoner.get('gender') === 'F'; });
+    },
+
+    // fetch - implements simple caching it has already fetched a value and the data options for the
+    //         new fetch match the existing data options then the cached value is used otherwise
+    //         does a new fetch
+    fetch: function(options) {
+      if (!options) { options = {}; }
+
+      if (this.cached_value && this.data_options_same_as_cached(options)) {
+        if (options.success && typeof options.success === 'function') {
+          return options.success();
+        }
+        return;
+      }
+
+      this.cached_value = true;
+      this.cached_data_options = options.data;
+
+      return CookCountyJailCollection.prototype.fetch.call(this, options);
     },
 
     histogram: function(field, buckets) {
