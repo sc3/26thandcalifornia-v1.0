@@ -49,11 +49,8 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
       },
 
       bookings_per_day: null,
-      female_inmates: null,
       longest_incarcerated_female: null,
       longest_incarcerated_male: null,
-      male_inmates: null,
-      number_of_males: null,
       races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'W', 'WH'],
 
       bailStats: function() {
@@ -73,10 +70,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
       },
 
       females: function() {
-        if (!this.female_inmates) {
-          this.female_inmates = this.collection.filter(function(prisoner) { return prisoner.get('gender') === 'F'; });
-        }
-        return this.female_inmates;
+        return this.collection.females();
       },
 
       gender_ratio: function(gender) {
@@ -85,17 +79,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
 
       longestIncarceratedFemale: function() {
         if (!this.longest_incarcerated_female) {
-          var age_at_booking = function(inmate) {
-                                  var age = inmate.get('age_at_booking');
-                                  if (age === 0) { age = 25; }
-                                  return age;
-                                },
-              female_ages = _.map(this.females(), age_at_booking),
-              min_female = _.min(female_ages),
-              max_female = _.max(female_ages),
-              male_ages = _.map(this.males(), age_at_booking),
-              min_male = _.min(male_ages),
-              max_male = _.max(male_ages);
           this.longest_incarcerated_female = this.find_longest_incarcerated_prisoner(this.females());
         }
         return this.longest_incarcerated_female;
@@ -109,10 +92,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
       },
 
       males: function() {
-        if (!this.male_inmates) {
-          this.male_inmates = this.collection.filter(function(prisoner) { return prisoner.get('gender') === 'M'; });
-        }
-        return this.male_inmates;
+        return this.collection.males();
       },
 
       numberOf: function() {
@@ -120,20 +100,11 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
       },
 
       numberOfFemales: function() {
-        return this.numberOf() - this.numberOfMales();
+        return this.females().length;
       },
 
       numberOfMales: function() {
-        if (!this.number_of_males) {
-          this.number_of_males = this.collection.reduce(function(number_of_males, prisoner) {
-                                                          if (prisoner.get('gender') === 'M') {
-                                                            number_of_males += 1;
-                                                          }
-                                                          return number_of_males;
-                                                        },
-                                                        0);
-        }
-        return this.number_of_males;
+        return this.males().length;
       },
 
       renderInit: function(argument) {
