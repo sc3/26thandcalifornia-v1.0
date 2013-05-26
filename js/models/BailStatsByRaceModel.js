@@ -3,7 +3,7 @@
 //
 define(['underscore', 'backbone', 'models/BailStatsItemModel'], function(_, Backbone, BailStatsItemModel) {
 
-  var BailStatsModel = Backbone.Model.extend({
+  var BailStatsByRaceModel = Backbone.Model.extend({
     defaults: {
       AS: null,
       B: null,
@@ -42,5 +42,5 @@ define(['underscore', 'backbone', 'models/BailStatsItemModel'], function(_, Back
     }
 
   });
-  return BailStatsModel;
+  return BailStatsByRaceModel;
 });

@@ -13,12 +13,13 @@ define([
     'views/HistogramView',
     'views/GenStatsView',
     'views/IncarcerationStatsView',
+    'views/BailStatsByRaceView',
 
     // Templates
     'text!templates/about.html'
 
 ], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView,
-            GenStatsView, IncarcerationStatsView,
+            GenStatsView, IncarcerationStatsView, BailStatsByRaceView,
             about) {
 
     // Application routes
@@ -29,6 +30,7 @@ define([
             'histogram': 'histogram',
             'gen_stats': 'gen_stats',
             'incarceration_stats': 'incarceration_stats',
+            'bail_stats_by_race': 'bail_stats_by_race',
             'about': 'about'
         }
     });
@@ -87,6 +89,15 @@ define([
           inmate_collection.fetch({
             data: stats_data_options,
             success: _.bind(incarceration_stats.renderInit, incarceration_stats)
+          });
+        });
+
+        // Render bail stats by race page template on 'incarceration' navigation event
+        var bail_stats_by_race = new BailStatsByRaceView({collection: inmate_collection});
+        router.on('route:bail_stats_by_race', function() {
+          inmate_collection.fetch({
+            data: stats_data_options,
+            success: _.bind(bail_stats_by_race.renderInit, bail_stats_by_race)
           });
         });
 

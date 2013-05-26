@@ -13,7 +13,6 @@ define([
   'collections/InmateCollection',
   'models/MinMaxAverageModel',
   'models/BookingsPerDayModel',
-  'models/BailStatsModel',
   'models/WeekdayStatsModel',
   'models/JailSystemPopulationModel',
 
@@ -21,7 +20,7 @@ define([
   'text!templates/gen_stats.html'
 ],
 function($, _, Backbone, Spinner, Bootstrap, D3,
-          InmateCollection, MinMaxAverageModel, BookingsPerDayModel, BailStatsModel, WeekdayStatsModel, JailSystemPopulationModel,
+          InmateCollection, MinMaxAverageModel, BookingsPerDayModel, WeekdayStatsModel, JailSystemPopulationModel,
           gen_stats_template) {
 
   "use strict";
@@ -49,17 +48,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
       },
 
       bookings_per_day: null,
-      longest_incarcerated_female: null,
-      longest_incarcerated_male: null,
       races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'W', 'WH'],
-
-      bailStats: function() {
-        var bail_stats = this.collection.reduce(function(bail_stats, cur_prisoner) {
-                                                  return bail_stats.add(cur_prisoner);
-                                                },
-                                                new BailStatsModel());
-        return bail_stats.stats();
-      },
 
       bookingsPerDay: function() {
         if (!this.bookings_per_day) {
