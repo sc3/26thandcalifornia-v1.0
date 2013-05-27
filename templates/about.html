@@ -1,9 +1,19 @@
 <h1>26th and California</h1>
 
+<style type="text/css">
+  p {
+    width: 60%;
+  }
+</style>
+
 <p>We recommend that you start by reading the <a href="https://github.com/sc3/26thandcalifornia/">project overview</a> on the Github project page.</p>
 
 <p>Consult the Cook County Jail project's <a href="https://github.com/sc3/cookcountyjail/wiki/API-guide">API Guide</a> to learn about getting data out of the API.</p>
 
-<p><strong>Discalimer:</strong> the data on prisoners is known to be not accurate, both at the source, the Cook County Jail and the way the data is captured is not guaranteed to be fault free. Therefore do not take the data as definitive, rather, viewed it as suggestive.</p>
+<h3>Disclaimer</h3>
+<p>The collected inmate data is known to be inaccurate, both at the source, the Cook County Jail, and the way the data is captured is not guaranteed to be fault free. Therefore do not take the data or statistics shown as definitive, rather, viewed them as suggestive.</p>
 
-<p>Please note that the Stats views load the entire data set and the first time you request one of these views the loading of the data takes some time, upwards of a minute. Subsequent views should render much quicker.</p>
+<h3>A Note on Execution Performance</h3>
+<p>To generate the Stats views, the entire data set is loaded the first time you request one of these views. The loading of this data takes some time, upwards of a minute. Subsequent views should render much quicker.</p>
+
+<p>Rendering some views requires a lot of calculations and the plotting of a lot of data points or elements, so some of them take a bit of time to be displayed. We intend to reduce these delays.</p>
