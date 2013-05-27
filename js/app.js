@@ -14,12 +14,13 @@ define([
     'views/GenStatsView',
     'views/IncarcerationStatsView',
     'views/BailStatsByRaceView',
+    'views/AgeAtBookingStatsView',
 
     // Templates
     'text!templates/about.html'
 
 ], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView,
-            GenStatsView, IncarcerationStatsView, BailStatsByRaceView,
+            GenStatsView, IncarcerationStatsView, BailStatsByRaceView, AgeAtBookingStatsView,
             about) {
 
     // Application routes
@@ -31,6 +32,7 @@ define([
             'gen_stats': 'gen_stats',
             'incarceration_stats': 'incarceration_stats',
             'bail_stats_by_race': 'bail_stats_by_race',
+            'age_at_booking_stats': 'age_at_booking_stats',
             'about': 'about'
         }
     });
@@ -98,6 +100,15 @@ define([
           inmate_collection.fetch({
             data: stats_data_options,
             success: _.bind(bail_stats_by_race.renderInit, bail_stats_by_race)
+          });
+        });
+
+        // Render age at booking stats page template on 'incarceration' navigation event
+        var age_at_booking_stats = new AgeAtBookingStatsView({collection: inmate_collection});
+        router.on('route:age_at_booking_stats', function() {
+          inmate_collection.fetch({
+            data: stats_data_options,
+            success: _.bind(age_at_booking_stats.renderInit, age_at_booking_stats)
           });
         });
 
