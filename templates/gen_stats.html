@@ -1,15 +1,7 @@
 <div id="gen-stats">
   <h1>General Statistics</h1>
 
-	<p><strong>Discalimer:</strong> the data on prisoners is known to be not accurate, both at the source, the Cook County
-		Jail and the way the data is captured is not guaranteed to be fault free. Therefore do not take the data as definitive,
-        rather viewed it as suggestive.</p>
-
-  <p>This purpose of page is to explore the Cook County Information date set, and in doing so, see what questions can be answered and
-    what query demands are made on the information set to collect and render those answers. Design of the information being displayed
-    is minimal, the journey is more about the limits of the data and the support needed to answer the questions. If others know of or
-    want to display this information in a better formats please either do so or document your requests on the
-    <a href="https://github.com/sc3/cookcountyjail/wiki">Cook County Jail Wiki</a>.
+  <p>This purpose of page is to explore the Cook County Information date set, and in doing so, see what questions can be answered and what query demands are made on the information set to collect and render those answers. Design of the information being displayed is minimal, the journey is more about the limits of the data and the support needed to answer the questions. If others know of or want to display this information in a better formats please either do so or document your requests on the <a href="https://github.com/sc3/cookcountyjail/wiki">Cook County Jail Wiki</a>. Please read the <strong><a href="#about">Disclaimer</a></strong> before using this information presented here.
   </p>
 
 	<h2>Information on the Data Set</h2>
@@ -18,16 +10,8 @@
   <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
   <p>Number of Males: <%= gen_stats.numberOfMales() %> (<%= gen_stats.gender_ratio('male').toFixed(1)  %>%).</p>
 
-  <h3>Longest Incarceration</h3>
-  <p>Female: <%= gen_stats.longestIncarceratedFemale().get('stay_length') %> days, Booking: <%= gen_stats.longestIncarceratedFemale().get('booking_date').substring(0, 10) %>,
-      Discharge: <%= ((gen_stats.longestIncarceratedFemale().get('discharge_date_earliest') != null) ? gen_stats.longestIncarceratedFemale().get('discharge_date_earliest').substring(0, 10) : 'Still in jail') %>.
-  </p>
-  <p>Male: <%= gen_stats.longestIncarceratedMale().get('stay_length') %> days, Booking: <%= gen_stats.longestIncarceratedMale().get('booking_date').substring(0, 10) %>,
-      Discharge: <%= ((gen_stats.longestIncarceratedMale().get('discharge_date_earliest') != null) ? gen_stats.longestIncarceratedMale().get('discharge_date_earliest').substring(0, 10) : 'Still in jail') %>.
-  </p>
-
   <h3>Averages from <%= gen_stats.bookingsPerDay().get('first_booking_day') %> to
-      <%= gen_stats.bookingsPerDay().get('last_booking_day') %></h3>
+      <%= gen_stats.bookingsPerDay().get('latest_booking_day') %></h3>
   <p>Average number prisoners booked per day: <%= gen_stats.bookingsPerDay().get('min_max_average').get('average').toFixed(0) %>,
       Females: <%= gen_stats.bookingsPerDay().get('min_max_average_females').get('average').toFixed(0) %>,
       Males: <%= gen_stats.bookingsPerDay().get('min_max_average_males').get('average').toFixed(0) %>.</p>
@@ -39,40 +23,6 @@
       Date: <%= gen_stats.bookingsPerDay().get('max_date') %>,
       Females: <%= gen_stats.bookingsPerDay().get('max_females') %>,
       Males: <%= gen_stats.bookingsPerDay().get('max_males') %>.</p>
-
-  <div class="" style="margin-bottom: 16px;">
-  	<h3>Bail Information</h3>
-    <table cellpadding="8px" border="1" style="text-align: right;">
-      <tr><td></td><td colspan="7" align="center">Female</td><td colspan="7" align="center">Male</td></tr>
-      <tr>
-        <td align="center">Race</td>
-        <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
-        <td align="center">Min Bail</td><td align="center">Max Bail</td><td align="center">Average</td><td align="center">Median</td>
-        <td align="center">Total</td><td align="center">NoBail</td><td align="center">Bail</td>
-        <td align="center">Min Bail</td><td align="center">Max Bail</td><td align="center">Average</td><td align="center">Median</td>
-      </tr>
-  		<% _.each(gen_stats.bailStats(), function(bail_stats, race) { %>
-        <tr>
-          <td><%= race %></td>
-          <td><%= bail_stats.total_females() %></td>
-          <td><%= bail_stats.female_nobail_count() %> <%= bail_stats.format_female_nobail_pecentage() %></td>
-          <td><%= bail_stats.female_bail_count() %> <%= bail_stats.format_female_bail_pecentage() %></td>
-          <td>$<%= (bail_stats.female_bail_count() != 0) ? bail_stats.female_min() : 0 %></td>
-          <td>$<%= (bail_stats.female_bail_count() != 0) ? bail_stats.female_max() : 0 %></td>
-          <td>$<%= (bail_stats.female_bail_count() != 0) ? bail_stats.female_average().toFixed(0) : 0 %></td>
-          <td>$<%= (bail_stats.female_bail_count() != 0) ? bail_stats.female_median().toFixed(0) : 0 %></td>
-
-          <td><%= bail_stats.total_males() %></td>
-          <td><%= bail_stats.male_nobail_count() %> <%= bail_stats.format_male_nobail_pecentage() %></td>
-          <td><%= bail_stats.male_bail_count() %> <%= bail_stats.format_male_bail_pecentage() %></td>
-          <td>$<%= (bail_stats.male_bail_count() != 0) ? bail_stats.male_min() : 0 %></td>
-          <td>$<%= (bail_stats.male_bail_count() != 0) ? bail_stats.male_max() : 0 %></td>
-          <td>$<%= (bail_stats.male_bail_count() != 0) ? bail_stats.male_average().toFixed(0) : 0 %></td>
-          <td>$<%= (bail_stats.male_bail_count() != 0) ? bail_stats.male_median().toFixed(0) : 0 %></td>
-       </tr>
-  		<% }); %>
-    </table>
-  </div>
 
   <div class="" style="margin-bottom: 16px;">
     <h3>Bookings per Weekday</h3>
@@ -100,56 +50,6 @@
     </style>
 
     <div id="BookingsPerWeekday"></div>
-  </div>
-
-  <div class="" style="margin-bottom: 16px;">
-    <h3>Jail System Population Counts</h3>
-    <p>The Cook County Jail system is interesting as people within it can be in Jail, incarcerated, or they can be out on bail, or in a Drug treatment program, or in an electronic monitoring program, whatever their status they are all in the Jail System. At the current time, the data provided by the Cook County Sherrif's website does not allow us to find out for an individual excatly what their status is, so this metric only shows them as being in the system, i.e. tracked by the Cook County Sherrif's department.</p>
-
-    <style type="text/css">
-      #JailSystemPopulation {
-        font: 10px sans-serif;
-      }
-
-      #JailSystemPopulation .axis path, #JailSystemPopulation .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-        display: inline;
-      }
-
-      #JailSystemPopulation .line {
-        fill: none;
-        stroke: steelblue;
-        stroke-width: 1.5px;
-      }
-
-      #JailSystemPopulation .dot {
-        fill: white;
-        stroke: steelblue;
-        stroke-width: 1.5px;
-      }
-    </style>
-
-    <div id="JailSystemPopulation"></div>
-  </div>
-
-  <div class="" style="margin-bottom: 16px;">
-    <h3>Female Inmate's Age at Booking by Race</h3>
-
-    <style type="text/css">
-    </style>
-
-    <div id="FemaleInmatesAgeAtBookingByRace"></div>
-  </div>
-
-  <div class="" style="margin-bottom: 16px;">
-    <h3>Male Inmate's Age at Booking by Race</h3>
-
-    <style type="text/css">
-    </style>
-
-    <div id="MaleInmatesAgeAtBookingByRace"></div>
   </div>
 
 </div>
