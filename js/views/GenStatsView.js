@@ -10,18 +10,15 @@ define([
   'jquery', 'underscore', 'backbone', 'spin', 'bootstrap', 'd3',
 
   // Our apps
-  'collections/InmateCollection',
   'models/MinMaxAverageModel',
   'models/BookingsPerDayModel',
-  'models/BailStatsModel',
   'models/WeekdayStatsModel',
-  'models/JailSystemPopulationModel',
 
   // Templates
   'text!templates/gen_stats.html'
 ],
 function($, _, Backbone, Spinner, Bootstrap, D3,
-          InmateCollection, MinMaxAverageModel, BookingsPerDayModel, BailStatsModel, WeekdayStatsModel, JailSystemPopulationModel,
+          MinMaxAverageModel, BookingsPerDayModel, WeekdayStatsModel,
           gen_stats_template) {
 
   "use strict";
@@ -49,20 +46,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
       },
 
       bookings_per_day: null,
-      female_inmates: null,
-      longest_incarcerated_female: null,
-      longest_incarcerated_male: null,
-      male_inmates: null,
-      number_of_males: null,
       races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'W', 'WH'],
-
-      bailStats: function() {
-        var bail_stats = this.collection.reduce(function(bail_stats, cur_prisoner) {
-                                                  return bail_stats.add(cur_prisoner);
-                                                },
-                                                new BailStatsModel());
-        return bail_stats.stats();
-      },
 
       bookingsPerDay: function() {
         if (!this.bookings_per_day) {
@@ -73,46 +57,15 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
       },
 
       females: function() {
-        if (!this.female_inmates) {
-          this.female_inmates = this.collection.filter(function(prisoner) { return prisoner.get('gender') === 'F'; });
-        }
-        return this.female_inmates;
+        return this.collection.females();
       },
 
       gender_ratio: function(gender) {
         return ((gender === 'female') ? this.numberOfFemales() : this.numberOfMales()) / this.numberOf() * 100;
       },
 
-      longestIncarceratedFemale: function() {
-        if (!this.longest_incarcerated_female) {
-          var age_at_booking = function(inmate) {
-                                  var age = inmate.get('age_at_booking');
-                                  if (age === 0) { age = 25; }
-                                  return age;
-                                },
-              female_ages = _.map(this.females(), age_at_booking),
-              min_female = _.min(female_ages),
-              max_female = _.max(female_ages),
-              male_ages = _.map(this.males(), age_at_booking),
-              min_male = _.min(male_ages),
-              max_male = _.max(male_ages);
-          this.longest_incarcerated_female = this.find_longest_incarcerated_prisoner(this.females());
-        }
-        return this.longest_incarcerated_female;
-      },
-
-      longestIncarceratedMale: function() {
-       if (!this.longest_incarcerated_male) {
-          this.longest_incarcerated_male = this.find_longest_incarcerated_prisoner(this.males());
-        }
-        return this.longest_incarcerated_male;
-      },
-
       males: function() {
-        if (!this.male_inmates) {
-          this.male_inmates = this.collection.filter(function(prisoner) { return prisoner.get('gender') === 'M'; });
-        }
-        return this.male_inmates;
+        return this.collection.males();
       },
 
       numberOf: function() {
@@ -120,20 +73,11 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
       },
 
       numberOfFemales: function() {
-        return this.numberOf() - this.numberOfMales();
+        return this.females().length;
       },
 
       numberOfMales: function() {
-        if (!this.number_of_males) {
-          this.number_of_males = this.collection.reduce(function(number_of_males, prisoner) {
-                                                          if (prisoner.get('gender') === 'M') {
-                                                            number_of_males += 1;
-                                                          }
-                                                          return number_of_males;
-                                                        },
-                                                        0);
-        }
-        return this.number_of_males;
+        return this.males().length;
       },
 
       renderInit: function(argument) {
@@ -141,9 +85,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
 
         this.$el.html(compiled_gen_stats_template);
         this.displayWeekdayBookings();
-        this.displayJailSystemPopulation();
-        this.displayInmatesAgeAtBookingByRace(this.females(), 'Female');
-        this.displayInmatesAgeAtBookingByRace(this.males(), 'Male');
       },
 
       weekdayStats: function() {
@@ -169,212 +110,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
                       });
       },
 
-
-      displayInmatesAgeAtBookingByRace: function(population, gender) {
-        var element_id = "#" + gender + "InmatesAgeAtBookingByRace",
-            i,
-            upper_age_limit = 120,
-            full_age_counts = new Array(upper_age_limit + 1);
-        for (i = 0; i <= upper_age_limit; ++i) {
-          full_age_counts[i] = {AS: 0, B: 0, BK: 0, IN: 0, LB: 0, LT: 0, LW: 0, W: 0, WH: 0};
-        }
-        full_age_counts = _.reduce(population,
-                                  function(age_counts, inmate) {
-                                    var age = inmate.get('age_at_booking');
-                                    if (age === 0) { age = 25; }
-                                    age_counts[age][inmate.get('race')] += 1;
-                                    return age_counts;
-                                  },
-                                  full_age_counts);
-        var age_start_index = -1,
-            age_end_index = -1,
-            sum;
-        for (i = 0; i <= upper_age_limit; ++i) {
-          sum = this.sum_age_counts(full_age_counts[i]);
-          if (sum !== 0) {
-            age_start_index = i;
-            break;
-          }
-        }
-        for (i = upper_age_limit; i >= 0; --i) {
-          sum = this.sum_age_counts(full_age_counts[i]);
-          if (sum !== 0) {
-            age_end_index = i;
-            break;
-          }
-        }
-        if (age_start_index === -1 || age_end_index === -1) {
-          return;
-        }
-        var age_counts = full_age_counts.slice(age_start_index, age_end_index + 1);
-
-        var margin = {top: 40, right: 40, bottom: 60, left: 80},
-            w = _.max([820, ($(window).width() * 0.9)]) - margin.left - margin.right,
-            h = _.max([480, ($(window).height() * 0.8)]) - margin.top - margin.bottom,
-            x = d3.scale.ordinal().rangeRoundBands([0, w], 0.2),
-            y = d3.scale.linear().range([h, 0]);
-
-          //define our domain ranges
-          var x_range = _.map(age_counts, function(d, i) { return i + age_start_index; }),
-              y_max_value = _.max(_.map(age_counts, this.sum_age_counts, this));
-          x.domain(x_range);
-          y.domain([0, y_max_value]);
-
-        //define our x axis
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom");
-
-        //define our y axis
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
-
-        var chart = d3.select(element_id).append("svg")
-            .attr("class", "chart")
-            .attr("width", w + margin.left + margin.right)
-            .attr("height", h + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        //draw our x axis
-        var x_axis = chart.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + h + ")")
-            .call(xAxis);
-
-        //draw our tic marks on the x axis
-        x_axis.selectAll('g')
-          .selectAll('text')
-          .attr('transform', function(d,i,j) { return 'translate (-17, 30) rotate(-90 0,0)'; }) ;
-
-        // draw our y axis
-        chart.append("g")
-            .attr("class", "y axis")
-            .call(yAxis);
-
-        var colors = d3.scale.category10().domain(this.races);
-
-        _.each(age_counts,
-                function(d) {
-                  var y0 = 0;
-                  d.rect_info = _.map(this.races, function(race) {
-                    return {race: race, y0: y0, y1: y0 += +d[race]}; });
-                },
-                this);
-
-        //finally, populate our SVG with data
-        var x_width = x.rangeBand();
-
-        var ages = chart.selectAll('.ages')
-            .data(age_counts)
-            .enter()
-            .append("g")
-            .attr("class", "g")
-            .attr("transform", function(d, i) { return "translate(" + x(i + age_start_index) + ",0)"; });
-
-        ages.selectAll("rect")
-            .data(function(d) { return d.rect_info; })
-            .enter()
-            .append("rect")
-            .attr("width", x_width)
-            .attr("y", function(d) {
-              return y(d.y1); })
-            .attr("height", function(d) {
-              var y0 = y(d.y0), y1 = y(d.y1);
-              var height = y0 - y1;
-              return height; })
-            .style("fill", function(d) {
-              return colors(d.race); });
-
-        var legend = chart.selectAll(".legend")
-            .data(colors.domain().slice().reverse())
-            .enter()
-            .append("g")
-            .attr("class", "legend")
-            .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-        legend.append("rect")
-            .attr("x", w - 18)
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", colors);
-
-        legend.append("text")
-            .attr("x", w - 24)
-            .attr("y", 9)
-            .attr("dy", ".35em")
-            .style("text-anchor", "end")
-            .text(function(d) { return d; });
-      },
-
-      displayJailSystemPopulation: function() {
-
-        var jail_population_per_day = new JailSystemPopulationModel({inmates: this.collection}),
-            daily_population = jail_population_per_day.daily_population();
-
-        var margin = {top: 20, right: 30, bottom: 30, left: 40},
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
-
-        var x = d3.time.scale()
-            .domain([daily_population[0][0], daily_population[daily_population.length - 1][0]])
-            .range([0, width]);
-
-        var y_range = [_.min(daily_population, function(entry) { return entry[1]; })[1],
-                       _.max(daily_population, function(entry) { return entry[1]; })[1]],
-            y;
-            if ((y_range[0] - 49) < 0) {
-              y_range[0] = 0;
-            } else {
-              y_range[0] = Math.floor((y_range[0] - 1) / 50) * 50;
-            }
-            y_range[1] = Math.floor((y_range[1] + 51) / 50) * 50;
-            y = d3.scale.linear()
-            .domain(y_range)
-            .range([height, 0]);
-
-        var xAxis = d3.svg.axis()
-            .scale(x)
-            .orient("bottom");
-
-        var yAxis = d3.svg.axis()
-            .scale(y)
-            .orient("left");
-
-        var line = d3.svg.line()
-            .x(function(d) { return x(d[0]); })
-            .y(function(d) { return y(d[1]); });
-
-        var svg = d3.select("#JailSystemPopulation")
-            .append("svg")
-            .datum(daily_population)
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
-
-        svg.append("g")
-            .attr("class", "y axis")
-            .call(yAxis);
-
-        svg.append("path")
-            .attr("class", "line")
-            .attr("d", line);
-
-        svg.selectAll(".dot")
-            .data(daily_population)
-            .enter().append("circle")
-            .attr("class", "dot")
-            .attr("cx", line.x())
-            .attr("cy", line.y())
-            .attr("r", 1.2);
-      },
 
       displayWeekdayBookings: function() {
 
@@ -471,31 +206,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
                       .style("stroke", function(d) { return color(bookings_per_weekday.name); });
                 });
 
-      },
-
-      find_longest_incarcerated_prisoner: function(prisoners) {
-        var stay_length_field = 'stay_length';
-        return _.reduce(prisoners,
-                        function(longest_serving_prisoner, cur_prisoner) {
-                          if (longest_serving_prisoner.get(stay_length_field) < cur_prisoner.get(stay_length_field)) {
-                            // As of 2013-04-07 some records do not have a booking date but do have a duration of stay
-                            // these records are bad and this guard prevents them from affecting the longest staying
-                            // prisoner. This defect should be corrected and then this guard should be removed
-                            if (cur_prisoner.get('booking_date')) {
-                              longest_serving_prisoner = cur_prisoner;
-                            }
-                          }
-                          return longest_serving_prisoner;
-                        },
-                        prisoners[0]);
-      },
-
-      sum_age_counts: function(age_counts) {
-        return _.reduce(this.races,
-                        function(sum, race) {
-                          return sum + age_counts[race];
-                        },
-                        0);
       }
   });
 
