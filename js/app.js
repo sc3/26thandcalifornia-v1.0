@@ -65,18 +65,17 @@ define([
         });
 
         // stats_data_options - options used to fetch data for the following stats views 
-        var stats_data_options;
-        // stats_data_options = { 'limit': 0 };
-        // stats_data_options = { 'booking_date__gte': '2012-12-31', 'limit': 0 };
-        // stats_data_options = { 'booking_date__gte': '2013-01-01', 'limit': 0 };
-        // stats_data_options = { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-07', 'limit': 0 };
-        // stats_data_options = { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-15', 'limit': 0 };
-        stats_data_options = { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-22', 'limit': 0 };
-        // stats_data_options = { 'booking_date__gte': '2013-03-04', 'booking_date__lte': '2013-03-10', 'limit': 0 };
-        // stats_data_options = { 'discharge_date_earliest__gt': '2013-03-01', 'limit': 0 };
-        // stats_data_options = { 'booking_date__gte': '2012-12-31', 'booking_date__lte': '2013-01-07', 'limit': 0 };
-        // stats_data_options = { 'booking_date': '2013-02-15', 'limit': 0 };
-        // stats_data_options = { 'discharge_date_earliest__isnull': 1, 'booking_date__gte': '1990-01-01', 'limit': 0 };
+        var stats_data_options = { 'limit': 0 };
+        // var stats_data_options = { 'booking_date__gte': '2012-12-31', 'limit': 0 };
+        // var stats_data_options = { 'booking_date__gte': '2013-01-01', 'limit': 0 };
+        // var stats_data_options = { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-07', 'limit': 0 };
+        // var stats_data_options = { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-15', 'limit': 0 };
+        // var stats_data_options = { 'booking_date__gte': '2013-01-01', 'booking_date__lte': '2013-01-22', 'limit': 0 };
+        // var stats_data_options = { 'booking_date__gte': '2013-03-04', 'booking_date__lte': '2013-03-10', 'limit': 0 };
+        // var stats_data_options = { 'discharge_date_earliest__gt': '2013-03-01', 'limit': 0 };
+        // var stats_data_options = { 'booking_date__gte': '2012-12-31', 'booking_date__lte': '2013-01-07', 'limit': 0 };
+        // var stats_data_options = { 'booking_date': '2013-02-15', 'limit': 0 };
+        // var stats_data_options = { 'discharge_date_earliest__isnull': 1, 'booking_date__gte': '1990-01-01', 'limit': 0 };
 
         // Render gen stats page template on 'gen_stats' navigation event
         var gen_stats = new GenStatsView({collection: inmate_collection});
