@@ -18,7 +18,7 @@ define([
     'views/JailPopulationStatsView',
 
     // Templates
-    'text!templates/about.html'
+    'text!templates/about.jst'
 
 ], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView,
             GenStatsView, IncarcerationStatsView, BailStatsByRaceView, AgeAtBookingStatsView, JailPopulationStatsView,

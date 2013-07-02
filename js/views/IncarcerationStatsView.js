@@ -10,7 +10,7 @@ define([
   'collections/InmateCollection',
 
   // Templates
-  'text!templates/incarceration_stats.html'
+  'text!templates/incarceration_stats.jst'
 ],
 function($, _, Backbone, Spinner, Bootstrap, D3,
           InmateCollection,

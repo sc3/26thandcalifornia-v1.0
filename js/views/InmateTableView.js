@@ -6,7 +6,10 @@ define([
 'collections/InmateCollection',
 
 // Templates
-'text!templates/inmate_table.html', 'text!templates/inmate_table_body.html'], function($, _, Backbone, Spinner, Bootstrap, InmateCollection, inmate_table, inmate_table_body) {
+'text!templates/inmate_table.jst',
+'text!templates/inmate_table_body.jst'],
+
+function($, _, Backbone, Spinner, Bootstrap, InmateCollection, inmate_table, inmate_table_body) {
 
     var InmateTableView = Backbone.View.extend({
         collection: InmateCollection,

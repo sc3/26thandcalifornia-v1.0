@@ -14,7 +14,7 @@ define([
   'models/BailStatsByRaceModel',
 
   // Templates
-  'text!templates/bail_stats_by_race.html'
+  'text!templates/bail_stats_by_race.jst'
 ],
 function($, _, Backbone, Spinner, Bootstrap, D3,
           InmateCollection, BailStatsByRaceModel,

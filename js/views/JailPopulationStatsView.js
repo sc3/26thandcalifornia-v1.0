@@ -13,7 +13,7 @@ define([
   'models/JailSystemPopulationModel',
 
   // Templates
-  'text!templates/jail_population_stats.html'
+  'text!templates/jail_population_stats.jst'
 ],
 function($, _, Backbone, Spinner, Bootstrap, D3, JailSystemPopulationModel, jail_population_stats_template) {
 

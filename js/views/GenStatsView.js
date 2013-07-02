@@ -15,7 +15,7 @@ define([
   'models/WeekdayStatsModel',
 
   // Templates
-  'text!templates/gen_stats.html'
+  'text!templates/gen_stats.jst'
 ],
 function($, _, Backbone, Spinner, Bootstrap, D3,
           MinMaxAverageModel, BookingsPerDayModel, WeekdayStatsModel,
