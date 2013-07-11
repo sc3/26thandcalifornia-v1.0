@@ -179,19 +179,49 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             .append("g")
             .attr("class", "b_p_w");
 
-         b_p_w.append("path")
+        b_p_w.append("path")
             .attr("class", "line")
             .attr("d", function(d) {
               return line(d.values); })
             .style("stroke", function(d) { return color(d.name); });
 
-        b_p_w.append("text")
+        /*b_p_w.append("text")
             .datum(function(d) { return {name: d.name, value: [d.values.length, d.values[d.values.length - 1]]}; })
             .attr("transform", function(d) { return "translate(" + x(d.value[0]) + "," + y(d.value[1]) + ")"; })
             .attr("x", 3)
             .attr("dy", ".35em")
             .text(function(d) { return d.name; })
-            .style("stroke", function(d) { return color(d.name); });
+            .style("stroke", function(d) { return color(d.name); });*/
+
+        var legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("height", 100)
+            .attr("width", 100)
+            .attr("transform", 'translate(-20, 50)');
+
+        legend.selectAll('rect')
+            .data(bookings_per_weekdays)
+            .enter()
+            .append("rect")
+            .attr("x", width - 65)
+            .attr("y", function(d, i){ return i *  20;})
+            .attr("width", 10)
+            .attr("height", 10)
+            .style("fill", function(d) { 
+              console.log(color(d))
+              return color(d.name);
+            });
+      
+        legend.selectAll('text')
+            .data(bookings_per_weekdays)
+            .enter()
+            .append("text")
+            .attr("x", width - 52)
+            .attr("y", function(d, i){ return i *  20 + 9;})
+            .text(function(d) {
+              return d.name;
+            });
+
 
         _.each(bookings_per_weekdays,
                 function(bookings_per_weekday) {
