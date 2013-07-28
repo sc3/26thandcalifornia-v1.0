@@ -4,7 +4,7 @@ function processJSONP(data) { return data; }
 // Generic collection for interacting with Cook County Jail API
 define([
     'jquery',
-    'backbone',
+    'backbone'
 ], function($, Backbone) {
 
     var CookCountyJailCollection = Backbone.Collection.extend({
@@ -16,7 +16,7 @@ define([
                 jsonpCallback: 'processJSONP',
                 cache: true,
                 data: {'format': 'jsonp', 'callback': 'processJSONP'},
-                url: this.url,
+                url: this.url
             }, options);
             return $.ajax(params);
         },
@@ -25,7 +25,7 @@ define([
             this.meta = data.meta;
             return data.objects;
         },
-        stats_start_date: '2013-01-01T00:00:00', // This is the "official" start date that data was being collectd
+        stats_start_date: '2013-01-01T00:00:00'  // This is the "official" start date that data was being collectd
     });
 
     return CookCountyJailCollection;

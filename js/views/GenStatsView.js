@@ -37,8 +37,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
   //     race
   //     stay_length
 
-  // list of prisoners is from oldest to newest
-
   var GenStatsView = Backbone.View.extend({
       collection: null,
       el: '#content',
@@ -50,8 +48,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
 
       bookingsPerDay: function() {
         if (!this.bookings_per_day) {
-          var prisoners = this.collection.filter(this.collection.prisoners_booked_since_collection_start_filter());
-          this.bookings_per_day = new BookingsPerDayModel({prisoners: prisoners});
+          this.bookings_per_day = new BookingsPerDayModel({inmates: this.collection});
         }
         return this.bookings_per_day;
       },
@@ -89,7 +86,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
 
       weekdayStats: function() {
         if (!this.weekday_stats) {
-          this.weekday_stats = new WeekdayStatsModel({booking_counts_per_day: this.bookingsPerDay().get('booking_counts_per_day')});
+          this.weekday_stats = new WeekdayStatsModel({booking_counts_per_day: this.bookingsPerDay().counts()});
         }
         return this.weekday_stats;
       },

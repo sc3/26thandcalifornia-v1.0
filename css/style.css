@@ -4,14 +4,14 @@ body {
 }
 
 /* Make room for spinner */
-#content { 
+#content {
     min-height: 300px;
 }
 
 /* Button Nano */
 .btn-nano [class^="icon-"],
 .btn-nano [class*=" icon-"] {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 .btn-nano {
@@ -27,11 +27,11 @@ body {
 	font-weight:bolder;
 	font-style: italic;
 }
-#inmate-table th.sortedby div  {
+#inmate-table th.sortedby div {
 	display: inline-block;
 }
 
-#inmate-table th:hover div  {
+#inmate-table th:hover div {
 	display: inline-block;
 }
 
@@ -53,10 +53,6 @@ body {
 
 .bar {
   fill: steelblue;
-}
-
-.x.axis path {
-  display: none;
 }
 
 @media (max-width: 979px) {
