@@ -1,7 +1,7 @@
 // Configure RequireJS
 
 // Inmate URL configuration variable
-var INMATE_URL = 'http://cookcountyjail.recoveredfactory.net/api/1.0/countyinmate/'; 
+var INMATE_URL = 'http://cookcountyjail.recoveredfactory.net/api/1.0/countyinmate/';
 
 // RequireJS aliases
 require.config({
@@ -32,7 +32,7 @@ require.config({
 // Load our application by requiring it, then calling it's
 // initialize method.
 require([
-    'app',
+    'app'
 ], function(App){
     App.initialize();
 });

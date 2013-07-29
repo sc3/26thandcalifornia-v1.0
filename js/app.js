@@ -16,13 +16,14 @@ define([
     'views/BailStatsByRaceView',
     'views/AgeAtBookingStatsView',
     'views/JailPopulationStatsView',
+    'views/BookingsPerDayStatsView',
 
     // Templates
     'text!templates/about.jst'
 
 ], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView,
             GenStatsView, IncarcerationStatsView, BailStatsByRaceView, AgeAtBookingStatsView, JailPopulationStatsView,
-            about) {
+            BookingsPerDayStatsView, about) {
 
     // Application routes
     var AppRouter = Backbone.Router.extend({
@@ -35,6 +36,7 @@ define([
             'bail_stats_by_race': 'bail_stats_by_race',
             'age_at_booking_stats': 'age_at_booking_stats',
             'jail_population_stats': 'jail_population_stats',
+            'bookings_per_day_stats': 'bookings_per_day_stats',
             'about': 'about'
         }
     });
@@ -64,7 +66,7 @@ define([
           });
         });
 
-        // stats_data_options - options used to fetch data for the following stats views 
+        // stats_data_options - options used to fetch data for the following stats views
         var stats_data_options = { 'limit': 0 };
         // var stats_data_options = { 'booking_date__gte': '2012-12-31', 'limit': 0 };
         // var stats_data_options = { 'booking_date__gte': '2013-01-01', 'limit': 0 };
@@ -121,6 +123,21 @@ define([
             success: _.bind(jail_population_stats.renderInit, jail_population_stats)
           });
         });
+
+        // Render bookings per data stats page template on 'bookings_per_day' navigation event
+        var route_stats_view = function(view_constructor_fn, route_name) {
+            var view = new view_constructor_fn({collection: inmate_collection});
+            router.on('route:' + route_name, function() {
+              inmate_collection.fetch({
+                data: stats_data_options,
+                success: _.bind(view.renderInit, view)
+              });
+            });
+            return view;
+        };
+
+        var stat_pages = [];
+        stat_pages.push(route_stats_view(BookingsPerDayStatsView, 'bookings_per_day_stats'));
 
         // Render about page template on 'about' navigation event
         var about_page = new PageView({template: about});
