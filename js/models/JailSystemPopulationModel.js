@@ -48,7 +48,8 @@ define(['underscore', 'backbone'], function(_, Backbone) {
     record_population_changes: function(population_changes) {
       this.get('inmates').each(function(inmate) {
                                   var discharge_date = inmate.get('discharge_date_earliest');
-                                  if (!discharge_date || discharge_date === '' || this.released_after_start_date(discharge_date)) {
+                                  if (!discharge_date || discharge_date === '' ||
+                                      this.released_after_start_date(discharge_date)) {
                                     var booking_date = inmate.get('booking_date'),
                                         index = 0;
                                     if (booking_date && booking_date !== '') {
@@ -60,7 +61,8 @@ define(['underscore', 'backbone'], function(_, Backbone) {
                                     }
                                     population_changes[index] += 1;
                                     if (discharge_date && discharge_date !== '') {
-                                      population_changes[Math.floor((new Date(discharge_date) - this.start_date) / this.one_day)] -= 1;
+                                      index = Math.floor((new Date(discharge_date) - this.start_date) / this.one_day);
+                                      population_changes[index] -= 1;
                                     }
                                   }
                                 },
