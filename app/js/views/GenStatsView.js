@@ -37,8 +37,6 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
   //     race
   //     stay_length
 
-  // list of prisoners is from oldest to newest
-
   var GenStatsView = Backbone.View.extend({
       collection: null,
       el: '#content',
@@ -50,8 +48,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
 
       bookingsPerDay: function() {
         if (!this.bookings_per_day) {
-          var prisoners = this.collection.filter(this.collection.prisoners_booked_since_collection_start_filter());
-          this.bookings_per_day = new BookingsPerDayModel({prisoners: prisoners});
+          this.bookings_per_day = new BookingsPerDayModel({inmates: this.collection});
         }
         return this.bookings_per_day;
       },
@@ -89,7 +86,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
 
       weekdayStats: function() {
         if (!this.weekday_stats) {
-          this.weekday_stats = new WeekdayStatsModel({booking_counts_per_day: this.bookingsPerDay().get('booking_counts_per_day')});
+          this.weekday_stats = new WeekdayStatsModel({booking_counts_per_day: this.bookingsPerDay().counts()});
         }
         return this.weekday_stats;
       },
@@ -179,19 +176,49 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             .append("g")
             .attr("class", "b_p_w");
 
-         b_p_w.append("path")
+        b_p_w.append("path")
             .attr("class", "line")
             .attr("d", function(d) {
               return line(d.values); })
             .style("stroke", function(d) { return color(d.name); });
 
-        b_p_w.append("text")
+        /*b_p_w.append("text")
             .datum(function(d) { return {name: d.name, value: [d.values.length, d.values[d.values.length - 1]]}; })
             .attr("transform", function(d) { return "translate(" + x(d.value[0]) + "," + y(d.value[1]) + ")"; })
             .attr("x", 3)
             .attr("dy", ".35em")
             .text(function(d) { return d.name; })
-            .style("stroke", function(d) { return color(d.name); });
+            .style("stroke", function(d) { return color(d.name); });*/
+
+        var legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("height", 100)
+            .attr("width", 100)
+            .attr("transform", 'translate(-20, 50)');
+
+        legend.selectAll('rect')
+            .data(bookings_per_weekdays)
+            .enter()
+            .append("rect")
+            .attr("x", width - 65)
+            .attr("y", function(d, i){ return i *  20;})
+            .attr("width", 10)
+            .attr("height", 10)
+            .style("fill", function(d) { 
+              console.log(color(d))
+              return color(d.name);
+            });
+      
+        legend.selectAll('text')
+            .data(bookings_per_weekdays)
+            .enter()
+            .append("text")
+            .attr("x", width - 52)
+            .attr("y", function(d, i){ return i *  20 + 9;})
+            .text(function(d) {
+              return d.name;
+            });
+
 
         _.each(bookings_per_weekdays,
                 function(bookings_per_weekday) {

@@ -144,9 +144,9 @@ define(['collections/CookCountyJailCollection', 'models/InmateModel'], function(
       return value;
     },
 
-    prisoners_booked_since_collection_start_filter: function() {
+    inmates_booked_since_collection_start_filter: function() {
       var stats_start_date = this.stats_start_date;
-      return function(prisoner) { return prisoner.get('booking_date') >= stats_start_date; };
+      return function(inmate) { return inmate.get('booking_date') >= stats_start_date; };
     },
 
     sortByAttribute: function(attribute, ascending) {
