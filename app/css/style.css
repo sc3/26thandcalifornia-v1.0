@@ -1,9 +1,15 @@
 body {
+    background-color: #fffffe;
     padding: 0;
 }
 
-h1, h2, h3, h4, h5, h6 { 
-    font-family: 'Oswald', sans-serif;
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'PT Sans', sans-serif;
+    font-weight: 700;
+}
+
+section { 
+    margin-bottom: 29px;
 }
 
 .not-bold {
@@ -11,39 +17,60 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .jail-nav {
-    background: url(../img/noisy_net.png);
-    color: #fff;
+    background-color: #eaeaea;
     position: fixed;
-    width: 240px;
-    padding: 0 15px;
+    width: 180px;
+    padding: 0 25px;
     top: 0;
     left: 0;
+    height: 100%;
+    border-right: 1px solid #ccc;
+}
+.jail-nav .nav a {
+    font-family: 'PT Sans', sans-serif;
 }
 
-.jail-nav ul {
-    margin-right: -15px;
-    text-align: right;
-}
 .jail-nav ul li {
     font-size: 18px;
-    line-height: 30px;
+    line-height: 27px;
+    margin-left: -10px;
+    margin-right: -10px;
 }
 .jail-nav ul li a {
     display: block;
-    padding-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .jail-nav h1 {
-    font-size: 32px;
-    font-weight: 400;
-    border-top: 4px solid #fff;
-    border-bottom: 4px solid #fff;
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 36px;
+    border-top: 3px solid #333;
+    border-bottom: 3px solid #333;
+    text-align: center;
+    margin-bottom: 15px;
 }
-
+.jail-nav h1 a {
+    color: #333;
+}
 .jail-content {
-    margin-left: 290px;
+    margin-left: 250px;
+    font-size: 18px;
+    line-height: 26px;
+    padding-right: 40px;
 }
-
-
+.jail-content h1 {
+    margin-top: 5px;
+    font-size: 42px;
+    line-height: 45px;
+    border-bottom: 3px solid #333;
+    margin-bottom: 15px;
+}
+.jail-content p {
+    max-width: 800px;
+    margin-bottom: 26px;
+}
 
 /* Button Nano */
 .btn-nano [class^="icon-"],

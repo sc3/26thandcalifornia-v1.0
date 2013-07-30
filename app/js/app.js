@@ -28,8 +28,7 @@ define([
     // Application routes
     var AppRouter = Backbone.Router.extend({
         routes: {
-            '': 'inmates',
-            'inmates': 'inmates',
+            '': 'about',
             'histogram': 'histogram',
             'gen_stats': 'gen_stats',
             'incarceration_stats': 'incarceration_stats',
