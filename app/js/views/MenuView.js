@@ -21,8 +21,8 @@ define([
         },
         makeactive: function(e) {
             // Make active on click.
-            this.$el.find('li').removeClass('active');
-            $(e.target).parent().addClass('active');
+            this.$el.find('a').removeClass('active');
+            $(e.target).addClass('active');
         },
         setheight: function() {
             this.$el.height($(window).height());

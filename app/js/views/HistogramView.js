@@ -107,7 +107,7 @@ define([
 
             //set our histogram margins
             var margin = {top: 40, right: 40, bottom: 60, left: 80},
-                width = ($(window).width() * 0.9) - margin.left - margin.right,
+                width = ($("#content").width()) - margin.left - margin.right,
                 height = ($(window).height() * .8) - margin.top - margin.bottom;
 
             //set our bar width range

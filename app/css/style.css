@@ -19,7 +19,7 @@ section {
 .jail-nav {
     background-color: #eaeaea;
     position: fixed;
-    width: 180px;
+    width: 205px;
     padding: 0 25px;
     top: 0;
     left: 0;
@@ -29,21 +29,32 @@ section {
 .jail-nav .nav a {
     font-family: 'PT Sans', sans-serif;
 }
-
+.jail-nav .nav>li>a:hover,
+.jail-nav .nav>li>a.active {
+    background-color: #fff;
+}
+.jail-nav .nav>li>a.active {
+    color: #333;
+    cursor: default;
+}
 .jail-nav ul li {
-    font-size: 18px;
-    line-height: 27px;
-    margin-left: -10px;
-    margin-right: -10px;
+    font-size: 20px;
+    line-height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: -7px;
+    margin-right: -7px;
+    font-weight: 700;
+    font-family: 'PT Sans Narrow', sans-serif;
 }
 .jail-nav ul li a {
     display: block;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
 }
 .jail-nav h1 {
     font-family: 'PT Sans Narrow', sans-serif;
-    font-size: 26px;
+    font-size: 30px;
     font-weight: 700;
     line-height: 36px;
     border-top: 3px solid #333;
@@ -54,8 +65,13 @@ section {
 .jail-nav h1 a {
     color: #333;
 }
+.jail-nav p {
+    font-size: 12px;
+    color: #666;
+}
+
 .jail-content {
-    margin-left: 250px;
+    margin-left: 275px;
     font-size: 18px;
     line-height: 26px;
     padding-right: 40px;
@@ -65,7 +81,7 @@ section {
     font-size: 42px;
     line-height: 45px;
     border-bottom: 3px solid #333;
-    margin-bottom: 15px;
+    margin-bottom: 23px;
 }
 .jail-content p {
     max-width: 800px;
