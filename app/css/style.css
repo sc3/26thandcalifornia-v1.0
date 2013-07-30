@@ -1,17 +1,54 @@
-/* Account for fixed nav */
 body {
-    padding-top: 70px;
+    padding: 0;
 }
 
-/* Make room for spinner */
-#content {
-    min-height: 300px;
+h1, h2, h3, h4, h5, h6 { 
+    font-family: 'Oswald', sans-serif;
 }
+
+.not-bold {
+    font-weight: 300;
+}
+
+.jail-nav {
+    background: url(../img/noisy_net.png);
+    color: #fff;
+    position: fixed;
+    width: 240px;
+    padding: 0 15px;
+    top: 0;
+    left: 0;
+}
+
+.jail-nav ul {
+    margin-right: -15px;
+    text-align: right;
+}
+.jail-nav ul li {
+    font-size: 18px;
+    line-height: 30px;
+}
+.jail-nav ul li a {
+    display: block;
+    padding-right: 15px;
+}
+.jail-nav h1 {
+    font-size: 32px;
+    font-weight: 400;
+    border-top: 4px solid #fff;
+    border-bottom: 4px solid #fff;
+}
+
+.jail-content {
+    margin-left: 290px;
+}
+
+
 
 /* Button Nano */
 .btn-nano [class^="icon-"],
 .btn-nano [class*=" icon-"] {
-  margin-top: 0;
+  margin-top: 0px;
 }
 
 .btn-nano {
@@ -27,11 +64,11 @@ body {
 	font-weight:bolder;
 	font-style: italic;
 }
-#inmate-table th.sortedby div {
+#inmate-table th.sortedby div  {
 	display: inline-block;
 }
 
-#inmate-table th:hover div {
+#inmate-table th:hover div  {
 	display: inline-block;
 }
 
@@ -53,6 +90,10 @@ body {
 
 .bar {
   fill: steelblue;
+}
+
+.x.axis path {
+  display: none;
 }
 
 @media (max-width: 979px) {
