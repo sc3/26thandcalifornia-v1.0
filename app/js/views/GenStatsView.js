@@ -204,11 +204,8 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
             .attr("y", function(d, i){ return i *  20;})
             .attr("width", 10)
             .attr("height", 10)
-            .style("fill", function(d) { 
-              console.log(color(d))
-              return color(d.name);
-            });
-      
+            .style("fill", function(d) { return color(d.name); });
+
         legend.selectAll('text')
             .data(bookings_per_weekdays)
             .enter()
@@ -229,7 +226,8 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
                       .attr("class", "dot")
                       .attr("cx", line.x())
                       .attr("cy", line.y())
-                      .attr("r", 2.1)
+                      .attr("r", 1.75)
+                      .style("fill", function(d) { return color(bookings_per_weekday.name); })
                       .style("stroke", function(d) { return color(bookings_per_weekday.name); });
                 });
 
