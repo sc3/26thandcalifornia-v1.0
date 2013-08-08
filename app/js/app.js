@@ -91,7 +91,6 @@ define([
         var histogram = new HistogramView({collection: inmate_collection});
         router.on('route:histogram', function() {
           inmate_collection.fetch({
-            data: stats_data_options,
             success: _.bind(histogram.render_advanced, histogram)
           });
         });
@@ -158,7 +157,6 @@ define([
             population_collection.fetch({
                 data: { 'order_by' : '-date', limit: 1 },
                 success: function() {
-                    console.log(population_collection);
                     var total = population_collection.toJSON().pop().total;
                     $('#content h1').after($("<h3>Yesterday, " + total + " inmates were scraped from the inmate locator.</h3><hr />"));
                 }
