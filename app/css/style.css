@@ -44,6 +44,12 @@ section {
     font-weight: 700;
     font-family: 'PT Sans Narrow', sans-serif;
 }
+.jail-nav ul li i {
+    font-size: 17px;
+    width: 20px;
+    text-align: center;
+    display: inline-block;
+}
 .jail-nav ul li a {
     display: block;
     padding-left: 7px;
