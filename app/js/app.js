@@ -8,6 +8,7 @@ define([
     // Application
     'models/InmateModel',
     'collections/InmateCollection',
+    'collections/DailyPopulationCollection',
     'views/MenuView',
     'views/PageView',
     'views/HistogramView',
@@ -21,7 +22,7 @@ define([
     // Templates
     'text!templates/about.jst'
 
-], function($, _, Backbone, Spinner, InmateModel, InmateCollection, MenuView, PageView, HistogramView,
+], function($, _, Backbone, Spinner, InmateModel, InmateCollection, DailyPopulationCollection, MenuView, PageView, HistogramView,
             GenStatsView, IncarcerationStatsView, BailStatsByRaceView, AgeAtBookingStatsView, JailPopulationStatsView,
             BookingsPerDayStatsView, about) {
 
@@ -46,9 +47,7 @@ define([
 
         // Initialize collection
         var inmate_collection = new InmateCollection([]);
-
-        // stats_data_options - options used to fetch data for the following stats views
-        var stats_data_options = { 'limit': 0 };
+        var population_collection = new DailyPopulationCollection([]);
 
         // Spinner
         var spinner_opts = {
@@ -80,6 +79,14 @@ define([
             spinner_el.fadeOut();
         }, this);
 
+        population_collection.on('fetch:start', function() {
+            spinner_el.fadeIn();
+        }, this);
+
+        population_collection.on('reset', function() {
+            spinner_el.fadeOut();
+        }, this);
+
         // Render histogram page template on 'histogram' navigation event
         var histogram = new HistogramView({collection: inmate_collection});
         router.on('route:histogram', function() {
@@ -94,7 +101,6 @@ define([
         var gen_stats = new GenStatsView({collection: inmate_collection});
         router.on('route:gen_stats', function() {
           inmate_collection.fetch({
-            data: stats_data_options,
             success: _.bind(gen_stats.renderInit, gen_stats)
           });
         });
@@ -103,7 +109,6 @@ define([
         var incarceration_stats = new IncarcerationStatsView({collection: inmate_collection});
         router.on('route:incarceration_stats', function() {
           inmate_collection.fetch({
-            data: stats_data_options,
             success: _.bind(incarceration_stats.renderInit, incarceration_stats)
           });
         });
@@ -112,7 +117,6 @@ define([
         var bail_stats_by_race = new BailStatsByRaceView({collection: inmate_collection});
         router.on('route:bail_stats_by_race', function() {
           inmate_collection.fetch({
-            data: stats_data_options,
             success: _.bind(bail_stats_by_race.renderInit, bail_stats_by_race)
           });
         });
@@ -121,7 +125,6 @@ define([
         var age_at_booking_stats = new AgeAtBookingStatsView({collection: inmate_collection});
         router.on('route:age_at_booking_stats', function() {
           inmate_collection.fetch({
-            data: stats_data_options,
             success: _.bind(age_at_booking_stats.renderInit, age_at_booking_stats)
           });
         });
@@ -130,7 +133,6 @@ define([
         var jail_population_stats = new JailPopulationStatsView({collection: inmate_collection});
         router.on('route:jail_population_stats', function() {
           inmate_collection.fetch({
-            data: stats_data_options,
             success: _.bind(jail_population_stats.renderInit, jail_population_stats)
           });
         });
@@ -140,7 +142,6 @@ define([
             var view = new view_constructor_fn({collection: inmate_collection});
             router.on('route:' + route_name, function() {
               inmate_collection.fetch({
-                data: stats_data_options,
                 success: _.bind(view.renderInit, view)
               });
             });
@@ -154,6 +155,14 @@ define([
         var about_page = new PageView({template: about});
         router.on('route:about', function() {
             about_page.render();
+            population_collection.fetch({
+                data: { 'order_by' : '-date', limit: 1 },
+                success: function() {
+                    console.log(population_collection);
+                    var total = population_collection.toJSON().pop().total;
+                    $('#content h1').after($("<h3>Yesterday, " + total + " inmates were scraped from the inmate locator.</h3><hr />"));
+                }
+            });
         });
 
         // Menu requires history fragment to set default active tab, so it loads
