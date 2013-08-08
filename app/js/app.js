@@ -7,7 +7,6 @@ define([
     // Application
     'models/InmateModel',
     'collections/InmateCollection',
-    'views/InmateTableView',
     'views/MenuView',
     'views/PageView',
     'views/HistogramView',
@@ -21,7 +20,7 @@ define([
     // Templates
     'text!templates/about.jst'
 
-], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView,
+], function($, _, Backbone, InmateModel, InmateCollection, MenuView, PageView, HistogramView,
             GenStatsView, IncarcerationStatsView, BailStatsByRaceView, AgeAtBookingStatsView, JailPopulationStatsView,
             BookingsPerDayStatsView, about) {
 
