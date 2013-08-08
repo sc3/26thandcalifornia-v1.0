@@ -13,9 +13,9 @@ define([
         },
         initialize: function() {
             // Set active based on current fragment when view is loaded.
-            this.$el.find('li').removeClass('active');
+            this.$el.find('a').removeClass('active');
             var fragment = Backbone.history.fragment || 'inmates';
-            $('a[href=#' + fragment + ']').parent().addClass('active');
+            $('a[href=#' + fragment + ']').addClass('active');
             this.setheight();
             $(window).bind("resize", _.bind(this.setheight, this));
         },
