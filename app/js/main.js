@@ -2,6 +2,7 @@
 
 // Inmate URL configuration variable
 var INMATE_URL = 'http://cookcountyjail.recoveredfactory.net/api/1.0/countyinmate/';
+var POPULATION_URL = 'http://cookcountyjail.recoveredfactory.net/api/1.0/dailypopulationcounts/';
 
 // RequireJS aliases
 require.config({

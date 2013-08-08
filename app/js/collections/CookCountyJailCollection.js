@@ -15,8 +15,8 @@ define([
                 jsonp: false,
                 jsonpCallback: 'processJSONP',
                 cache: true,
-                data: {'format': 'jsonp', 'callback': 'processJSONP'},
-                url: this.url
+                data: {'format': 'jsonp', 'callback': 'processJSONP', 'limit': 0},
+                url: this.url,
             }, options);
             this.trigger('fetch:start');
             return $.ajax(params);

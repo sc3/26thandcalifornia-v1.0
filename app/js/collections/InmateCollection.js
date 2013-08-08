@@ -1,27 +1,27 @@
 define(['collections/CookCountyJailCollection', 'models/InmateModel'], function(CookCountyJailCollection, InmateModel) {
 
-	var InmateCollection = CookCountyJailCollection.extend({
-		url: INMATE_URL,
-		model: InmateModel,
-		sortAscending: true,
-		sortByAttributeKey: 'jail_id',
-    memoized: {},
+    var InmateCollection = CookCountyJailCollection.extend({
+        url: INMATE_URL,
+        model: InmateModel,
+        sortAscending: true,
+        sortByAttributeKey: 'jail_id',
+        memoized: {},
 
-		comparator: function(lhs, rhs) {
-			var compare = null,
-			val_lhs = lhs.get(this.sortByAttributeKey),
-			val_rhs = rhs.get(this.sortByAttributeKey);
-			switch(typeof(val_lhs)){
-				case "string":
-				compare = val_lhs.localeCompare(val_rhs);
-				break;
+        comparator: function(lhs, rhs) {
+            var compare = null,
+            val_lhs = lhs.get(this.sortByAttributeKey),
+            val_rhs = rhs.get(this.sortByAttributeKey);
+            switch(typeof(val_lhs)){
+                case "string":
+                compare = val_lhs.localeCompare(val_rhs);
+                break;
 
-				case "number":
-				compare =  val_lhs - val_rhs;
-				break;
-			}
-			return this.sortAscending ? compare : -compare;
-		},
+                case "number":
+                compare =  val_lhs - val_rhs;
+                break;
+            }
+            return this.sortAscending ? compare : -compare;
+        },
 
     // returns true if the cached data options match the data options in the passed in options object
     // return false otherwise.
@@ -160,8 +160,8 @@ define(['collections/CookCountyJailCollection', 'models/InmateModel'], function(
       this.memoized = {};
       return CookCountyJailCollection.prototype.sync.apply(this, arguments);
     }
-	});
+    });
 
-	return InmateCollection;
+    return InmateCollection;
 
 });
