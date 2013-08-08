@@ -3,11 +3,11 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'spin',
 
     // Application
     'models/InmateModel',
     'collections/InmateCollection',
-    'views/InmateTableView',
     'views/MenuView',
     'views/PageView',
     'views/HistogramView',
@@ -21,7 +21,7 @@ define([
     // Templates
     'text!templates/about.jst'
 
-], function($, _, Backbone, InmateModel, InmateCollection, InmateTableView, MenuView, PageView, HistogramView,
+], function($, _, Backbone, Spinner, InmateModel, InmateCollection, MenuView, PageView, HistogramView,
             GenStatsView, IncarcerationStatsView, BailStatsByRaceView, AgeAtBookingStatsView, JailPopulationStatsView,
             BookingsPerDayStatsView, about) {
 
@@ -50,13 +50,34 @@ define([
         // stats_data_options - options used to fetch data for the following stats views
         var stats_data_options = { 'limit': 0 };
 
+        // Spinner
+        var spinner_opts = {
+          lines: 12, // The number of lines to draw
+          length: 12, // The length of each line
+          width: 6, // The line thickness
+          radius: 14, // The radius of the inner circle
+          corners: 1, // Corner roundness (0..1)
+          rotate: 0, // The rotation offset
+          direction: 1, // 1: clockwise, -1: counterclockwise
+          color: '#000', // #rgb or #rrggbb
+          speed: 1.2, // Rounds per second
+          trail: 40, // Afterglow percentage
+          shadow: false, // Whether to render a shadow
+          className: 'spinner', // The CSS class to assign to the spinner
+          zIndex: 2e9, // The z-index (defaults to 2000000000)t
+        };
 
-        inmate_collection.bind('fetch:start', function() {
-            console.log('start');
+        $('#content').css('min-height', $(window).height() + 'px');
+
+        var spinner_el = $('#spinner');
+        var spinner = new Spinner(spinner_opts).spin(spinner_el.get(0));
+
+        inmate_collection.on('fetch:start', function() {
+            spinner_el.fadeIn();
         }, this);
 
-        inmate_collection.bind('reset', function() {
-            console.log('end');
+        inmate_collection.on('reset', function() {
+            spinner_el.fadeOut();
         }, this);
 
         // Render histogram page template on 'histogram' navigation event

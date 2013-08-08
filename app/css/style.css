@@ -44,6 +44,12 @@ section {
     font-weight: 700;
     font-family: 'PT Sans Narrow', sans-serif;
 }
+.jail-nav ul li i {
+    font-size: 17px;
+    width: 20px;
+    text-align: center;
+    display: inline-block;
+}
 .jail-nav ul li a {
     display: block;
     padding-left: 7px;
@@ -66,21 +72,38 @@ section {
     font-size: 12px;
     color: #666;
 }
+#spinner {
+    background-color: rgba(255, 255, 255, 0.8);
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    margin-left: -20px;
+    padding-right: 20px;
+    margin-top: -20px;
+    padding-bottom: -20px;
+    display: none;
+    overflow: hidden;
+}
+.spinner {
+    top: 50% !important;
+    left: 50% !important;
+}
 
-.jail-content {
+#jail-content {
     margin-left: 275px;
     font-size: 18px;
     line-height: 26px;
     padding-right: 40px;
+    position: relative;
 }
-.jail-content h1 {
+#jail-content h1 {
     margin-top: 5px;
     font-size: 42px;
     line-height: 45px;
     border-bottom: 3px solid #333;
     margin-bottom: 23px;
 }
-.jail-content p {
+#jail-content p {
     max-width: 800px;
     margin-bottom: 26px;
 }
