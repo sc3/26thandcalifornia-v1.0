@@ -18,6 +18,7 @@ define([
                 data: {'format': 'jsonp', 'callback': 'processJSONP'},
                 url: this.url
             }, options);
+            this.trigger('fetch:start');
             return $.ajax(params);
         },
         parse: function(data) {
