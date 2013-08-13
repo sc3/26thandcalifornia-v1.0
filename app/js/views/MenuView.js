@@ -6,7 +6,6 @@ define([
 ], function($, _, Backbone) {
 
     var MenuView = Backbone.View.extend({
-        el: '#menu',
         events: {
             // Call 'makeactive' when link within 'el' ia clicked.
             'click a': 'makeactive'

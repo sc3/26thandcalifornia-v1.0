@@ -7,7 +7,7 @@
 
 define([
   // Libraries
-  'jquery', 'underscore', 'backbone', 'spin', 'bootstrap', 'd3',
+  'backbone', 'd3',
 
   // Our apps
   'models/BookingsPerDayModel',
@@ -15,7 +15,7 @@ define([
   // Templates
   'text!templates/bookings_per_day_stats.jst'
 ],
-function($, _, Backbone, Spinner, Bootstrap, D3, BookingsPerDayModel, bookings_per_day_stats_template) {
+function(Backbone, D3, BookingsPerDayModel, bookings_per_day_stats_template) {
 
   "use strict";
 
@@ -41,12 +41,11 @@ function($, _, Backbone, Spinner, Bootstrap, D3, BookingsPerDayModel, bookings_p
       events: {
       },
 
-      renderInit: function(argument) {
+      render: function(argument) {
         var compiled_template = _.template(bookings_per_day_stats_template, {});
-
         this.$el.html(compiled_template);
-
-        this.displayBookingsPerDay();
+        //this.displayBookingsPerDay();
+        return this;
       },
 
       displayBookingsPerDay: function() {

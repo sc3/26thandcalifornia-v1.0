@@ -58,9 +58,10 @@ require.config({
 require([
   'backbone',
   'spin',
+  'views/MenuView',
   'backbone_querystring',
 ],
-function(Backbone, Spinner){
+function(Backbone, Spinner, MenuView){
   var JailRouter = Backbone.QueryRouter.extend({
     routes: {
       '' : 'render',
@@ -116,6 +117,8 @@ function(Backbone, Spinner){
 
   var spinner_el = $('#spinner');
   var spinner = new Spinner(spinner_opts).spin(spinner_el.get(0));
+
+  var menu = new MenuView({ el: $('#menu') });
 
   var router = new JailRouter();
   Backbone.history.start();
