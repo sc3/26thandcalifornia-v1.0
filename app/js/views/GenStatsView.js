@@ -7,7 +7,7 @@
 
 define([
   // Libraries
-  'jquery', 'underscore', 'backbone', 'spin', 'bootstrap', 'd3',
+  'backbone', 'd3',
 
   // Our apps
   'models/MinMaxAverageModel',
@@ -17,7 +17,7 @@ define([
   // Templates
   'text!templates/gen_stats.jst'
 ],
-function($, _, Backbone, Spinner, Bootstrap, D3,
+function(Backbone, D3,
           MinMaxAverageModel, BookingsPerDayModel, WeekdayStatsModel,
           gen_stats_template) {
 
@@ -77,7 +77,7 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
         return this.males().length;
       },
 
-      renderInit: function(argument) {
+      render: function(argument) {
         var compiled_gen_stats_template = _.template(gen_stats_template, { gen_stats: this });
 
         this.$el.html(compiled_gen_stats_template);

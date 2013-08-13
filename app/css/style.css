@@ -16,6 +16,12 @@ section {
     font-weight: 300;
 }
 
+#content { 
+  position: relative;
+  background-color: #fff;
+}
+
+
 .jail-nav {
     background-color: #eaeaea;
     position: fixed;
@@ -81,8 +87,8 @@ section {
     padding-right: 20px;
     margin-top: -20px;
     padding-bottom: -20px;
-    display: none;
     overflow: hidden;
+    z-index: 0;
 }
 .spinner {
     top: 50% !important;
