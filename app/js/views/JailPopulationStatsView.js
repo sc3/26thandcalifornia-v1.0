@@ -7,15 +7,16 @@
 
 define([
   // Libraries
-  'jquery', 'underscore', 'backbone', 'spin', 'bootstrap', 'd3',
+  'views/JailView', 'd3',
 
   // Our apps
+  'collections/InmateCollection',
   'models/JailSystemPopulationModel',
 
   // Templates
   'text!templates/jail_population_stats.jst'
 ],
-function($, _, Backbone, Spinner, Bootstrap, D3, JailSystemPopulationModel, jail_population_stats_template) {
+function(JailView, D3, InmateCollection, JailSystemPopulationModel, jail_population_stats_template) {
 
   "use strict";
 
@@ -35,18 +36,16 @@ function($, _, Backbone, Spinner, Bootstrap, D3, JailSystemPopulationModel, jail
 
   // list of prisoners is from oldest to newest
 
-  var JailPopulationStatsView = Backbone.View.extend({
-      collection: null,
-      el: '#content',
-      events: {
-      },
+  var JailPopulationStatsView = JailView.extend({
+      collection: new InmateCollection(),
 
-      renderInit: function(argument) {
+      render: function() {
         var compiled_template = _.template(jail_population_stats_template, {});
 
         this.$el.html(compiled_template);
 
         this.displayJailSystemPopulation();
+        return this;
       },
 
 

@@ -4,7 +4,7 @@
 
 define([
   // Libraries
-  'backbone', 'd3',
+  'views/JailView', 'd3',
 
   // Our apps
   'collections/InmateCollection',
@@ -12,7 +12,7 @@ define([
   // Templates
   'text!templates/incarceration_stats.jst'
 ],
-function(Backbone, D3,
+function(JailView, D3,
           InmateCollection,
           incarceration_stats_template) {
 
@@ -34,12 +34,8 @@ function(Backbone, D3,
 
   // list of prisoners is from oldest to newest
 
-  var IncarcerationStatsView = Backbone.View.extend({
-      collection: null,
-      el: '#content',
-      events: {
-      },
-
+  var IncarcerationStatsView = JailView.extend({
+      collection: new InmateCollection(),
       longest_incarcerated_female: null,
       longest_incarcerated_male: null,
 
@@ -65,16 +61,9 @@ function(Backbone, D3,
         return this.collection.males();
       },
 
-      initialize: function() {
-        this.collection = new InmateCollection();
-      },
-
       render: function(params) {
-        var that = this;
-        return $.when(this.collection.fetch({ data: params})).then(function() {
-          var compiled_incarceration_stats_template = _.template(incarceration_stats_template, { incarceration_stats: that });
-          that.$el.html(compiled_incarceration_stats_template);
-        })
+        var compiled_incarceration_stats_template = _.template(incarceration_stats_template, { incarceration_stats: this });
+        this.$el.html(compiled_incarceration_stats_template);
       },
 
 

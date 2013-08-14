@@ -3,10 +3,8 @@ function processJSONP(data) { return data; }
 
 // Generic collection for interacting with Cook County Jail API
 define([
-    'jquery',
-    'backbone'
-], function($, Backbone) {
-
+    'backbone',
+], function(Backbone) {
     var CookCountyJailCollection = Backbone.Collection.extend({
         sync: function(method, model, options) {
             var params = $.extend(true, {
@@ -15,7 +13,7 @@ define([
                 jsonp: false,
                 jsonpCallback: 'processJSONP',
                 cache: true,
-                data: {'format': 'jsonp', 'callback': 'processJSONP', 'limit': 1000},
+                data: {'format': 'jsonp', 'callback': 'processJSONP', 'limit': 0},
                 url: this.url,
             }, options);
             this.trigger('fetch:start');

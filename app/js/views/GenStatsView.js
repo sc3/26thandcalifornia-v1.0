@@ -7,7 +7,7 @@
 
 define([
   // Libraries
-  'backbone', 'd3',
+  'views/JailView', 'd3',
 
   // Models and collections
   'models/MinMaxAverageModel',
@@ -18,7 +18,7 @@ define([
   // Templates
   'text!templates/gen_stats.jst'
 ],
-function(Backbone, D3,
+function(JailView, D3,
           MinMaxAverageModel, BookingsPerDayModel, WeekdayStatsModel, InmateCollection,
           gen_stats_template) {
 
@@ -38,8 +38,8 @@ function(Backbone, D3,
   //     race
   //     stay_length
 
-  var GenStatsView = Backbone.View.extend({
-      collection: null,
+  var GenStatsView = JailView.extend({
+      collection: new InmateCollection(),
       bookings_per_day: null,
       races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'W', 'WH'],
 
@@ -74,18 +74,10 @@ function(Backbone, D3,
         return this.males().length;
       },
 
-      initialize: function() {
-        this.collection = new InmateCollection();
-      },
-
       render: function(params) {
-        var that = this;
-        return $.when(this.collection.fetch({ data: params}))
-                .then(function() {
-                  var compiled_gen_stats_template = _.template(gen_stats_template, { gen_stats: that });
-                  that.$el.html(compiled_gen_stats_template);
-                  that.displayWeekdayBookings();
-                });
+        var compiled_gen_stats_template = _.template(gen_stats_template, { gen_stats: this });
+        this.$el.html(compiled_gen_stats_template);
+        this.displayWeekdayBookings();
       },
 
       weekdayStats: function() {

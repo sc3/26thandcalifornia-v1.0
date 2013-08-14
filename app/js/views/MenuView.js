@@ -4,7 +4,6 @@ define([
     'underscore',
     'backbone',
 ], function($, _, Backbone) {
-
     var MenuView = Backbone.View.extend({
         initialize: function(options) {
             this.router = options.router;
@@ -14,17 +13,20 @@ define([
             $(window).bind("resize", _.bind(this.setheight, this));
         },
         makeactive: function(route, params) {
+            if (_.isObject(route)) { return; }
+          
             // Remove active and set querystring on links
-            var querystring = (!_.isEmpty(params)) ? '?' + $.param(params) : '';
-            this.$el.find('a').removeClass('active').each(function() {
+            var querystring = '?' + $.param(params);
+            this.$el.find('.nav').find('a').removeClass('active').each(function() {
               var href = $(this).attr('href').split('?').shift();
               $(this).attr('href', href + querystring);
             });
 
-            // Find active element
+            // Create active element ID, escape characters that break jQuery
             var fragment = route + '/' + querystring
-            fragment = fragment.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&")
-            $('a[href=#' + fragment + ']').addClass('active');
+            fragment = fragment.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&");
+            // Find active element
+            this.$el.find('a[href=#' + fragment + ']').addClass('active');
         },
         setheight: function() {
             this.$el.height($(window).height());

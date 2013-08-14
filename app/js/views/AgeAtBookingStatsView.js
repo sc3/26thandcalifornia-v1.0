@@ -7,10 +7,11 @@
 
 define([
   // Libraries
-  'backbone', 'd3',
+  'views/JailView',
+  'd3',
   'collections/InmateCollection',
 ],
-function(Backbone, D3, InmateCollection) {
+function(JailView, D3, InmateCollection) {
 
   "use strict";
 
@@ -30,12 +31,7 @@ function(Backbone, D3, InmateCollection) {
 
   // list of prisoners is from oldest to newest
 
-  var AgeAtBookingStatsView = Backbone.View.extend({
-      collection: null,
-      el: '#content',
-      events: {
-      },
-
+  var AgeAtBookingStatsView = JailView.extend({
       races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'W', 'WH'],
 
       females: function() {
@@ -49,12 +45,7 @@ function(Backbone, D3, InmateCollection) {
         this.collection = new InmateCollection();
       },
 
-      render: function(params) {
-
-        return $.when(this.collection.fetch({ data: params })).
-          then(_.bind(this._render, this));
-      },
-      _render: function() {
+      render: function() {
         this.$el.html('<div class="" style="margin-bottom: 16px;">' +
                       " <h3>Female Inmate's Age at Booking by Race</h3>" +
                       ' <style type="text/css"></style>' +

@@ -7,15 +7,16 @@
 
 define([
   // Libraries
-  'backbone', 'd3',
+  'views/JailView', 'd3',
 
   // Our apps
+  'collections/InmateCollection',
   'models/BookingsPerDayModel',
 
   // Templates
   'text!templates/bookings_per_day_stats.jst'
 ],
-function(Backbone, D3, BookingsPerDayModel, bookings_per_day_stats_template) {
+function(JailView, D3, InmateCollection, BookingsPerDayModel, bookings_per_day_stats_template) {
 
   "use strict";
 
@@ -35,16 +36,13 @@ function(Backbone, D3, BookingsPerDayModel, bookings_per_day_stats_template) {
 
   // list of prisoners is from oldest to newest
 
-  var BookingsPerDayStatsView = Backbone.View.extend({
-      collection: null,
-      el: '#content',
-      events: {
-      },
+  var BookingsPerDayStatsView = JailView.extend({
+      collection: new InmateCollection(),
 
       render: function(argument) {
         var compiled_template = _.template(bookings_per_day_stats_template, {});
         this.$el.html(compiled_template);
-        //this.displayBookingsPerDay();
+        this.displayBookingsPerDay();
         return this;
       },
 

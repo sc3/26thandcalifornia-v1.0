@@ -1,25 +1,14 @@
 define([
     // Libraries
-    'jquery',
-    'underscore',
-    'backbone',
+    'views/JailView',
     'collections/InmateCollection',
     'd3',
-], function($, _, Backbone, InmateCollection, mything) {
+], function(JailView, InmateCollection, D3) {
 
-    var HistogramView = Backbone.View.extend({
+    var HistogramView = JailView.extend({
         el: '#content',
-        initialize: function(options) {
-            this.collection = new InmateCollection([]);
-        },
-        render: function(params) {
-          var that = this;
-          return $.when(this.collection.fetch({ data: params}))
-                  .then(function() {
-                    that._render()
-                  });
-        },
-        _render: function(context) {
+        collection: new InmateCollection(),
+        render: function(context) {
             // draw an advanced chart with d3!
             // based on http://bl.ocks.org/3885304
 
@@ -27,8 +16,6 @@ define([
 
             //fetch our data from the collection
             var data = this.collection.histogram('stay_length', _.range(0, 365, 7));
-
-            console.log(data);
 
             //sum up our inmate count from raw data
             //API should return a summary for better performance
