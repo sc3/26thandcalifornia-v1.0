@@ -7,9 +7,10 @@
 
 define([
   // Libraries
-  'jquery', 'underscore', 'backbone', 'spin', 'bootstrap', 'd3'
+  'backbone', 'd3',
+  'collections/InmateCollection',
 ],
-function($, _, Backbone, Spinner, Bootstrap, D3) {
+function(Backbone, D3, InmateCollection) {
 
   "use strict";
 
@@ -44,9 +45,16 @@ function($, _, Backbone, Spinner, Bootstrap, D3) {
       males: function() {
         return this.collection.males();
       },
+      initialize: function() {
+        this.collection = new InmateCollection();
+      },
 
-      renderInit: function(argument) {
+      render: function(params) {
 
+        return $.when(this.collection.fetch({ data: params })).
+          then(_.bind(this._render, this));
+      },
+      _render: function() {
         this.$el.html('<div class="" style="margin-bottom: 16px;">' +
                       " <h3>Female Inmate's Age at Booking by Race</h3>" +
                       ' <style type="text/css"></style>' +
@@ -80,7 +88,14 @@ function($, _, Backbone, Spinner, Bootstrap, D3) {
                                   function(age_counts, inmate) {
                                     var age = inmate.get('age_at_booking');
                                     if (age === 0) { age = 20; } // this is the majority age
-                                    age_counts[age][inmate.get('race')] += 1;
+                                    if (!age_counts[age]) {
+                                      age_counts[age] = {};
+                                    }
+                                    if (age_counts[age][inmate.get('race')]) {
+                                      age_counts[age][inmate.get('race')] += 1;
+                                    } else {
+                                      age_counts[age][inmate.get('race')] = 1;
+                                    }
                                     age_counts[age]['total'] += 1;
                                     return age_counts;
                                   },

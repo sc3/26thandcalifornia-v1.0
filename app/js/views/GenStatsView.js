@@ -9,16 +9,17 @@ define([
   // Libraries
   'backbone', 'd3',
 
-  // Our apps
+  // Models and collections
   'models/MinMaxAverageModel',
   'models/BookingsPerDayModel',
   'models/WeekdayStatsModel',
+  'collections/InmateCollection',
 
   // Templates
   'text!templates/gen_stats.jst'
 ],
 function(Backbone, D3,
-          MinMaxAverageModel, BookingsPerDayModel, WeekdayStatsModel,
+          MinMaxAverageModel, BookingsPerDayModel, WeekdayStatsModel, InmateCollection,
           gen_stats_template) {
 
   "use strict";
@@ -39,10 +40,6 @@ function(Backbone, D3,
 
   var GenStatsView = Backbone.View.extend({
       collection: null,
-      el: '#content',
-      events: {
-      },
-
       bookings_per_day: null,
       races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'W', 'WH'],
 
@@ -77,11 +74,18 @@ function(Backbone, D3,
         return this.males().length;
       },
 
-      render: function(argument) {
-        var compiled_gen_stats_template = _.template(gen_stats_template, { gen_stats: this });
+      initialize: function() {
+        this.collection = new InmateCollection();
+      },
 
-        this.$el.html(compiled_gen_stats_template);
-        this.displayWeekdayBookings();
+      render: function(params) {
+        var that = this;
+        return $.when(this.collection.fetch({ data: params}))
+                .then(function() {
+                  var compiled_gen_stats_template = _.template(gen_stats_template, { gen_stats: that });
+                  that.$el.html(compiled_gen_stats_template);
+                  that.displayWeekdayBookings();
+                });
       },
 
       weekdayStats: function() {

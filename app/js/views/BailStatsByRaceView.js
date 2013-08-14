@@ -7,7 +7,7 @@
 
 define([
   // Libraries
-  'jquery', 'underscore', 'backbone', 'spin', 'bootstrap', 'd3',
+  'backbone', 'd3',
 
   // Our apps
   'collections/InmateCollection',
@@ -16,7 +16,7 @@ define([
   // Templates
   'text!templates/bail_stats_by_race.jst'
 ],
-function($, _, Backbone, Spinner, Bootstrap, D3,
+function(Backbone, D3,
           InmateCollection, BailStatsByRaceModel,
           bail_stats_by_race_template) {
 
@@ -39,19 +39,21 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
   // list of prisoners is from oldest to newest
 
   var BailStatsByRaceView = Backbone.View.extend({
-      collection: null,
-      el: '#content',
-      events: {
+      initialize: function() {
+        this.collection = new InmateCollection();
       },
+      render: function(params) {
+        var that = this;
+        return $.when(that.collection.fetch({data: params})).then(function() {
+          that.$el.html('<h1>Something is broken</h1>');
+          //var bail_stats_by_race = that.collection.reduce(function(bail_stats, cur_prisoner) {
+                                                            //return bail_stats.add(cur_prisoner);
+                                                          //},
+                                                          //new BailStatsByRaceModel());
+          //var compiled_template = _.template(bail_stats_by_race_template, { bail_stats_by_race: bail_stats_by_race });
 
-      renderInit: function(argument) {
-        var bail_stats_by_race = this.collection.reduce(function(bail_stats, cur_prisoner) {
-                                                          return bail_stats.add(cur_prisoner);
-                                                        },
-                                                        new BailStatsByRaceModel());
-        var compiled_template = _.template(bail_stats_by_race_template, { bail_stats_by_race: bail_stats_by_race });
-
-        this.$el.html(compiled_template);
+          //that.$el.html(compiled_template);
+        })
       }
   });
 

@@ -1,0 +1,55 @@
+<div id="gen-stats">
+  <h1>General Statistics</h1>
+
+  <p>This purpose of page is to explore the Cook County Information date set, and in doing so, see what questions can be answered and what query demands are made on the information set to collect and render those answers. Design of the information being displayed is minimal, the journey is more about the limits of the data and the support needed to answer the questions. If others know of or want to display this information in a better formats please either do so or document your requests on the <a href="https://github.com/sc3/cookcountyjail/wiki">Cook County Jail Wiki</a>. Please read the <strong><a href="#about">Disclaimer</a></strong> before using this information presented here.
+  </p>
+
+	<h2>Information on the Data Set</h2>
+
+  <p>Number of Prisoner Records: <%= gen_stats.numberOf() %>.</p>
+  <p>Number of Females: <%= gen_stats.numberOfFemales() %> (<%= gen_stats.gender_ratio('female').toFixed(1) %>%).</p>
+  <p>Number of Males: <%= gen_stats.numberOfMales() %> (<%= gen_stats.gender_ratio('male').toFixed(1)  %>%).</p>
+
+  <h3>Averages from <%= gen_stats.bookingsPerDay().get('first_booking_day') %> to
+      <%= gen_stats.bookingsPerDay().get('latest_booking_day') %></h3>
+  <p>Average number prisoners booked per day: <%= gen_stats.bookingsPerDay().get('min_max_average').get('average').toFixed(0) %>,
+      Females: <%= gen_stats.bookingsPerDay().get('min_max_average_females').get('average').toFixed(0) %>,
+      Males: <%= gen_stats.bookingsPerDay().get('min_max_average_males').get('average').toFixed(0) %>.</p>
+  <p>Minimum number prisoners booked per day: <%= gen_stats.bookingsPerDay().get('min_max_average').get('min') %> -
+      Date: <%= gen_stats.bookingsPerDay().get('min_date') %>,
+      Females: <%= gen_stats.bookingsPerDay().get('min_females') %>,
+      Males: <%= gen_stats.bookingsPerDay().get('min_males') %>.</p>
+  <p>Maximum number prisoners booked per day: <%= gen_stats.bookingsPerDay().get('min_max_average').get('max') %> -
+      Date: <%= gen_stats.bookingsPerDay().get('max_date') %>,
+      Females: <%= gen_stats.bookingsPerDay().get('max_females') %>,
+      Males: <%= gen_stats.bookingsPerDay().get('max_males') %>.</p>
+
+  <div class="" style="margin-bottom: 16px;">
+    <h3>Bookings per Weekday</h3>
+
+    <style type="text/css">
+      #BookingsPerWeekday {
+        font: 10px sans-serif;
+      }
+
+      #BookingsPerWeekday .axis path, #BookingsPerWeekday .axis line {
+        fill: none;
+        shape-rendering: crispEdges;
+        display: inline;
+      }
+
+      #BookingsPerWeekday .line {
+        fill: none;
+        stroke-width: 2px;
+      }
+
+      #BookingsPerWeekday .dot {
+        fill: none;
+        stroke-width: 1.5px;
+      }
+    </style>
+
+    <div id="BookingsPerWeekday"></div>
+  </div>
+
+</div>

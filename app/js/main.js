@@ -14,7 +14,8 @@ require.config({
       backbone_querystring: 'lib/query-string',
       d3: '//cdnjs.cloudflare.com/ajax/libs/d3/3.2.2/d3.v3.min',
       text: '//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text',
-      spin: '//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min'
+      spin: '//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min',
+      moment: '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min',
     },
     shim: {
       backbone: {
@@ -57,11 +58,11 @@ require.config({
 
 require([
   'backbone',
-  'spin',
+  'views/SpinView',
   'views/MenuView',
   'backbone_querystring',
 ],
-function(Backbone, Spinner, MenuView){
+function(Backbone, SpinnerView, MenuView){
   var JailRouter = Backbone.QueryRouter.extend({
     routes: {
       '' : 'render',
@@ -69,57 +70,49 @@ function(Backbone, Spinner, MenuView){
     },
     loadedViews: {},
     render: function() {
-      //console.log(params);
-      var args = Array.prototype.slice.call(arguments);
-      var params = args.pop();
-      var view = (args.length === 1) ? args.pop() : 'home';
+      var loaded = this.loadedViews,
+          args = Array.prototype.slice.call(arguments),
+          params = args.pop(),
+          view = (args.length === 1) ? args.pop() : 'home';
 
       // Construct a view name like 'HomeView'
       view = view.toLowerCase().replace(/\b[a-z]/g, function(letter) {
           return letter.toUpperCase();
       }) + 'View';
-      var loaded = this.loadedViews;
 
-      // Load
-      $('#content').empty().hide();
-      if (!loaded[view]) {
-        require(['views/'+view], function(View) {
-          loaded[view] = new View({ el: $('#content') });
-          loaded[view].render(params).$el.fadeIn();
-        })
-      } else {
-        loaded[view].render(params).$el.fadeIn();
-      }
+      // Hide content, then...
+      $('#content').fadeOut(function() {
+        // Empty
+        $('#content').empty();
 
-      //console.log('route ' + view + ' triggered');
-
+        // Load if necessary and render
+        if (!loaded[view]) {
+          require(['views/'+view], function(View) {
+            loaded[view] = new View({ el: $('#content') });
+            loaded[view].render(params).done(function() {
+              $('#content').fadeIn();
+            });
+          })
+        } else {
+          loaded[view].render(params).done(function() {
+            $('#content').fadeIn();
+          });
+        }
+      });
     }
   });
-  // Menu view
-  // Spinner view
-  var spinner_opts = {
-    lines: 12, // The number of lines to draw
-    length: 12, // The length of each line
-    width: 6, // The line thickness
-    radius: 14, // The radius of the inner circle
-    corners: 1, // Corner roundness (0..1)
-    rotate: 0, // The rotation offset
-    direction: 1, // 1: clockwise, -1: counterclockwise
-    color: '#000', // #rgb or #rrggbb
-    speed: 1.2, // Rounds per second
-    trail: 40, // Afterglow percentage
-    shadow: false, // Whether to render a shadow
-    className: 'spinner', // The CSS class to assign to the spinner
-    zIndex: 0, // The z-index (defaults to 2000000000)t
-  };
 
-  $('#content').css('min-height', $(window).height() + 'px');
+  // Responsive height setting
+  var setHeight = function() {
+    $('#content, #jail-content').css('min-height', $(window).height() + 'px');
+  }
+  setHeight();
+  $(window).on('resize', setHeight);
 
-  var spinner_el = $('#spinner');
-  var spinner = new Spinner(spinner_opts).spin(spinner_el.get(0));
-
-  var menu = new MenuView({ el: $('#menu') });
-
+  // Spinner
+  var spinner = new SpinnerView({ el: $('#spinner') });
   var router = new JailRouter();
+  var menu = new MenuView({ el: $('#menu'), router: router });
   Backbone.history.start();
+
 });

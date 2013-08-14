@@ -4,7 +4,7 @@
 
 define([
   // Libraries
-  'jquery', 'underscore', 'backbone', 'spin', 'bootstrap', 'd3',
+  'backbone', 'd3',
 
   // Our apps
   'collections/InmateCollection',
@@ -12,7 +12,7 @@ define([
   // Templates
   'text!templates/incarceration_stats.jst'
 ],
-function($, _, Backbone, Spinner, Bootstrap, D3,
+function(Backbone, D3,
           InmateCollection,
           incarceration_stats_template) {
 
@@ -65,10 +65,16 @@ function($, _, Backbone, Spinner, Bootstrap, D3,
         return this.collection.males();
       },
 
-      renderInit: function(argument) {
-        var compiled_incarceration_stats_template = _.template(incarceration_stats_template, { incarceration_stats: this });
+      initialize: function() {
+        this.collection = new InmateCollection();
+      },
 
-        this.$el.html(compiled_incarceration_stats_template);
+      render: function(params) {
+        var that = this;
+        return $.when(this.collection.fetch({ data: params})).then(function() {
+          var compiled_incarceration_stats_template = _.template(incarceration_stats_template, { incarceration_stats: that });
+          that.$el.html(compiled_incarceration_stats_template);
+        })
       },
 
 

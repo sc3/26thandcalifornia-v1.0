@@ -16,7 +16,8 @@ section {
     font-weight: 300;
 }
 
-#content { 
+#content {
+  display: none;
   position: relative;
   background-color: #fff;
 }

@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'backbone_mutators'], function($, _, Backbone, Mutators) {
+define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
     var CookCountyJailModel = Backbone.Model.extend({
         mutators: {

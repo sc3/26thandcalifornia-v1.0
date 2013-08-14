@@ -15,7 +15,7 @@ define([
                 jsonp: false,
                 jsonpCallback: 'processJSONP',
                 cache: true,
-                data: {'format': 'jsonp', 'callback': 'processJSONP', 'limit': 0},
+                data: {'format': 'jsonp', 'callback': 'processJSONP', 'limit': 1000},
                 url: this.url,
             }, options);
             this.trigger('fetch:start');
