@@ -25,20 +25,37 @@ export them as AMD modules.
 If you create a file called `views/StatisticsandmeasurementsView.js`, it will automatically be made
 available at `#statisticsandmeasurements/`.
 
-Here's a basic view template:
+Here's a very basic view:
 
-```
-define([
-  'views/JailView',
-],
-function(JailView) {
-  var StatisticsandmeasurementsView = JailView.extend({
-    render: function() {
-      this.$el.html('Hello world');
-    }
-  return StatisticsandmeasurementsView;
-});
-``` 
+    define([
+      'views/JailView',
+    ],
+    function(JailView) {
+      var StatisticsandmeasurementsView = JailView.extend({
+        render: function() {
+          this.$el.html('Hello world');
+          return this;
+        }
+      });
+      return StatisticsandmeasurementsView;
+    });
+
+JailView objects can also accept a collection to load before rendering:
+
+    define([
+      'views/JailView',
+      'collections/InmateCollection',
+    ],
+    function(JailView, InmateCollection) {
+      var LoadcollectionView = JailView.extend({
+        collection: new InmateCollection(),
+        render: function() {
+          this.$el.html('This renders once inmate data is retrieved.');
+          return this;
+        }
+      });
+      return LoadcollectionView;
+    });
 
 
 # Deployment
