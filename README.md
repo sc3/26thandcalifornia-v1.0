@@ -9,13 +9,15 @@ Chi-Town Coding Crew's [Cook County Jail API](http://cookcountyjail.recoveredfac
 # Install and run server
 
 Clone the repo:
+
     git clone git://github.com/sc3/26thandcalifornia.git 
 
 If you have Python, start a local server:
+
     cd 26thandcalifornia/app
     python -m SimpleHTTPServer
 
-Now visit http://localhost:8000 in your web browser.
+Now visit [`http://localhost:8000`](http://localhost:8000) in your web browser.
 
 # Development
 
