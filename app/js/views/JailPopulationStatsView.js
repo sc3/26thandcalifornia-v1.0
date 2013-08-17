@@ -51,6 +51,10 @@ function(JailView, D3, InmateCollection, JailSystemPopulationModel, jail_populat
 
       displayJailSystemPopulation: function() {
 
+        function round_up(value, rounding_factor) {
+          return Math.floor((value + rounding_factor + 1) / rounding_factor) * rounding_factor;
+        }
+
         var jail_population_per_day = new JailSystemPopulationModel({inmates: this.collection}),
             daily_population = jail_population_per_day.daily_population();
 
@@ -62,18 +66,11 @@ function(JailView, D3, InmateCollection, JailSystemPopulationModel, jail_populat
             .domain([daily_population[0][0], daily_population[daily_population.length - 1][0]])
             .range([0, width]);
 
-        var y_range = [_.min(daily_population, function(entry) { return entry[1]; })[1],
-                       _.max(daily_population, function(entry) { return entry[1]; })[1]],
-            y;
-            if ((y_range[0] - 49) < 0) {
-              y_range[0] = 0;
-            } else {
-              y_range[0] = Math.floor((y_range[0] - 1) / 50) * 50;
-            }
-            y_range[1] = Math.floor((y_range[1] + 51) / 50) * 50;
+        var y_range = [0,
+                       round_up(_.max(daily_population, function(entry) { return entry[1]; })[1], 100)],
             y = d3.scale.linear()
-            .domain(y_range)
-            .range([height, 0]);
+                  .domain(y_range)
+                  .range([height, 0]);
 
         var xAxis = d3.svg.axis()
             .scale(x)
