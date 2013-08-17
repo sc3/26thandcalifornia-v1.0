@@ -15,7 +15,7 @@ require.config({
       text: '//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text',
       spin: '//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min',
       moment: '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min',
-      highcharts: '//cdnjs.cloudflare.com/ajax/libs/highcharts/3.0.2/highcharts',
+      highcharts: '//cdnjs.cloudflare.com/ajax/libs/highcharts/3.0.2/highcharts'
     },
     shim: {
       backbone: {
@@ -23,7 +23,7 @@ require.config({
         exports: 'Backbone'
       },
       underscore: {
-        exports: '_',
+        exports: '_'
       },
       spin: {
           exports: 'Spinner'
@@ -34,7 +34,7 @@ require.config({
       highcharts: {
         deps: [ "jquery" ],
         exports: "Highcharts"
-      },
+      }
     }
 });
 
@@ -44,13 +44,13 @@ require([
   'moment',
   'views/SpinView',
   'views/MenuView',
-  'backbone_querystring',
+  'backbone_querystring'
 ],
 function(Backbone, moment, SpinnerView, MenuView){
   var JailRouter = Backbone.QueryRouter.extend({
     routes: {
       '' : 'render',
-      ':view/': 'render',
+      ':view/': 'render'
     },
     loadedViews: {},
     render: function() {
@@ -67,15 +67,13 @@ function(Backbone, moment, SpinnerView, MenuView){
         params = {
           'booking_date__gte': first.format('YYYY-MM-DD'),
           'booking_date__lt': last.format('YYYY-MM-DD'),
-          'limit': 0,
+          'limit': 0
         };
         return this.navigate(view + '/?' + $.param(params), { trigger: true, replace: true });
       }
 
       // Construct a view name like 'HomeView'
-      view = view.toLowerCase().replace(/\b[a-z]/g, function(letter) {
-          return letter.toUpperCase();
-      }) + 'View';
+      view = view + 'View';
 
       // Hide content, then...
       $('#content').fadeOut(function() {
@@ -89,7 +87,7 @@ function(Backbone, moment, SpinnerView, MenuView){
             loaded[view].deferred_render(params).done(function() {
               $('#content').fadeIn();
             });
-          })
+          });
         } else {
           loaded[view].deferred_render(params).done(function() {
             $('#content').fadeIn();
@@ -101,8 +99,8 @@ function(Backbone, moment, SpinnerView, MenuView){
 
   // Responsive height setting
   var setHeight = function() {
-    $('#content, #jail-content').css('min-height', $(window).height() + 'px');
-  }
+                    $('#content, #jail-content').css('min-height', $(window).height() + 'px');
+                  };
   setHeight();
   $(window).on('resize', setHeight);
 
