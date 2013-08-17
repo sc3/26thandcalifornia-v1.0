@@ -14,7 +14,7 @@ define([
         },
         makeactive: function(route, params) {
             if (_.isObject(route)) { return; }
-          
+
             // Remove active and set querystring on links
             var querystring = '?' + $.param(params);
             this.$el.find('.nav').find('a').removeClass('active').each(function() {
@@ -23,7 +23,7 @@ define([
             });
 
             // Create active element ID, escape characters that break jQuery
-            var fragment = route + '/' + querystring
+            var fragment = route + '/' + querystring;
             fragment = fragment.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, "\\$&");
             // Find active element
             this.$el.find('a[href=#' + fragment + ']').addClass('active');
@@ -36,4 +36,3 @@ define([
     return MenuView;
 
 });
-
