@@ -2,7 +2,7 @@ define([
     // Libraries
     'views/JailView',
     'collections/InmateCollection',
-    'd3',
+    'd3'
 ], function(JailView, InmateCollection, D3) {
 
     var HistogramView = JailView.extend({
@@ -26,11 +26,11 @@ define([
             //set our histogram margins
             var margin = {top: 40, right: 40, bottom: 60, left: 80},
                 width = ($("#jail-content").width()) - margin.left - margin.right,
-                height = ($(window).height() * .8) - margin.top - margin.bottom;
+                height = ($(window).height() * 0.8) - margin.top - margin.bottom;
 
             //set our bar width range
             var x = d3.scale.ordinal()
-                .rangeRoundBands([0, width], .2);
+                .rangeRoundBands([0, width], 0.2);
 
             //set our height
             var y = d3.scale.linear()
@@ -50,7 +50,7 @@ define([
             var svg = d3.select("#histogram_advanced").append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
-              .append("g")
+                .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             //define our domain ranges
@@ -67,13 +67,13 @@ define([
             var xTicks = d3.select('.axis.x').selectAll('g');
             xTicks
               .selectAll('text')
-              .attr('transform', function(d,i,j) { return 'translate (-17, 30) rotate(-90 0,0)' }) ;
+              .attr('transform', function(d,i,j) { return 'translate (-17, 30) rotate(-90 0, 0)'; });
 
             // draw our y axis
             svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis)
-              .append("text")
+                .append("text")
                 .attr("transform", "rotate(-90)")
                 .attr("y", 6)
                 .attr("dy", ".71em")
@@ -83,7 +83,7 @@ define([
             //finally, populate our SVG with data
             svg.selectAll(".bar")
                 .data(data)
-              .enter().append("rect")
+                .enter().append("rect")
                 .attr("class", "bar")
                 .attr("x", function(d) { return x(d.stay); })
                 .attr("width", x.rangeBand())

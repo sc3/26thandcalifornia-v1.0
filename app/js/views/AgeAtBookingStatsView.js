@@ -9,7 +9,7 @@ define([
   // Libraries
   'views/JailView',
   'd3',
-  'collections/InmateCollection',
+  'collections/InmateCollection'
 ],
 function(JailView, D3, InmateCollection) {
 
@@ -32,7 +32,7 @@ function(JailView, D3, InmateCollection) {
   // list of prisoners is from oldest to newest
 
   var AgeAtBookingStatsView = JailView.extend({
-      races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'W', 'WH'],
+      races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'U', 'W', 'WH'],
 
       females: function() {
         return this.collection.females();
@@ -73,7 +73,7 @@ function(JailView, D3, InmateCollection) {
             upper_age_limit = 120,
             full_age_counts = new Array(upper_age_limit + 1);
         for (i = 0; i <= upper_age_limit; ++i) {
-          full_age_counts[i] = {AS: 0, B: 0, BK: 0, IN: 0, LB: 0, LT: 0, LW: 0, W: 0, WH: 0, age: i, total: 0};
+          full_age_counts[i] = {AS: 0, B: 0, BK: 0, IN: 0, LB: 0, LT: 0, LW: 0, U: 0, W: 0, WH: 0, age: i, total: 0};
         }
         full_age_counts = _.reduce(population,
                                   function(age_counts, inmate) {
