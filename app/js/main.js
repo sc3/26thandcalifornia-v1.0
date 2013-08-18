@@ -61,13 +61,13 @@ function(Backbone, moment, SpinnerView, MenuView){
 
       // Set default params
       if (_.isEmpty(params)) {
-        var now = moment();
-        var last = moment([now.year(), now.month(), 1]);
-        var first = moment(last).subtract('month', 1);
+        var now = moment(),
+            last = moment([now.year(), now.month(), 1]),
+            first = moment(last).subtract('month', 1);
         params = {
-          'date__gte': first.format('YYYY-MM-DD'),
-          'date__lt': last.format('YYYY-MM-DD'),
-          'limit': 0,
+          'booking_date__gte': first.format('YYYY-MM-DD'),
+          'booking_date__lt': last.format('YYYY-MM-DD'),
+          'limit': 0
         };
         return this.navigate(view + '/?' + $.param(params), { trigger: true, replace: true });
       }

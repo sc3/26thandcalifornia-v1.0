@@ -25,7 +25,7 @@ function(Backbone, JailView, DailyPopulationCollection, template, Highcharts) {
       this.template = _.template(template);
     },
 
-    // Render will be called automatically when route is trigger and 
+    // Render will be called automatically when route is trigger and
     // collection is fetched.
     render: function() {
       // Render the template
@@ -37,12 +37,12 @@ function(Backbone, JailView, DailyPopulationCollection, template, Highcharts) {
       // Attach a chart
       $('.population-chart').highcharts({
         title: {
-          text: 'Inmates per day',
+          text: 'Inmates per day'
         },
         xAxis: { type: 'datetime' },
         yAxis: { title: 'Inmates recorded by scraper' },
-        legend: { enabled: false, },
-        credits: { enabled: false, },
+        legend: { enabled: false },
+        credits: { enabled: false },
         plotOptions: {
           area: {
             fillColor: {
@@ -71,7 +71,7 @@ function(Backbone, JailView, DailyPopulationCollection, template, Highcharts) {
           pointInterval: 24 * 3600 * 1000,
           pointStart: Date.UTC(2013, 0, 1),
           data: this.collection.pluck('total')
-        }],
+        }]
       });
     }
   });

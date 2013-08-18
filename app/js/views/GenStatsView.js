@@ -41,7 +41,7 @@ function(JailView, D3,
   var GenStatsView = JailView.extend({
       collection: new InmateCollection(),
       bookings_per_day: null,
-      races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'W', 'WH'],
+      races: ['AS', 'B', 'BK', 'IN', 'LB', 'LT', 'LW', 'U', 'W', 'WH'],
 
       bookingsPerDay: function() {
         if (!this.bookings_per_day) {
