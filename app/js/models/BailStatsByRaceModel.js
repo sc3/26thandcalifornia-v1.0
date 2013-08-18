@@ -12,6 +12,7 @@ define(['underscore', 'backbone', 'models/BailStatsItemModel'], function(_, Back
       LB: null,
       LT: null,
       LW: null,
+      U: null,
       W: null,
       WH: null
     },
@@ -24,6 +25,7 @@ define(['underscore', 'backbone', 'models/BailStatsItemModel'], function(_, Back
       this.set('LB', new BailStatsItemModel());
       this.set('LW', new BailStatsItemModel());
       this.set('LT', new BailStatsItemModel());
+      this.set('U', new BailStatsItemModel());
       this.set('W', new BailStatsItemModel());
       this.set('WH', new BailStatsItemModel());
     },
@@ -31,7 +33,11 @@ define(['underscore', 'backbone', 'models/BailStatsItemModel'], function(_, Back
     add: function(prisoner) {
       var race = prisoner.get('race'),
           b_s_i_m = this.get(race);
-      b_s_i_m.add(prisoner);
+      if (b_s_i_m) {
+        b_s_i_m.add(prisoner);
+      } else {
+        alert("found prsoner with unknown race info " + race);
+      }
       return this;
     },
 
