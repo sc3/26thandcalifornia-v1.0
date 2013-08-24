@@ -57,7 +57,7 @@ function(Backbone, moment, SpinnerView, MenuView){
       var loaded = this.loadedViews,
           args = Array.prototype.slice.call(arguments),
           params = args.pop(),
-          view = (args.length === 1) ? args.pop() : 'home';
+          view = (args.length === 1) ? args.pop() : 'Home';
 
       // Set default params
       if (_.isEmpty(params)) {
