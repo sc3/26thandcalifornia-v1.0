@@ -69,11 +69,18 @@ function(Backbone, JailView, DailyPopulationCollection, template, Highcharts) {
           type: 'area',
           name: 'Total inmates',
           pointInterval: 24 * 3600 * 1000,
-          pointStart: Date.UTC(2013, 0, 1),
+          pointStart: this.get_start_date(),
           data: this.collection.pluck('total')
         }]
       });
-      console.log(this.collection.pluck('total'));
+    },
+    get_start_date: function() {
+        var options = this.collection.cached_data_options;
+        if (options['booking_date__gte']) {
+            var dateArray = options['booking_date__gte'].split("-");
+            return Date.UTC(parseInt(dateArray[0]), parseInt(dateArray[1])-1 , parseInt(dateArray[2]));
+        }
+        return Date.UTC(2013, 0, 1);
     }
   });
   return HomeView;
