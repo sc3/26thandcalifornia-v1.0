@@ -73,6 +73,7 @@ function(Backbone, JailView, DailyPopulationCollection, template, Highcharts) {
           data: this.collection.pluck('total')
         }]
       });
+      console.log(this.collection.pluck('total'));
     }
   });
   return HomeView;
