@@ -50,7 +50,7 @@ function(JailView, D3, InmateCollection, BookingsPerDayModel, bookings_per_day_s
 
         var bookings_per_day = new BookingsPerDayModel({inmates: this.collection}).counts();
 
-        var margin = {top: 20, right: 30, bottom: 30, left: 40},
+        var margin = {top: 20, right: 50, bottom: 30, left: 40},
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
@@ -72,14 +72,14 @@ function(JailView, D3, InmateCollection, BookingsPerDayModel, bookings_per_day_s
             .scale(y)
             .orient("left");
 
-        var line = d3.svg.line()
-            .x(function(d) {
-              return x(d.Day); })
-            .y(function(d) {
-              return y(d.T); });
+        var x_line_fn = function(d) { return x(d.Day); };
 
-        var bookings_per_day_info = _.map(bookings_per_day, function(booking_info) {
-          return booking_info; });
+        var bookings_per_day_info = _.map(bookings_per_day,
+                                          function(booking_info) { return booking_info; });
+
+        var field_names = ['T', 'F', 'M'];
+
+        var color = d3.scale.category10().domain(field_names);
 
         var svg = d3.select("#BookingsPerDay")
             .append("svg")
@@ -98,17 +98,39 @@ function(JailView, D3, InmateCollection, BookingsPerDayModel, bookings_per_day_s
             .attr("class", "y axis")
             .call(yAxis);
 
-        svg.append("path")
-            .attr("class", "line")
-            .attr("d", line);
+        _.map(field_names,
+              function(f_name) {
+                var line = d3.svg.line()
+                            .x(x_line_fn)
+                            .y(function(d) { return y(d[f_name]); }),
+                    last_booking = bookings_per_day_info[bookings_per_day_info.length - 1],
+                    map_to_names = {F: 'Females', M: 'Males', T: 'Totals'},
+                    cur_color = color(f_name);
+                svg.append("path")
+                    .attr("class", "line")
+                    .attr("d", line)
+                    .style("stroke", cur_color);
 
-        svg.selectAll(".dot")
-            .data(bookings_per_day_info)
-            .enter().append("circle")
-            .attr("class", "dot")
-            .attr("cx", line.x())
-            .attr("cy", line.y())
-            .attr("r", 1.2);
+                svg.selectAll('.dot_' + f_name)
+                    .data(bookings_per_day_info)
+                    .enter().append("circle")
+                    .attr("class", "dot")
+                    .attr("cx", line.x())
+                    .attr("cy", line.y())
+                    .attr("r", 1.2)
+                    .style("fill", function(d) { return cur_color; })
+                    .style("stroke", function(d) { return cur_color; });
+
+                svg.append("text")
+                    .attr("transform",
+                          function(d) {
+                            return "translate(" + x(last_booking.Day) + "," + y(last_booking[f_name]) + ")"; })
+                    .attr("x", 4)
+                    .attr("dy", ".35em")
+                    .text(function(d) { return map_to_names[f_name]; })
+                    .style("stroke", function(d) { return cur_color; });
+              }
+        );
       },
 
       get_start_end_dates: function(bookings_per_day) {
@@ -128,14 +150,8 @@ function(JailView, D3, InmateCollection, BookingsPerDayModel, bookings_per_day_s
       // calculates the maximum and values for y based on number of inmates booked per day
       // and scales it by +/- 50
       y_range: function(bookings_per_day) {
-        var y_range = [_.min(bookings_per_day, function(entry) { return entry.T; }).T,
-                       _.max(bookings_per_day, function(entry) { return entry.T; }).T],
-            y;
-        if ((y_range[0] - 49) < 0) {
-          y_range[0] = 0;
-        } else {
-          y_range[0] = Math.floor((y_range[0] - 1) / 50) * 50;
-        }
+        var y_range = [0,
+                       _.max(bookings_per_day, function(entry) { return entry.T; }).T];
         y_range[1] = Math.floor((y_range[1] + 51) / 50) * 50;
         return y_range;
       }
