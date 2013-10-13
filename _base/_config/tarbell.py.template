@@ -2,7 +2,7 @@
 NAME = "{{ name }}"
 
 # Descriptive title of project
-TITLE = "{{ title }}"
+TITLE = "{{ title|escape }}"
 
 {% if key %}SPREADSHEET_KEY = "{{ key }}"{% endif %}
 
