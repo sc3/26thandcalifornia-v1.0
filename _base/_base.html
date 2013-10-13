@@ -9,11 +9,13 @@
   {% endblock css %}
 
   {% block opengraph %} 
+  {#
   <meta property="og:url" content="{{ page_url("%s/%s.html" % (project, pagename)) }}" />
   <meta property="og:title" content="{{ title }}" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="{{ opengraph_image }}" />
   <meta property="og:description" content="{{ opengraph_description }}" />
+  #}
   {% endblock opengraph %}
 
   {% block shim %}

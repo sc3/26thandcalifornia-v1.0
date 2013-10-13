@@ -1,25 +1,50 @@
 {% extends "_base.html" %}
 
 {% block content %}
-<h1>{{ title }}</h1>
 
-<h2>{{ subhead }}</h2>
+{% if PREVIEW_SERVER %}
+<div class="alert alert-warning">
+  <p>Edit this <a href="https://docs.google.com/spreadsheet/ccc?key={{ SPREADSHEET_KEY }}" target="_blank">project's Google spreadsheet</a>.</p> 
 
-<p>{{ intro }}</p>
+  <p>You can modify this file by editing <code>{{ PROJECT_PATH }}/index.html</code>.</p>
 
-<blockquote>
-{{ quote|markdown }}
-</blockquote>
+  <p>This block will not publish when <code>tarbell publish</code> is invoked.</p>
+</div>
+{% endif %}
 
-<table class="table">
-<tbody>
-{% for row in data %}
-<tr>
-  <td>{{ row.name }}</td>
-  <td>{{ row.born }}</td>
-  <td>{{ row.died }}</td>
-</tr>
-{% endfor %}
-</tbody>
-</table>
+<div class="jumbotron">
+  <h1>{{ headline }}</h1>
+  <p>{{ intro }}</p>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <blockquote>
+    {{ quote|markdown }}
+    <small>{{ quote_author }}</small>
+
+    </blockquote>
+  </div>
+
+  <div class="col-md-4">
+    <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Born</th>
+        <th>Died</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for row in data %}
+    <tr>
+      <td>{{ row.name }}</td>
+      <td>{{ row.born|format_date }}</td>
+      <td>{{ row.died|format_date }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+  </div>
+</div>
 {% endblock content %}
