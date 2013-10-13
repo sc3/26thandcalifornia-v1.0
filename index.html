@@ -1,5 +1,25 @@
 {% extends "_base.html" %}
 
 {% block content %}
-<h1>HI</h1>
+<h1>{{ title }}</h1>
+
+<h2>{{ subhead }}</h2>
+
+<p>{{ intro }}</p>
+
+<blockquote>
+{{ quote|markdown }}
+</blockquote>
+
+<table class="table">
+<tbody>
+{% for row in data %}
+<tr>
+  <td>{{ row.name }}</td>
+  <td>{{ row.born }}</td>
+  <td>{{ row.died }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
 {% endblock content %}
