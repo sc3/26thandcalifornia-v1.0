@@ -15,8 +15,8 @@ TITLE = "{{ title|escape }}"
 
 # S3 bucket configuration
 {% if not s3_buckets %}#{% endif %}S3_BUCKETS = {
-{% if not s3_buckets or not s3_buckets.staging %}#{% endif %}    "staging": "{{ s3_buckets.staging }}{{ name }}/",
-{% if not s3_buckets or not s3_buckets.production %}#{% endif %}    "production": "{{ s3_buckets.production }}{{ name }}/",
+{% if s3_buckets and not s3_buckets.staging %}#{% endif %}    "staging": "{{ s3_buckets.staging }}{{ name }}/",
+{% if s3_buckets and not s3_buckets.production %}#{% endif %}    "production": "{{ s3_buckets.production }}{{ name }}/",
 {% if not s3_buckets %}#{% endif %}}
 
 # Repository this project is based on (used for updates)
