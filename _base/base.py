@@ -1,12 +1,14 @@
-from jinja2 import evalcontextfilter, Markup
-from time import time
-import re
+import datetime
 import dateutil.parser
 import dateutil.tz
-from flask import Blueprint
 import markdown as Markdown
 import os
+import re
+
+from flask import Blueprint
+from jinja2 import evalcontextfilter, Markup
 from scrubber import Scrubber
+from time import time
 
 NAME = "Basic Bootstrap 3 template"
 
@@ -66,14 +68,20 @@ def drop_cap(text):
 
 
 @blueprint.app_template_filter()
-def format_date(string, format='%b. %d, %Y', convert_tz=None):
-    parsed = dateutil.parser.parse(string)
+def format_date(value, format='%b. %d, %Y', convert_tz=None):
+    """
+    Format a date.
+    """
+    if isinstance(value, float) or isinstance(value, int):
+        seconds = (value - 25569) * 86400.0
+        parsed = datetime.datetime.utcfromtimestamp(seconds)
+    else:
+        parsed = dateutil.parser.parse(value)
     if convert_tz:
         local_zone = dateutil.tz.gettz(convert_tz)
         parsed = parsed.astimezone(tz=local_zone)
 
     return parsed.strftime(format)
-
 
 @blueprint.app_template_filter()
 def strong_to_b(value):
