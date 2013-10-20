@@ -1,54 +1,196 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>{% block title %}{{ title|striptags }}{% endblock title %}</title>
-  <link rel="shortcut icon" href="/favicon{% if preview_mode %}-preview{% endif %}.ico" />
+  <title>Chicago Tribune: Chicago breaking news, sports, business, entertainment, weather and traffic - Chicago Tribune</title>
 
-  {% block css %}
-  <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/css/bootstrap.min.css" />
-  {% endblock css %}
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <base target="_top" />
 
-  {% block opengraph %} 
-  {#
-  <meta property="og:url" content="{{ page_url("%s/%s.html" % (project, pagename)) }}" />
-  <meta property="og:title" content="{{ title }}" />
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="//s3.amazonaws.com/media.apps.chicagotribune.com/bootstrap/v2.3.2-ctredesign.3/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="//s3.amazonaws.com/media.apps.chicagotribune.com/bootstrap/v2.3.2-ctredesign.3/css/bootstrap-responsive.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="//s3.amazonaws.com/media.apps.chicagotribune.com/bootstrap/v2.3.2-ctredesign.3/js/bootstrap.min.js"></script>
+
+  <script src="//s3.amazonaws.com/media.apps.chicagotribune.com/modernizr/v2.6.2/modernizr-2.6.2.custom.min.js"></script>
+  <script src="//s3.amazonaws.com/media.apps.chicagotribune.com/webshims/v1.9.7/minified/polyfiller.js"></script>
+
+  <script type="text/javascript">
+      // Run the polyfiller (make old browsers support HTML5)
+      // Just need HTML5 forms support
+      $.webshims.polyfill('forms');
+  </script>
+
+  <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+  <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/core-min.js"></script>
+  <script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js"></script>
+  <script src="js/app.js"></script>
+
+  <meta name="description" content="">
+
+  <meta property="og:url" content="" />
+  <meta property="og:title" content="Chicago Tribune: Chicago breaking news, sports, business, entertainment, weather and traffic - Sponsored Content - Chicago Tribune" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="{{ opengraph_image }}" />
-  <meta property="og:description" content="{{ opengraph_description }}" />
-  #}
-  {% endblock opengraph %}
+  <meta property="og:image" content="" />
+  <meta property="og:description" content="" />
 
-  {% block shim %}
-  <!--[if lt IE 9]>
-  <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-  {% endblock %}
+  <script type="text/javascript" src="//cdn.gigya.com/js/socialize.js?apiKey=2_4_F4IdtCdvuR2rCu5QTvu9iyF7shgNflXt9OC9CZCGkdNBZxTv6bQxpYge4Mlva-"></script>
 
-  {% block meta %}
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  {% endblock meta %}
+  <style type="text/css">
+    .navbar {
+        position: fixed;
+        padding: 0px;
+        margin: 0px;
+    }
+    
+    body {
+      padding-top:40px;
+    }
+  </style>
+
 </head>
-<body{% block bodyattrs %} class="{{ pagename }}"{% endblock bodyattrs %}>
 
-{% block nav %}
-  {% include "_nav.html" %}
-{% endblock nav %}
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <ul class="nav nav-compact">
+          <li>
+            <a href="#" class="dropdown-toggle"
+                data-toggle="dropdown"><i class="cticon-menu"></i><span class="hidden-phone">&nbsp;Sections</span></a>
+            <ul class="mobile-menu dropdown-menu" role="menu">
+              <li>
+                <a href="http://www.chicagotribune.com">Home</a>
+              </li>
+              <li>
+                <a href="http://www.chicagotribune.com/news/">News</a>
+              </li>
+              <li>
+                <a href="http://www.chicagotribune.com/business/">Business</a>
+              </li>
+              <li>
+                <a href="http://www.chicagotribune.com/sports/">Sports</a>
+              </li>
+              <li>
+                <a href="http://www.chicagotribune.com/entertainment/">A&amp;E</a>
+              </li>
+              <li>
+                <a href="http://www.chicagotribune.com/features/">Lifestyles</a>
+              </li>
+              <li>
+                <a href="http://www.chicagotribune.com/news/opinion/">Opinion</a>
+              </li>
+              <li>
+                <a href="http://www.chicagotribune.com/classified/realestate/">Real Estate</a>
+              </li>
+              <li>
+                <a href="http://www.chicagotribune.com/classified/automotive/">Cars</a>
+              </li>
+              <li>
+                <a href="http://www.chicagotribune.com/classified/jobs/">Jobs</a>
+              </li></ul>
+          </li>
+        </ul>
 
-{% block container %}
-<div class="container">
-{% block content %}{% endblock content %}
-</div>
-{% endblock container %}
+        <a class="brand" href="http://www.chicagotribune.com"><img class="ct-logo"
+          src="http://media.apps.chicagotribune.com/images/logo_inverse.png"
+          title="Chicago Tribune" alt="Chicago Tribune"/></a>
 
-{% block footer %}
-  {% include "_footer.html" %}
-{% endblock footer %}
+        <ul class="nav nav-full">
+          <li>
+            <a href="http://www.chicagotribune.com">Home</a>
+          </li>
+          <li>
+            <a href="http://www.chicagotribune.com/news/">News</a>
+          </li>
+          <li>
+            <a href="http://www.chicagotribune.com/business/">Business</a>
+          </li>
+          <li>
+            <a href="http://www.chicagotribune.com/sports/">Sports</a>
+          </li>
+          <li>
+            <a href="http://www.chicagotribune.com/entertainment/">A&amp;E</a>
+          </li>
+          <li>
+            <a href="http://www.chicagotribune.com/features/">Lifestyles</a>
+          </li>
+          <li>
+            <a href="http://www.chicagotribune.com/news/opinion/">Opinion</a>
+          </li>
+          <li>
+            <a href="http://www.chicagotribune.com/classified/realestate/">Real Estate</a>
+          </li>
+          <li>
+            <a href="http://www.chicagotribune.com/classified/automotive/">Cars</a>
+          </li>
+          <li>
+            <a href="http://www.chicagotribune.com/classified/jobs/">Jobs</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+    <div class="container-fluid">
+      <div class="page-header">
+        <button id="toggle" class="btn btn-primary">Encrypt</button>
+      </div>
 
-{% block scripts %}
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/js/bootstrap.min.js"></script>
-{% endblock scripts %}
+      {% block content %}
+      {% endblock %}
+
+      <footer class="page-footer">
+        <ul class="nav nav-pills">
+          <li><a href="https://members.chicagotribune.com/">Subscription</a></li>
+          <li><a href="http://www.chicagotribune.com/services/site/map">Site index</a></li>
+          <li><a href="http://www.chicagotribune.com/services/site/connect" class="mainNav" target="_parent">Contact us</a></li>
+          <li><a href="http://privacy.tribune.com">Privacy Policy</a></li>
+        </ul>
+        <ul class="nav nav-pills">
+          <li><a href="http://apps.chicagotribune.com/">Crafted by the News Apps team</a></li>
+          <li><a href="http://www.tribune.com/">A Tribune Newspaper website</a></li>
+        </ul>
+      </footer>
+    </div>
+
+    <!-- Chartbeat -->
+    <script type="text/javascript">
+        var _sf_async_config={uid:3096,domain:"apps.chicagotribune.com"};
+        (function(){
+          function loadChartbeat() {
+            window._sf_endpt=(new Date()).getTime();
+            var e = document.createElement('script');
+            e.setAttribute('language', 'javascript');
+            e.setAttribute('type', 'text/javascript');
+            e.setAttribute('src',
+               (("https:" == document.location.protocol) ? "https://a248.e.akamai.net/chartbeat.download.akamai.com/102508/" : "http://static.chartbeat.com/") +
+               "js/chartbeat.js");
+            document.body.appendChild(e);
+          }
+          var oldonload = window.onload;
+          window.onload = (typeof window.onload != 'function') ?
+             loadChartbeat : function() { oldonload(); loadChartbeat(); };
+        })();
+    </script>
+
+    <!-- Google Analytics -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-9792248-1']);
+      _gaq.push(['_trackPageview'])
+      _gaq.push(['_setDomainName', 'apps.chicagotribune.com']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
 
 </body>
-</html>
+

@@ -1,50 +1,70 @@
 {% extends "_base.html" %}
 
 {% block content %}
-
-{% if PREVIEW_SERVER %}
-<div class="alert alert-warning">
-  <p>Edit this <a href="https://docs.google.com/spreadsheet/ccc?key={{ SPREADSHEET_KEY }}" target="_blank">project's Google spreadsheet</a>.</p> 
-
-  <p>You can modify this file by editing <code>{{ PROJECT_PATH }}/index.html</code>.</p>
-
-  <p>This block will not publish when <code>tarbell publish</code> is invoked.</p>
-</div>
-{% endif %}
-
-<div class="jumbotron">
-  <h1>{{ headline }}</h1>
-  <p>{{ intro }}</p>
-</div>
-
-<div class="row">
-  <div class="col-md-8">
-    <blockquote>
-    {{ quote|markdown }}
-    <small>{{ quote_author }}</small>
-
-    </blockquote>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span4 offset4">
+      <h1><span id="header-text" class="crypt-text">Exploring Encryption</span></h1>
+    </div>
   </div>
 
-  <div class="col-md-4">
-    <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Born</th>
-        <th>Died</th>
-      </tr>
-    </thead>
-    <tbody>
-    {% for row in data %}
-    <tr>
-      <td>{{ row.name }}</td>
-      <td>{{ row.born|format_date }}</td>
-      <td>{{ row.died|format_date }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-    </table>
+  <div class="row-fluid">
+    <div class="span6 offset3 lead-in">
+      <h4 id="intro1" class="crypt-text">How to guard your privacy against the NSA, GCHQ and other acronyms you've never even heard of.</h4>
+    </div>
   </div>
-</div>
+
+
+
+
+<article class="trib-article">
+  <div>
+    <p class="trib-byline"><span id="byline" class="caps crypt-text">By Abraham Epton</span>
+      <a href="https://twitter.com/aepton" class="twitter-follow-button crypt-text" data-show-count="false" id="twitter">Follow @aepton</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+      <br>
+      <time id="time" class="crypt-text">October 20, 2013</time>
+    </p>
+  </div>
+
+  <p id="body1" class="crypt-text">If you're worried about whether the government can read your emails, I have good news and bad news. The bad news is that a determined, well-resourced attacker will almost always find a way. But the good news is that there are basic steps you can take to protect your privacy, and they most likely will make a difference. I asked some of the leading figures in the unclassified cryptography community about what they do, personally, to safeguard their most important communications.</p>
+
+  <p id="body2" class="crypt-text">The most important thing they stressed was that the solution to government espionage against the citizenry is not technical, but political. Governments with nearly unlimited resources will always have some ability to spy on individual people if they so desire. It is therefore incumbent on us to think seriously about what level of government surveillance we are comfortable with, and to push back against efforts we consider overly intrusive.</p>
+
+  <div class="pull-out">
+    <p>
+      <span id="schneier" class="crypt-text">I think the average person needs to understand that this is a political problem, that the surveillance state has gotten too powerful and needs to be reined in.  That this is not a matter of spying on the bad guys; it's a matter of spying on everyone, and making us all less safe.</span>
+      <br>
+      <strong><small id="schneier-name" class="crypt-text">Bruce Schneier, author of Applied Cryptography, technical consultant during Edward Snowden document analysis, all-around cryptobadass</small></strong>
+    </p>
+  </div>
+
+  <p id="body3" class="crypt-text">One way to regain some control over our own security is to personally encrypt our most sensitive data. This is more effective an approach than you might think: grounded in solid mathematical principles, open-source encryption tools available today make it effectively impossible for even the most sophisticated attacker to decrypt a message. This is because they rely on intrinsic properties of very large numbers that are fairly mind-blowing.</p>
+
+  <p id="body4" class="crypt-text">For instance, as Bruce Schneier demonstrated in Applied Cryptography, if you were to hook up a decryption computer to a supernova and convert all of the energy released by that stellar explosion into attempts to decode a secret with brute force, you would eventually be able to guess any 219-bit password. Typical strong passwords today are 256 bits, meaning you would need one supernova to get to 219 bits; another one to get to 220 bits; another one to get to 221 bits; and eventually, 38 supernovae just to guess one password.</p>
+
+  <h2 id="heading1" class="crypt-text">How to encrypt your emails</h2>
+  <p id="body5" class="crypt-text">Explain public-key crypto, link to easy-to-use crypto tools</p>
+
+  <h2 id="heading2" class="crypt-text">How to pick and manage strong passwords</h2>
+  <p id="body6" class="crypt-text">Explain why they're important, explain easy techniques to do it via memory, link to password managers</p>
+
+  <h2 id="heading3" class="crypt-text">How to become anonymous</h2>
+  <p id="body7" class="crypt-text">Explain how Tor works, what it's good/not good for (talk about NSA powerpoint about how hard it is to break), how to easily access it, what a proxy is and how to use it</p>
+
+  <h2 id="heading4" class="crypt-text">How to minimize your exposure</h2>
+  <p id="body8" class="crypt-text">Why staying patched/up-to-date is important, what it won't protect against, what a firewall is and how to enable it in OS X and Windows, link to free anti-virus and anti-malware stuff, more explanation of what NSA seems to be able to do and what they seem not to be able to do</p>
+
+  <div class="pull-out">
+    <p>
+      <span id="weis" class="crypt-text">The recent revelations about NSA capabilities have not changed my assessment of best practices for communication security. So far, most of the allegations are about circumventing cryptosystems through people or processes, not breaking the underlying algorithms. That could change with more revelations, but as of now, nothing has been a big surprise. One exception is that NIST standards, particularly for elliptic curve cryptography, are under more scrutiny from the crypto community.</span>
+      <br>
+      <strong><small id="weis-name" class="crypt-text">Steve Weis, creator of Google's KeyCzar and 2-step verification and co-founder, PrivateCore</small></strong>
+    </p>
+  </div>
+
+  <h2 id="heading5" class="crypt-text">How to think about threat modeling</h2>
+  <p id="body9" class="crypt-text">What threat modeling is, why it's important, some sample scenarios</p>
+</article>
+
 {% endblock content %}

@@ -1,13 +1,20 @@
-/* Styles for {{ project_name }} */
+.crypt-text {
+  word-wrap: break-word;
+}
 
-/* Ida Tarbell quote */
-#tarbell-quote { font-style: italic; margin: 10px 0; }
-
-/* Spinner */
-#spinner { height: 100px; }
+.trib-article .pull-out {
+  width: 60%;
+}
 
 /* Responsive rule */
 @media all and (max-width: 979px) {
-   #tarbell-quote { float: left; max-width: 300px; margin-right: 20px; }
-   #tarbell-image { width: 150px; } 
+  .trib-article .pull-out {
+    width: 63%;
+  }
+}
+
+@media all and (max-width: 481px) {
+  .trib-article .pull-out {
+    width: 87%;
+  }
 }
