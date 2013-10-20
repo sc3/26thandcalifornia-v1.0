@@ -6,6 +6,12 @@
   width: 60%;
 }
 
+.navbar .nav>li>a {
+  max-width: 72px;
+  height: 1em;
+  overflow: hidden;
+}
+
 /* Responsive rule */
 @media all and (max-width: 979px) {
   .trib-article .pull-out {
