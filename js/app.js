@@ -11,8 +11,8 @@ $(document).ready(function() {
   $('.encrypt').each(function() {
     $('#' + this.id + '_explainer').hide();
   });
-  glob_crypt_status = true;
   $('.encrypt-options').hide();
+  glob_crypt_status = true;
   setTimeout(function() {
     $('#twitter').hide();
     var header = $('#header-text').text();
@@ -42,10 +42,10 @@ $(document).ready(function() {
       toggleCryptElement(this.id);
     });
     glob_crypt_status = true;
-    $('#decrypt').show();
     $('.encrypt-options').hide();
     setTimeout(function() {
       $('#twitter').hide();
+      $('#decrypt').show();
       var header = $('#header-text').text();
       if (header.length > 45) {
         $('#header-text').html(

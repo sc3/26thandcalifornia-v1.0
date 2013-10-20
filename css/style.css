@@ -30,6 +30,10 @@
   display: none;
 }
 
+#decrypt {
+  text-align: center;
+}
+
 /* Responsive rule */
 @media all and (max-width: 979px) {
   .trib-article .pull-out {
