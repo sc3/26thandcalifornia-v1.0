@@ -12,7 +12,7 @@ $(document).ready(function() {
     $('#' + this.id + '_explainer').hide();
   });
   glob_crypt_status = true;
-  $('#encrypt-options').hide();
+  $('.encrypt-options').hide();
   setTimeout(function() {
     $('#twitter').hide();
   }, 500);
@@ -38,7 +38,7 @@ $(document).ready(function() {
     });
     glob_crypt_status = true;
     $('#decrypt').show();
-    $('#encrypt-options').hide();
+    $('.encrypt-options').hide();
     setTimeout(function() {
       $('#twitter').hide();
     }, 500);
@@ -49,7 +49,7 @@ $(document).ready(function() {
       toggleCryptElement(this.id);
     });
     $('#twitter').show();
-    $('#encrypt-options').show();
+    $('.encrypt-options').show();
     $('#decrypt').hide();
   });
 

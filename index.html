@@ -10,7 +10,7 @@
 
 <article class="trib-article">
   <div>
-    <p class="trib-byline"><span id="byline" class="caps crypt-text">By Abraham Epton</span>
+    <p class="trib-byline"><span id="byline" class="caps crypt-text">By Abraham Epton, News Applications developer</span>
       <a href="https://twitter.com/aepton" class="twitter-follow-button crypt-text" data-show-count="false" id="twitter">Follow @aepton</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
       <br>
@@ -18,38 +18,50 @@
     </p>
   </div>
 
-  <div class="trib-media flush">
+  <div class="trib-media">
     <figure>
       <button id="decrypt" class="btn btn-primary">Decrypt article</button>
-      <div id="encrypt-options">
-        <p>Encrypt article using</p>
+      <div class="encrypt-options">
+        <p><strong>Encrypt article using</strong></p>
         <div class="btn-group">
-          <button class="btn btn-success encrypt" id="aes">AES</button>
-          <button class="btn btn-warning encrypt" id="des">DES</button>
+          <button class="btn btn-warning encrypt" id="aes">AES</button>
+          <button class="btn btn-danger encrypt" id="des">DES</button>
           <button class="btn btn-success encrypt" id="3des">Triple DES</button>
           <button class="btn btn-success encrypt" id="rabbit">Rabbit</button>
-          <button class="btn btn-warning encrypt" id="rc4">RC4</button>
-          <button class="btn btn-success encrypt" id="rc4drop">RC4 Drop</button>
+          <button class="btn btn-danger encrypt" id="rc4">RC4</button>
         </div>
       </div>
       <div id="aes_explainer" class="explainer">
-        <p>History, explanation, uses of AES</p>
+        <p><strong>Created</strong>&nbsp;National Institute of Standards and Technology, 2001, based on Rijndael cipher</p>
+        <p><strong>Key length</strong>&nbsp;128, 192 and 256 bits</p>
+        <p><strong>Used in</strong>&nbsp;WinZip, Windows 2000 and later file-system encryption, FileVault disk encryption on OS X, OpenSSL</p>
+        <p><strong>Status</strong>&nbsp;Under suspicion of weakening by NSA?</p>
       </div>
       <div id="des_explainer" class="explainer">
-        <p>History, explanation, uses of DES</p>
+        <p><strong>Created</strong>&nbsp;IBM, early 1970s</p>
+        <p><strong>Key length</strong>&nbsp;56 bits</p>
+        <p><strong>Used in</strong>&nbsp;Not currently in use, but catalyzed academic, non-military study of cryptography</p>
+        <p><strong>Status</strong>&nbsp;Known to be insecure due to small key length</p>
       </div>
       <div id="3des_explainer" class="explainer">
-        <p>History, explanation, uses of Triple DES</p>
+        <p><strong>Created</strong>&nbsp;American National Standards Institute and other government agencies, 1998 or earlier, by applying DES 3 times on each block of a message</p>
+        <p><strong>Key length</strong>&nbsp;56, 112 or 168 bits</p>
+        <p><strong>Used in</strong>&nbsp;Electronic payments including MasterCard and Visa; Microsoft OneNote and Outlook 2007</p>
+        <p><strong>Status</strong>&nbsp;National Institute of Standards and Technology considers it secure through 2030</p>
       </div>
       <div id="rabbit_explainer" class="explainer">
-        <p>History, explanation, uses of Rabbit</p>
+        <p><strong>Created</strong>&nbsp;Cryptico A/S, Copenhagen, 2003</p>
+        <p><strong>Key length</strong>&nbsp;128 bits</p>
+        <p><strong>Used in</strong>&nbsp;Wireless networks, open-source SSL/TLS implementations</p>
+        <p><strong>Status</strong>&nbsp;No known significant vulnerabilities</p>
       </div>
       <div id="rc4_explainer" class="explainer">
-        <p>History, explanation, uses of RC4</p>
+        <p><strong>Created</strong>&nbsp;Ron Rivest, RSA Security, 1987</p>
+        <p><strong>Key length</strong>&nbsp;Variable, typically between 40 and 256 bits</p>
+        <p><strong>Used in</strong>&nbsp;WEP and WPA WiFi security, Skype (modified form), PDF</p>
+        <p><strong>Status</strong>&nbsp;Known vulnerability if portion of output isn't discarded, other implementation flaws can render it very insecure</p>
       </div>
-      <div id="rc4drop_explainer" class="explainer">
-        <p>History, explanation, uses of RC4 Drop</p>
-      </div>
+      <p id="implementation" class="encrypt-options"><small>Implementation by <a href="https://code.google.com/p/crypto-js">CryptoJS</a></small></p>
     </figure>
   </div>
 
@@ -70,7 +82,14 @@
   <p id="body4" class="crypt-text">For instance, as Bruce Schneier demonstrated in Applied Cryptography, if you were to hook up a decryption computer to a supernova and convert all of the energy released by that stellar explosion into attempts to decode a secret with brute force, you would eventually be able to guess any 219-bit password. Typical strong passwords today are 256 bits, meaning you would need one supernova to get to 219 bits; another one to get to 220 bits; another one to get to 221 bits; and eventually, 38 supernovae just to guess one password.</p>
 
   <h2 id="heading2" class="crypt-text">How to pick and manage strong passwords</h2>
-  <p id="body6" class="crypt-text">Explain why they're important, explain easy techniques to do it via memory, link to password managers</p>
+
+  <p id="body10" class="crypt-text">No encryption scheme is going to protect your data if the password you use is "password". Dictionary-based attacks, where thousands of the most common passwords are guessed every second, can make quick work of short, insecure keys.</p>
+
+  <p id="body11" class="crypt-text">If your password isn't long enough, even perfectly randomly-generated passwords are vulnerable. In late 2012, a single system employing just 25 graphics cards pulled out of a consumer desktop PC was able to guess over 350 billion Windows passwords a second. That's enough to try every single possible 8-character password (consisting of letters, numbers and 33 different symbols) in under six hours.</p>
+
+  <p id="body12" class="crypt-text">So long passwords are ideal, but they're pretty tough to remember. It's hard enough to recall something like Htu67%c* - it's totally unrealistic to expect people to remember something twice as long and just that arbitrary. Happily, with a long enough phrase you can sacrifice some randomness and make a secure password easy to remember. Randall Monroe proposed one technique in his webcomic, xkcd: just pick four random words and use them as your password. "Join symphony forget blankets" is actually a pretty secure password, and much easier to remember than a much less secure, randomly-generated string like "1&hT^s5%".</p>
+
+  <p id="body13" class="crypt-text">Add: password management services</p>
 
   <div class="pull-out">
     <p>

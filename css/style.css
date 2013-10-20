@@ -21,6 +21,11 @@
   margin-top: 10px;
 }
 
+#implementation {
+  margin-top: 20px;
+  margin-bottom: -10px;
+}
+
 /* Responsive rule */
 @media all and (max-width: 979px) {
   .trib-article .pull-out {
