@@ -15,6 +15,11 @@ $(document).ready(function() {
   $('.encrypt-options').hide();
   setTimeout(function() {
     $('#twitter').hide();
+    var header = $('#header-text').text();
+    if (header.length > 45) {
+      $('#header-text').html(
+        header.substr(0, 45) + '<span class="hide-text">' + header.substr(45) + '</span>');
+    }
   }, 500);
 
   /*$('#toggle').click(function() {
@@ -41,6 +46,11 @@ $(document).ready(function() {
     $('.encrypt-options').hide();
     setTimeout(function() {
       $('#twitter').hide();
+      var header = $('#header-text').text();
+      if (header.length > 45) {
+        $('#header-text').html(
+          header.substr(0, 45) + '<span class="hide-text">' + header.substr(45) + '</span>');
+      }
     }, 500);
   });
 

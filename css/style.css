@@ -26,6 +26,10 @@
   margin-bottom: -10px;
 }
 
+.hide-text {
+  display: none;
+}
+
 /* Responsive rule */
 @media all and (max-width: 979px) {
   .trib-article .pull-out {
