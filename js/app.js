@@ -35,13 +35,11 @@ function toggleCryptElement(el_id) {
   }
   if (!crypt_status.hasOwnProperty(el_id) || crypt_status[el_id] == false) {
     in_process = true;
-    var text = CryptoJS.AES.encrypt($("#" + el_id).text(), crypt_key).toString();
     $("#" + el_id).text(CryptoJS.AES.encrypt($("#" + el_id).text(), crypt_key).toString());
     crypt_status[el_id] = true;
     in_process = false;
   } else if (crypt_status[el_id] == true) {
     in_process = true;
-    var text = CryptoJS.AES.decrypt($("#" + el_id).text(), crypt_key).toString();
     $("#" + el_id).text(CryptoJS.AES.decrypt($("#" + el_id).text(), crypt_key).toString(CryptoJS.enc.Utf8));
     crypt_status[el_id] = false;
     in_process = false;
