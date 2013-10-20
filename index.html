@@ -3,19 +3,10 @@
 {% block content %}
 <div class="container-fluid">
   <div class="row-fluid">
-    <div class="span4 offset4">
-      <h1><span id="header-text" class="crypt-text">Exploring Encryption</span></h1>
-    </div>
-  </div>
-
-  <div class="row-fluid">
     <div class="span6 offset3 lead-in">
       <h4 id="intro1" class="crypt-text">How to protect your privacy against the NSA, GCHQ and other acronyms you've never even heard of.</h4>
     </div>
   </div>
-
-
-
 
 <article class="trib-article">
   <div>
@@ -25,6 +16,41 @@
       <br>
       <time id="time" class="crypt-text">October 20, 2013</time>
     </p>
+  </div>
+
+  <div class="trib-media flush">
+    <figure>
+      <button id="decrypt" class="btn btn-primary">Decrypt article</button>
+      <div id="encrypt-options">
+        <p>Encrypt article using</p>
+        <div class="btn-group">
+          <button class="btn btn-success encrypt" id="aes">AES</button>
+          <button class="btn btn-warning encrypt" id="des">DES</button>
+          <button class="btn btn-success encrypt" id="3des">Triple DES</button>
+          <button class="btn btn-success encrypt" id="rabbit">Rabbit</button>
+          <button class="btn btn-warning encrypt" id="rc4">RC4</button>
+          <button class="btn btn-success encrypt" id="rc4drop">RC4 Drop</button>
+        </div>
+      </div>
+      <div id="aes_explainer" class="explainer">
+        <p>History, explanation, uses of AES</p>
+      </div>
+      <div id="des_explainer" class="explainer">
+        <p>History, explanation, uses of DES</p>
+      </div>
+      <div id="3des_explainer" class="explainer">
+        <p>History, explanation, uses of Triple DES</p>
+      </div>
+      <div id="rabbit_explainer" class="explainer">
+        <p>History, explanation, uses of Rabbit</p>
+      </div>
+      <div id="rc4_explainer" class="explainer">
+        <p>History, explanation, uses of RC4</p>
+      </div>
+      <div id="rc4drop_explainer" class="explainer">
+        <p>History, explanation, uses of RC4 Drop</p>
+      </div>
+    </figure>
   </div>
 
   <p id="body1" class="crypt-text">If you're worried about whether the government can read your emails, I have good news and bad news. The bad news is that a determined, well-resourced attacker will almost always find a way. But the good news is that there are basic steps you can take to protect your privacy, and they most likely will make a difference. I asked some of the leading figures in the unclassified cryptography community about what they do, personally, to safeguard their most important communications.</p>

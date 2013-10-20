@@ -12,6 +12,15 @@
   overflow: hidden;
 }
 
+#header-text {
+  max-width: 25em;
+  overflow: hidden;
+}
+
+.explainer {
+  margin-top: 10px;
+}
+
 /* Responsive rule */
 @media all and (max-width: 979px) {
   .trib-article .pull-out {
