@@ -88,7 +88,7 @@ function toggleCryptElement(el_id) {
     in_process = true;
     $("#" + el_id).fadeOut(function() {
       $("#" + el_id).text(encryptText($("#" + el_id).text()));
-      $("#" + el_id).fadeIn();
+      $("#" + el_id).show();
     });
     crypt_status[el_id] = true;
     in_process = false;
@@ -96,7 +96,7 @@ function toggleCryptElement(el_id) {
     in_process = true;
     $("#" + el_id).fadeOut(function() {
       $("#" + el_id).text(decryptText($("#" + el_id).text()));
-      $("#" + el_id).fadeIn();
+      $("#" + el_id).show();
     });
     crypt_status[el_id] = false;
     in_process = false;
