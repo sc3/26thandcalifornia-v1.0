@@ -3,6 +3,7 @@ var crypt_status = {};
 var glob_crypt_status = false;
 var in_process = false;
 var last_used_scheme = 'aes';
+var last_hovered_scheme = '';
 
 $(document).ready(function() {
   $('.crypt-text').each(function() {
@@ -61,16 +62,14 @@ $(document).ready(function() {
     $('#twitter').show();
     $('.encrypt-options').show();
     $('#decrypt').hide();
+    $('#' + last_used_scheme + '_explainer').show();
   });
 
   $('.encrypt').mouseover(function() {
+    $('#' + last_hovered_scheme + '_explainer').hide();
     $('#' + this.id + '_explainer').show();
+    last_hovered_scheme = this.id;
   });
-
-  $('.encrypt').mouseout(function() {
-    $('#' + this.id + '_explainer').hide();
-  });
-
 
 });
 
