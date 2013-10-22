@@ -3,7 +3,7 @@ var crypt_status = {};
 var glob_crypt_status = false;
 var in_process = false;
 var last_used_scheme = 'aes';
-var last_hovered_scheme = '';
+var last_hovered_scheme = 'aes';
 
 $(document).ready(function() {
   $('.crypt-text').each(function() {

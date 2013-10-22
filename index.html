@@ -66,7 +66,7 @@
         <p><strong>Used in</strong>&nbsp;WEP and WPA WiFi security, Skype (modified form), PDF</p>
         <p><strong>Status</strong>&nbsp;Known vulnerability if portion of output isn't discarded, other implementation flaws can render it very insecure</p>
       </div>
-      <p id="implementation"><small>Implementation by <a href="https://code.google.com/p/crypto-js">CryptoJS</a></small></p>
+      <p class="intercred"><small>Implementation by <a href="https://code.google.com/p/crypto-js">CryptoJS</a></small></p>
     </figure>
   </div>
 
@@ -88,7 +88,23 @@
 
   <h2 id="heading2" class="crypt-text">How to pick and manage strong passwords</h2>
 
-  <p id="bodynote" class="crypt-text">Add password checker interactive</p>
+  <div class="trib-media encrypt-options">
+    <figure>
+      <div>
+        <strong><p id="passcheck1" class="crypt-text">How many supernova would it take to guess your password?</p></strong>
+
+        <p id="passcheck2" class="crypt-text">In Applied Cryptography, Bruce Schneier described an "ideal" computer - one that operated at the extreme physical limits of computation, using the minimum amount of energy the universe could possibly allow to represent a single bit. This computer would use the fastest technique allowed by the laws of the universe to guess passwords.</p>
+
+        <p id="passcheck3" class="crypt-text">How long do you think it would take such a computer to brute-force your password? How about merely the world's current (publicly-known) fastest supercomputer, the Tianhe-2 (http://www.top500.org/system/177999)?</p>
+
+        <input type="password" id="passcracktext" placeholder="Enter a password similar to your own">
+        <br>
+        <button type="submit" class="btn">Crack this password</button>
+        <a href="https://www.schneier.com/blog/archives/2009/09/the_doghouse_cr.html"><p class="intercred"><small>Calculations based on Bruce Schneier, Applied Cryptography, 1996</small></p></a>
+      </div>
+    </figure>
+  </div>
+
   <p id="body10" class="crypt-text">No encryption scheme is going to protect your data if the password you use is "password". Dictionary-based attacks, where thousands of the most common passwords are guessed every second, can make quick work of short, insecure keys.</p>
 
   <p><span id="body11a" class="crypt-text">If your password isn't long enough, even perfectly randomly-generated passwords are vulnerable. In late 2012, </span><a id="body11b" class="crypt-text" href="http://arstechnica.com/security/2012/12/25-gpu-cluster-cracks-every-standard-windows-password-in-6-hours/">a single system employing just 25 graphics cards</a><span id="body11c" class="crypt-text"> pulled out of a consumer desktop PC was able to guess over 350 billion Windows passwords a second. That's enough to try every single possible 8-character password (consisting of letters, numbers and 33 different symbols) in under six hours. It would take that same machine over 239 trillion years to guess all 16-character passwords using the same set of letters, numbers and symbols.</span></p>
@@ -107,8 +123,16 @@
     </p>
   </div>
 
-  <h2 id="heading1" class="crypt-text">How to encrypt your emails</h2>
-  <p id="body5" class="crypt-text">Explain public-key crypto, link to easy-to-use crypto tools</p>
+  <h2 id="heading1" class="crypt-text">How to encrypt your emails (and other stuff)</h2>
+  <div class="trib-media encrypt-options">
+    <figure>
+      <div>
+        <p id="bodynote" class="crypt-text">Add interactive explaining how public-key cryptography works, since I've always wondered/not quite felt like I understood it I bet others have too</p>
+      </div>
+    </figure>
+  </div>
+
+  <p id="body5" class="crypt-text">Explain public-key crypto, link to easy-to-use crypto tools, explain whole-disk encryption and what its weak points are (crowbar, endpoints)</p>
 
   <div class="pull-out">
     <p>
@@ -121,6 +145,14 @@
   
 
   <h2 id="heading3" class="crypt-text">How to become anonymous</h2>
+  <div class="trib-media encrypt-options">
+    <figure>
+      <div>
+        <p id="bodynote" class="crypt-text">Add interactive explaining how Tor works (and how it's different from a VPN and a proxy), maybe make one comparing Tor to steganography with an example of the latter - both are all about hiding signal in noise</p>
+      </div>
+    </figure>
+  </div>
+
   <p id="body7" class="crypt-text">Explain how Tor works, what it's good/not good for (talk about NSA powerpoint about how hard it is to break), how to easily access it, what a proxy is and how to use it</p>
 
   <div class="pull-out">
