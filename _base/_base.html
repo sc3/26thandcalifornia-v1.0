@@ -6,16 +6,15 @@
 
   {% block css %}
   <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.0.2/css/font-awesome.min.css" />
   {% endblock css %}
 
   {% block opengraph %} 
-  {#
-  <meta property="og:url" content="{{ page_url("%s/%s.html" % (project, pagename)) }}" />
+  <meta property="og:url" content="{{ ROOT_URL }}/{{ PATH }}" />
   <meta property="og:title" content="{{ title }}" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="{{ opengraph_image }}" />
   <meta property="og:description" content="{{ opengraph_description }}" />
-  #}
   {% endblock opengraph %}
 
   {% block shim %}
@@ -34,6 +33,18 @@
 {% block nav %}
   {% include "_nav.html" %}
 {% endblock nav %}
+
+{% block preview %}
+{% if PREVIEW_SERVER %}
+<div class="alert alert-warning">
+  <p>Edit this <a href="https://docs.google.com/spreadsheet/ccc?key={{ SPREADSHEET_KEY }}" target="_blank">project's Google spreadsheet</a>.</p> 
+
+  <p>You can modify this file by editing <code>{{ PROJECT_PATH }}/index.html</code>.</p>
+
+  <p>This block will not publish when <code>tarbell publish</code> is invoked.</p>
+</div>
+{% endif %}
+{% endblock preview %}
 
 {% block container %}
 <div class="container">

@@ -2,16 +2,6 @@
 
 {% block content %}
 
-{% if PREVIEW_SERVER %}
-<div class="alert alert-warning">
-  <p>Edit this <a href="https://docs.google.com/spreadsheet/ccc?key={{ SPREADSHEET_KEY }}" target="_blank">project's Google spreadsheet</a>.</p> 
-
-  <p>You can modify this file by editing <code>{{ PROJECT_PATH }}/index.html</code>.</p>
-
-  <p>This block will not publish when <code>tarbell publish</code> is invoked.</p>
-</div>
-{% endif %}
-
 <div class="jumbotron">
   <h1>{{ headline }}</h1>
   <p>{{ intro }}</p>

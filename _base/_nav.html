@@ -33,9 +33,38 @@
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="docs.html"><strong>Get help!</strong></a></li>
+
+      <ul id="social-menu" class="nav navbar-nav navbar-right">
+          {% if opengraph_description and opengraph_image %}
+          <li>
+              <a target="_blank" href="https://www.facebook.com/sharer.php?u={{ ROOT_URL }}/{{ PATH }}&t={{ title|urlencode }}">
+                  <i class="icon-white icon-facebook-sign"></i> <span class="hidden">Facebook</span>
+              </a>
+          </li>
+          {% endif %}
+          {% if twitter_description %}
+          <li>
+              <a target="_blank" href="https://twitter.com/share?url={{ ROOT_URL }}/{{ PATH }}&text={{ twitter_description|urlencode }}">
+                  <i class="icon-white icon-twitter-sign"></i> <span class="hidden">Twitter</span>
+              </a>
+          </li>
+          {% endif %}
+          {% if opengraph_description and opengraph_image %}
+          <li>
+              <a target="_blank" href="https://plus.google.com/share?url={{ ROOT_URL }}/{{ PATH }}">
+                  <i class="icon-white icon-google-plus-sign"></i> <span class="hidden">Google+</span>
+              </a>
+          </li>
+          {% endif %}
+          {% if opengraph_description and opengraph_image %}
+          <li>
+              <a target="_blank" href="http://pinterest.com/pin/create/button/?url={{ ROOT_URL }}/{{ PATH }}&media={{ opengraph_image }}&description={{ opengraph_description|urlencode }}" class="pin-it-button" count-layout="horizontal">
+                  <i class="icon-white icon-pinterest-sign"></i> <span class="hidden">Pinterest</span>
+              </a>
+          </li>
+          {% endif %}
       </ul>
+
     </div>{# /.navbar-collapse #}
   </div>
 </nav>
