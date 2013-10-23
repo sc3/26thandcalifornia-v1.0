@@ -1,13 +1,52 @@
-/* Styles for {{ project_name }} */
+.crypt-text {
+  word-wrap: break-word;
+}
 
-/* Ida Tarbell quote */
-#tarbell-quote { font-style: italic; margin: 10px 0; }
+.trib-article .pull-out {
+  width: 60%;
+}
 
-/* Spinner */
-#spinner { height: 100px; }
+.navbar .nav>li>a {
+  max-width: 72px;
+  height: 1em;
+  overflow: hidden;
+}
+
+#header-text {
+  max-width: 25em;
+  overflow: hidden;
+}
+
+.explainer {
+  margin-top: 10px;
+}
+
+.intercred {
+  margin-top: 20px;
+  margin-bottom: -10px;
+}
+
+#passcracktext {
+  width: 22em;
+}
+
+.hide-text {
+  display: none;
+}
+
+#decrypt {
+  text-align: center;
+}
 
 /* Responsive rule */
 @media all and (max-width: 979px) {
-   #tarbell-quote { float: left; max-width: 300px; margin-right: 20px; }
-   #tarbell-image { width: 150px; } 
+  .trib-article .pull-out {
+    width: 63%;
+  }
+}
+
+@media all and (max-width: 481px) {
+  .trib-article .pull-out {
+    width: 87%;
+  }
 }

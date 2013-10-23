@@ -1,50 +1,139 @@
-// Example project application. If this file is a little complicated, it's because
-// we're trying to demonstrate a basic app pattern using RequireJS.
+var crypt_key = "Yes, I used a cleartext key.";
+var crypt_status = {};
+var glob_crypt_status = false;
+var in_process = false;
+var last_used_scheme = 'aes';
+var last_hovered_scheme = 'aes';
 
-// Further configure RequireJS
-require.config( {
-    // Library paths
-    paths: {
-        moment: '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.0.0/moment.min',
-        spin: '//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min',
-    },
-    // Shim for non-AMD compatible Javascript libraries
-    shim: {
-        spin: {
-            exports: 'Spinner'
-        },
+$(document).ready(function() {
+  $('.crypt-text').each(function() {
+    toggleCryptElement(this.id);
+  });
+  $('.encrypt').each(function() {
+    $('#' + this.id + '_explainer').hide();
+  });
+  $('.encrypt-options').hide();
+  glob_crypt_status = true;
+  setTimeout(function() {
+    $('#twitter').hide();
+    var header = $('#header-text').text();
+    if (header.length > 45) {
+      $('#header-text').html(
+        header.substr(0, 45) + '<span class="hide-text">' + header.substr(45) + '</span>');
     }
-} );
+  }, 500);
 
-// Quotes for generator
-var TARBELL_QUOTES = [
-    "And he calls his great organization a benefaction, and points to his church-going and charities as proof of his righteousness. This is supreme wrong-doing cloaked by religion. There is but one name for it -- hypocrisy.",
-    "Perhaps our national ambition to standardize ourselves has behind it the notion that democracy means standardization. But standardization is the surest way to destroy the initiative, to benumb the creative impulse above all else essential to the vitality and growth of democratic ideals.",
-    "There is no more effective medicine to apply to feverish public sentiment than figures.",
-    "How defeated and restless the child that is not doing something in which it sees a purpose, a meaning! It is by its self-directed activity that the child, as years pass, finds its work, the thing it wants to do and for which it finally is willing to deny itself pleasure, ease, even sleep and comfort.",
-    "Imagination is the only key to the future. Without it none exists -- with it all things are possible.",
-    "The first and most imperative necessity in war is money, for money means everything else -- men, guns, ammunition."
-];
-
-// Invoke our application by requiring some libraries
-require([ 'jquery', 'js//views/NavigationView', 'moment', 'spin' ],
-function($, NavigationView, moment, Spinner) {
-    // Navigation view: Use Backbone view from base app to generate nav bar
-    var nav = new NavigationView({
-        el: $('#header'),
-        title: { label: document.title, url: '' },
-    }).render();
-
-    // Random Ida Tarbell quote generator: Simple jQuery DOM manipulation
-    var getQuote = function() {
-        return TARBELL_QUOTES[ Math.floor( Math.random() * TARBELL_QUOTES.length ) ];
+  /*$('#toggle').click(function() {
+    $('.crypt-text').each(function() {
+      toggleCryptElement(this.id);
+    });
+    glob_crypt_status = !glob_crypt_status;
+    if (glob_crypt_status) {
+      $('#toggle').text('Decrypt article');
+      $('#twitter').hide();
+    } else {
+      $('#toggle').text('Encrypt article');
+      $('#twitter').show();
     }
-    $('#tarbell-quote').text('"' + getQuote() + '"');
+  });*/
 
-    // MomentJS: Using an AMD-compatible library
-    $('#moment').text(moment().format('MMMM Do YYYY, h:mm:ss a'));
+  $('.encrypt').click(function() {
+    last_used_scheme = this.id;
+    $('.crypt-text').each(function() {
+      toggleCryptElement(this.id);
+    });
+    glob_crypt_status = true;
+    $('.encrypt-options').hide();
+    setTimeout(function() {
+      $('#twitter').hide();
+      $('#decrypt').show();
+      var header = $('#header-text').text();
+      if (header.length > 45) {
+        $('#header-text').html(
+          header.substr(0, 45) + '<span class="hide-text">' + header.substr(45) + '</span>');
+      }
+    }, 500);
+  });
 
-    // SpinJS: Using a non-AMD-compatible library and pure Javascript
-    var spinnerElement = document.getElementById('spinner');
-    var spinner = new Spinner().spin(spinnerElement);
+  $('#decrypt').click(function() {
+    $('.crypt-text').each(function() {
+      toggleCryptElement(this.id);
+    });
+    $('#twitter').show();
+    $('.encrypt-options').show();
+    $('#decrypt').hide();
+    $('#' + last_used_scheme + '_explainer').show();
+  });
+
+  $('.encrypt').mouseover(function() {
+    $('#' + last_hovered_scheme + '_explainer').hide();
+    $('#' + this.id + '_explainer').show();
+    last_hovered_scheme = this.id;
+  });
+
 });
+
+function toggleCryptElement(el_id) {
+  if (in_process) {
+    return;
+  }
+  var text = '';
+  if (!crypt_status.hasOwnProperty(el_id)) {
+    in_process = true;
+    $("#" + el_id).text(encryptText($("#" + el_id).text()));
+    crypt_status[el_id] = true;
+    in_process = false;
+  } else if (crypt_status[el_id] == false) {
+    in_process = true;
+    $("#" + el_id).fadeOut(function() {
+      $("#" + el_id).text(encryptText($("#" + el_id).text()));
+      $("#" + el_id).show();
+    });
+    crypt_status[el_id] = true;
+    in_process = false;
+  } else if (crypt_status[el_id] == true) {
+    in_process = true;
+    $("#" + el_id).fadeOut(function() {
+      $("#" + el_id).text(decryptText($("#" + el_id).text()));
+      $("#" + el_id).show();
+    });
+    crypt_status[el_id] = false;
+    in_process = false;
+  }
+}
+
+function encryptText(cleartext) {
+  if (last_used_scheme == 'aes') {
+    return CryptoJS.AES.encrypt(cleartext, crypt_key).toString();
+  } else if (last_used_scheme = 'des') {
+    return CryptoJS.DES.encrypt(cleartext, crypt_key).toString();
+  } else if (last_used_scheme = '3des') {
+    return CryptoJS.TripleDES.encrypt(cleartext, crypt_key).toString();
+  } else if (last_used_scheme = 'rabbit') {
+    return CryptoJS.Rabbit.encrypt(cleartext, crypt_key).toString();
+  } else if (last_used_scheme = 'rc4') {
+    return CryptoJS.RC4.encrypt(cleartext, crypt_key).toString();
+  } else if (last_used_scheme = 'rc4drop') {
+    return CryptoJS.RC4Drop.encrypt(cleartext, crypt_key).toString();
+  } else {
+    return ''
+  }
+}
+
+function decryptText(ciphertext) {
+  if (last_used_scheme == 'aes') {
+    return CryptoJS.AES.decrypt(ciphertext, crypt_key).toString(CryptoJS.enc.Utf8);
+  } else if (last_used_scheme = 'des') {
+    return CryptoJS.DES.decrypt(ciphertext, crypt_key).toString(CryptoJS.enc.Utf8);
+  } else if (last_used_scheme = '3des') {
+    return CryptoJS.TripleDES.decrypt(ciphertext, crypt_key).toString(CryptoJS.enc.Utf8);
+  } else if (last_used_scheme = 'rabbit') {
+    return CryptoJS.Rabbit.decrypt(ciphertext, crypt_key).toString(CryptoJS.enc.Utf8);
+  } else if (last_used_scheme = 'rc4') {
+    return CryptoJS.RC4.decrypt(ciphertext, crypt_key).toString(CryptoJS.enc.Utf8);
+  } else if (last_used_scheme = 'rc4drop') {
+    return CryptoJS.RC4Drop.decrypt(ciphertext, crypt_key).toString(CryptoJS.enc.Utf8);
+  } else {
+    return ''
+  }
+}
