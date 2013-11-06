@@ -178,14 +178,6 @@ function(JailView, D3,
               return line(d.values); })
             .style("stroke", function(d) { return color(d.name); });
 
-        /*b_p_w.append("text")
-            .datum(function(d) { return {name: d.name, value: [d.values.length, d.values[d.values.length - 1]]}; })
-            .attr("transform", function(d) { return "translate(" + x(d.value[0]) + "," + y(d.value[1]) + ")"; })
-            .attr("x", 3)
-            .attr("dy", ".35em")
-            .text(function(d) { return d.name; })
-            .style("stroke", function(d) { return color(d.name); });*/
-
         var legend = svg.append("g")
             .attr("class", "legend")
             .attr("height", 100)
@@ -208,10 +200,7 @@ function(JailView, D3,
             .append("text")
             .attr("x", 30)
             .attr("y", function(d, i){ return i *  20 + 9;})
-            .text(function(d) {
-              return d.name;
-            });
-
+            .text(function(d) { return d.name; });
 
         _.each(bookings_per_weekdays,
                 function(bookings_per_weekday) {
