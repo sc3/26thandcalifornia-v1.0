@@ -121,7 +121,7 @@ function(JailView, D3,
                                                             },
                                                             [])) - 10) / 10) * 10;
 
-        var margin = {top: 20, right: 30, bottom: 30, left: 40},
+        var margin = {top: 20, right: 60, bottom: 30, left: 40},
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom;
 
@@ -189,14 +189,14 @@ function(JailView, D3,
         var legend = svg.append("g")
             .attr("class", "legend")
             .attr("height", 100)
-            .attr("width", 100)
-            .attr("transform", 'translate(-20, 50)');
+            .attr("width", margin.right)
+            .attr("transform", 'translate(' + width + ',' + (margin.top + 20) + ')');
 
         legend.selectAll('rect')
             .data(bookings_per_weekdays)
             .enter()
             .append("rect")
-            .attr("x", width - 65)
+            .attr("x", 10)
             .attr("y", function(d, i){ return i *  20;})
             .attr("width", 10)
             .attr("height", 10)
@@ -206,7 +206,7 @@ function(JailView, D3,
             .data(bookings_per_weekdays)
             .enter()
             .append("text")
-            .attr("x", width - 52)
+            .attr("x", 30)
             .attr("y", function(d, i){ return i *  20 + 9;})
             .text(function(d) {
               return d.name;
