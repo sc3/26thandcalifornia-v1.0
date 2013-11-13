@@ -1,0 +1,26 @@
+{% extends "_26thandcalifornia.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="headline">
+    <h1>{{ headline }}</h1>
+    <p>{{ subheadline }}</p>
+  </div>
+  <div class="row">
+    <div class="col-md-7">
+      <h2>{{ findings_headline }}</h2>
+      <h3>{{ finding1_headline }}</h3>
+      {{ finding1_text|markdown }}
+      <div class="box">
+        <img src="http://blog.visual.ly/wp-content/uploads/2013/01/618x618xD3-Chord-Diagram.png,q547b7b.pagespeed.ic.Z-732jJrvc.png" />
+      </div>
+    </div>
+    <div class="col-md-5">
+      <h2>{{ about_headline }}</h2>
+      {{ about_text|markdown }}
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+
