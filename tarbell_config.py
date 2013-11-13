@@ -17,13 +17,9 @@ SPREADSHEET_KEY = "0Ak3IIavLYTovdExmUldWMVVDR3I5MWtFU01Nc054Mmc"
 # CREATE_JSON = True
 
 # S3 bucket configuration
-#S3_BUCKETS = {
-    # Provide target -> s3 url pairs, such as:
-    # "mytarget": "s3://mys3url.bucket.url/some/path"
-#}
-
-# Repository this project is based on (used for updates)
-TEMPLATE_REPO_URL = "https://github.com/newsapps/tarbell-template"
+S3_BUCKETS = {
+     "staging": "s3://26thandcalifornia.recoveredfactory.net/staging/"
+}
 
 # Default template variables
 DEFAULT_CONTEXT = {

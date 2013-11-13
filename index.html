@@ -1,18 +1,38 @@
 {% extends "_base.html" %}
 
-{% block preview %}{% endblock preview %}
+{% block css %}
+{{ super() }}
+<link href='http://fonts.googleapis.com/css?family=Radley:400,400italic' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+{% endblock css %}
 
 {% block content %}
 <div class="container">
-  <div class="jumbotron">
-    <div class="row">
-      <div class="col-md-6">
-        <h1>{{ headline }}</h1>
+  <div class="headline">
+    <h1>{{ headline }}</h1>
+    <p>{{ subheadline }}</p>
+  </div>
+  <div class="row">
+    <div class="col-md-7">
+      <h2>{{ findings_headline }}</h2>
+      <h3>{{ finding1_headline }}</h3>
+      {{ finding1_text|markdown }}
+      <div class="box">
+        <img src="http://blog.visual.ly/wp-content/uploads/2013/01/618x618xD3-Chord-Diagram.png,q547b7b.pagespeed.ic.Z-732jJrvc.png" />
       </div>
-      <div class="col-md-6">
-        <p>{{ intro }}</p>
-      </div>
+    </div>
+    <div class="col-md-5">
+      <h2>{{ about_headline }}</h2>
+      {{ about_text|markdown }}
     </div>
   </div>
 </div>
 {% endblock content %}
+
+{% block scripts %}
+{{ super() }}
+
+{% endblock scripts %}
+
+{% block preview %}{% endblock preview %}
