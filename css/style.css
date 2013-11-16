@@ -1,6 +1,10 @@
 body {
   background-color: #e5e5e5;
 }
+body>.container, .footer {
+  font-family: "Radley", serif;
+  font-size: 19px;
+}
 
 a { color: #900; }
 a:hover { color: #f00; }
@@ -26,7 +30,7 @@ h1, h2, h3, h4, h5, h6 {
 .box {
     position: relative;
     margin: 15px 0;
-    padding: 10px;
+    padding: 15px 20px;
     background:#fff;
     -webkit-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
        -moz-box-shadow:0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
@@ -52,11 +56,13 @@ h1, h2, h3, h4, h5, h6 {
   max-width: 100%;
 }
 
+.content {
+  margin: 30px 15% 30px 15%;
+}
+
 .headline, .footer {
-  font-family: "Radley", serif;
   text-align: center;
-  margin-bottom: 25px;
-  margin: 30px 15% 10px 15%;
+  margin: 30px 15% 25px 15%;
 }
 
 .headline h1 { 
@@ -73,8 +79,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .headline p, .footer p {
-  font-size: 19px;
-  margin-bottom: 6px;
+  font-style: italic;
+  margin-bottom: 7px;
 }
 
 

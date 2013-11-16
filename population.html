@@ -4,23 +4,36 @@
 <div class="container">
   <div class="headline">
     <h1>{{ headline }}</h1>
-    <p>{{ subheadline }}</p>
+    <p>{{ page_population.title.value }}</p>
   </div>
-  <div class="row">
-    <div class="col-md-7">
-      <h2>{{ findings_headline }}</h2>
-      <h3>{{ finding1_headline }}</h3>
-      {{ finding1_text|markdown }}
-      <div class="box">
-        <img src="http://blog.visual.ly/wp-content/uploads/2013/01/618x618xD3-Chord-Diagram.png,q547b7b.pagespeed.ic.Z-732jJrvc.png" />
-      </div>
-    </div>
-    <div class="col-md-5">
-      <h2>{{ about_headline }}</h2>
-      {{ about_text|markdown }}
-    </div>
+  <div class="content">
+    {{ page_population.intro.value|markdown }}
+  </div>
+  <div class="box">
+    <div id="chart" class="chart"></div>
+  </div>
+  <div class="content">
+    {{ page_population.outro.value|markdown }}
   </div>
 </div>
 {% endblock content %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript">
+$(document).ready(function() {
+  var collection = new JailCollection([], {
+    url: 'data/dpc.json'
+  });
+  var chart = new Barchart({
+    el: $("#chart"),
+    collection: collection,
+    xKey: 'booking_date',
+    yKey: 'total',
+  });
+  collection.fetch();
+});
+</script>
+{% endblock %}
 
 
